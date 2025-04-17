@@ -1,0 +1,93 @@
+/* Correctifs supplémentaires pour les problèmes de CSS */
+
+/* Correction pour les galeries qui ne s'affichent pas correctement */
+.gallery-tab.active {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+    gap: 20px !important;
+}
+
+.gallery-item {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    background-color: #f8f8f8;
+    margin-bottom: 20px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Correction pour les boutons de navigation qui n'apparaissent pas */
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #2a6aa8;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Correction pour s'assurer que les sections ont un espacement correct */
+section {
+    margin-bottom: 30px;
+}
+
+/* Correction pour les onglets de galerie */
+.gallery-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    color: #333333;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Correction pour la modal */
+.modal.active {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Correction pour les points d'intérêt */
+.poi-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.poi-list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed #eaeaea;
+    list-style-type: none;
+}

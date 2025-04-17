@@ -1,0 +1,259 @@
+/* Styles pour les sliders de galerie */
+
+/* Centrage global pour la section de galerie */
+.gallery-section .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Titre centré */
+.gallery-section .section-title {
+    text-align: center;
+    width: 100%;
+}
+
+/* Navigation par onglets centrée */
+.gallery-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Style pour les boutons d'onglet */
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    color: #333333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-btn i {
+    font-size: 1.2rem;
+}
+
+/* Style pour l'onglet actif */
+.tab-btn.active {
+    background-color: #2a6aa8;
+    color: white;
+    font-weight: bold;
+}
+
+/* Conteneur de contenu de galerie centré */
+.gallery-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Onglets de galerie */
+.gallery-tab {
+    display: none;
+    width: 80%; /* Utilise 80% de la largeur du conteneur parent */
+    margin: 0 auto;
+}
+
+.gallery-tab.active {
+    display: block;
+}
+
+/* Conteneur du slider */
+.slider-container {
+    position: relative;
+    width: 100%;
+    padding-top: 60%; /* Ratio d'aspect: 5:3 (60% = 3/5 * 100%) */
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    background-color: #f8f8f8;
+}
+
+/* Wrapper des slides */
+.slides-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Styles des slides individuels */
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.slide img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+/* Animation d'apparition des images */
+.slide.active img {
+    animation: zoomIn 0.5s ease forwards;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Boutons de navigation */
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #2a6aa8;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.slider-nav:hover {
+    background-color: #2a6aa8;
+    color: white;
+}
+
+.prev-btn {
+    left: 20px;
+}
+
+.next-btn {
+    right: 20px;
+}
+
+.slider-nav i {
+    font-size: 1.5rem;
+}
+
+/* Pagination (points) */
+.slider-pagination {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.pagination-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-dot.active {
+    background-color: #2a6aa8;
+    transform: scale(1.2);
+}
+
+/* Compteur de slides */
+.slider-counter {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    z-index: 10;
+}
+
+/* Responsive */
+@media screen and (max-width: 992px) {
+    .gallery-tab {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .gallery-tab {
+        width: 95%;
+    }
+    
+    .slider-nav {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .prev-btn {
+        left: 10px;
+    }
+    
+    .next-btn {
+        right: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .gallery-tab {
+        width: 100%;
+    }
+    
+    .slider-container {
+        padding-top: 75%; /* Ratio plus vertical pour mobile (4:3) */
+    }
+    
+    .slider-nav {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .slider-nav i {
+        font-size: 1.2rem;
+    }
+    
+    .pagination-dot {
+        width: 10px;
+        height: 10px;
+    }
+}

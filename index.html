@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Appartement élégant à louer à Milan, Via Giovanni di Breganze 1, 20152. Idéalement situé près des attractions touristiques et des transports en commun. Parfait pour 2 personnes.">
+    <meta name="keywords" content="appartement Milan, location Milan, Via Giovanni di Breganze, hébergement Milan, Airbnb Milan">
+    <meta property="og:title" content="Appartement élégant à Milan - Location de Vacances">
+    <meta property="og:description" content="Appartement confortable pour 2 personnes à Milan, Via Giovanni di Breganze 1, 20152. Réservez maintenant sur Airbnb ou Booking.">
+    <meta property="og:type" content="website">
+    <title>Appartement élégant à Milan - Location de Vacances</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/fixes.css">
+    <link rel="stylesheet" href="css/slider.css">
+    <link rel="stylesheet" href="css/slider-fix.css">
+    
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Favicons -->
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    
+    <!-- Préchargement des images essentielles pour améliorer les performances -->
+    <link rel="preload" href="img/building/vueimmeuble.jpeg" as="image">
+    
+    <!-- Style CSS inline pour les améliorations spécifiques -->
+    <style>
+        /* Styles pour les boutons de réservation */
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+        
+        @media (max-width: 768px) {
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                max-width: 300px;
+            }
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .btn i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .btn-primary {
+            background-color: #e67e22;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #2a6aa8;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Style pour la carte et les points d'intérêt */
+        .location-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 2rem auto;
+            width: 100%;
+        }
+        
+        .map-container {
+            flex: 1 1 60%;
+            min-width: 300px;
+            height: 500px; /* Hauteur augmentée pour correspondre aux POI */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .poi-section {
+            flex: 1 1 35%;
+            min-width: 300px;
+            max-height: 500px; /* Hauteur égale à la carte */
+            overflow-y: auto; /* Défilement si trop de contenu */
+            padding-right: 10px; /* Espace pour la barre de défilement */
+        }
+        
+        /* Styles améliorés pour les points d'intérêt */
+        .poi-category {
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .poi-category h4 {
+            color: #2a6aa8;
+            margin: 0 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e67e22;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        
+        .poi-category h4 i {
+            margin-right: 10px;
+            color: #e67e22;
+        }
+        
+        .poi-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .poi-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #e0e0e0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .poi-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .poi-list li i {
+            margin-right: 10px;
+            color: #2a6aa8;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Style pour l'en-tête des POI */
+        .poi-section h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-size: 1.3rem;
+            color: #333;
+            border-bottom: 2px solid #2a6aa8;
+        }
+        
+        @media (max-width: 992px) {
+            .map-container, .poi-section {
+                height: auto;
+                max-height: none;
+            }
+            
+            .map-container {
+                height: 400px;
+            }
+            
+            .location-wrapper {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .map-container {
+                height: 350px;
+            }
+        }
+        
+        /* Amélioration des animations pour les sections */
+        section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        section.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Amélioration du pied de page */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sélecteur de langue -->
+    <div class="language-selector">
+        <button data-lang="fr" class="active">Français</button>
+        <button data-lang="en">English</button>
+        <button data-lang="it">Italiano</button>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1 class="main-title" data-fr="Appartement élégant à Milan" data-en="Elegant Apartment in Milan" data-it="Elegante Appartamento a Milano"></h1>
+            <p class="subtitle" data-fr="Via Giovanni di Breganze 1, 20152 Milan" data-en="Via Giovanni di Breganze 1, 20152 Milan" data-it="Via Giovanni di Breganze 1, 20152 Milano"></p>
+        </div>
+    </header>
+
+    <main>
+        <!-- Première section des boutons de réservation en haut de page -->
+        <section class="hero">
+            <div class="container">
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary" id="airbnb-link-top" data-fr="Réserver sur Airbnb" data-en="Book on Airbnb" data-it="Prenota su Airbnb"></a>
+                    <a href="#" class="btn btn-secondary" id="booking-link-top" data-fr="Réserver sur Booking" data-en="Book on Booking" data-it="Prenota su Booking"></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Description de l'appartement -->
+        <section class="apartment-overview">
+            <div class="container">
+                <h2 class="section-title" data-fr="Présentation de l'appartement" data-en="Apartment Overview" data-it="Panoramica dell'appartamento"></h2>
+                <div class="overview-content">
+                    <div class="overview-text">
+                        <p data-fr="Découvrez ce magnifique appartement situé au cœur de Milan, Via Giovanni di Breganze 1. Parfait pour les voyageurs en quête de confort et d'élégance dans un quartier bien desservi. Idéal pour 2 personnes, cet appartement offre tout le nécessaire pour un séjour agréable à Milan." 
+                           data-en="Discover this beautiful apartment located in the heart of Milan, Via Giovanni di Breganze 1. Perfect for travelers seeking comfort and elegance in a well-connected neighborhood. Ideal for 2 people, this apartment offers everything you need for a pleasant stay in Milan." 
+                           data-it="Scopri questo bellissimo appartamento situato nel cuore di Milano, Via Giovanni di Breganze 1. Perfetto per i viaggiatori in cerca di comfort ed eleganza in un quartiere ben collegato. Ideale per 2 persone, questo appartamento offre tutto il necessario per un piacevole soggiorno a Milano."></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Galeries de photos -->
+        <section class="gallery-section">
+            <div class="container">
+                <h2 class="section-title" data-fr="Galeries Photos" data-en="Photo Galleries" data-it="Gallerie Fotografiche"></h2>
+                
+                <div class="gallery-tabs">
+                    <button class="tab-btn active" data-tab="building">
+                        <i class="fas fa-building"></i> 
+                        <span data-fr="Immeuble" data-en="Building" data-it="Edificio"></span>
+                    </button>
+                    <button class="tab-btn" data-tab="bedroom">
+                        <i class="fas fa-bed"></i> 
+                        <span data-fr="Chambre" data-en="Bedroom" data-it="Camera da letto"></span>
+                    </button>
+                    <button class="tab-btn" data-tab="bathroom">
+                        <i class="fas fa-bath"></i> 
+                        <span data-fr="Salle de bain" data-en="Bathroom" data-it="Bagno"></span>
+                    </button>
+                    <button class="tab-btn" data-tab="living">
+                        <i class="fas fa-couch"></i> 
+                        <span data-fr="Living" data-en="Living Room" data-it="Soggiorno"></span>
+                    </button>
+                    <button class="tab-btn" data-tab="kitchen">
+                        <i class="fas fa-utensils"></i> 
+                        <span data-fr="Coin cuisine" data-en="Kitchen Area" data-it="Angolo cottura"></span>
+                    </button>
+                </div>
+                
+                <div class="gallery-content">
+                    <!-- Les galeries seront remplies par JavaScript sous forme de sliders -->
+                    <div class="gallery-tab active" id="building-gallery">
+                        <!-- Slider pour l'immeuble sera injecté ici -->
+                    </div>
+                    
+                    <div class="gallery-tab" id="bedroom-gallery">
+                        <!-- Slider pour la chambre sera injecté ici -->
+                    </div>
+                    
+                    <div class="gallery-tab" id="bathroom-gallery">
+                        <!-- Slider pour la salle de bain sera injecté ici -->
+                    </div>
+                    
+                    <div class="gallery-tab" id="living-gallery">
+                        <!-- Slider pour le salon sera injecté ici -->
+                    </div>
+                    
+                    <div class="gallery-tab" id="kitchen-gallery">
+                        <!-- Slider pour la cuisine sera injecté ici -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Emplacement avec carte et points d'intérêt côte à côte -->
+        <section class="location-section">
+            <div class="container">
+                <h2 class="section-title" data-fr="Emplacement et Points d'intérêt" data-en="Location and Points of Interest" data-it="Posizione e Punti di interesse"></h2>
+                
+                <div class="address-info">
+                    <p><strong data-fr="Adresse:" data-en="Address:" data-it="Indirizzo:"></strong> Via Giovanni di Breganze 1, 20152, Milan</p>
+                </div>
+                
+                <div class="location-wrapper">
+                    <!-- Carte Google Maps -->
+                    <div class="map-container">
+                        <iframe 
+                            id="google-map"
+                            width="100%" 
+                            height="100%" 
+                            frameborder="0" 
+                            style="border:0" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    
+                    <!-- Points d'intérêt -->
+                    <div class="poi-section">
+                        <h3 data-fr="À proximité" data-en="Nearby" data-it="Nelle vicinanze"></h3>
+                        
+                        <div class="poi-category">
+                            <h4>
+                                <i class="fas fa-monument"></i>
+                                <span data-fr="Monuments et Attractions" data-en="Monuments and Attractions" data-it="Monumenti e Attrazioni"></span>
+                            </h4>
+                            <ul class="poi-list">
+                                <li>
+                                    <i class="fas fa-landmark"></i>
+                                    <span data-fr="Château Sforzesco - 3,5 km" data-en="Sforzesco Castle - 3.5 km" data-it="Castello Sforzesco - 3,5 km"></span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-church"></i>
+                                    <span data-fr="Duomo de Milan - 5 km" data-en="Milan Cathedral - 5 km" data-it="Duomo di Milano - 5 km"></span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-store-alt"></i>
+                                    <span data-fr="Galerie Vittorio Emanuele II - 5 km" data-en="Galleria Vittorio Emanuele II - 5 km" data-it="Galleria Vittorio Emanuele II - 5 km"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="poi-category">
+                            <h4>
+                                <i class="fas fa-utensils"></i>
+                                <span data-fr="Restaurants et Cafés" data-en="Restaurants and Cafes" data-it="Ristoranti e Caffè"></span>
+                            </h4>
+                            <ul class="poi-list">
+                                <li>
+                                    <i class="fas fa-pizza-slice"></i>
+                                    <span data-fr="Ristorante Italiano - 400 m" data-en="Ristorante Italiano - 400 m" data-it="Ristorante Italiano - 400 m"></span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-coffee"></i>
+                                    <span data-fr="Café Milano - 600 m" data-en="Café Milano - 600 m" data-it="Caffè Milano - 600 m"></span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-hamburger"></i>
+                                    <span data-fr="Pizzeria Napoli - 800 m" data-en="Pizzeria Napoli - 800 m" data-it="Pizzeria Napoli - 800 m"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="poi-category">
+                            <h4>
+                                <i class="fas fa-subway"></i>
+                                <span data-fr="Transports" data-en="Transportation" data-it="Trasporti"></span>
+                            </h4>
+                            <ul class="poi-list">
+                                <li>
+                                    <i class="fas fa-train"></i>
+                                    <span data-fr="Métro Ligne 1 (Station Bande Nere) - 900 m" data-en="Metro Line 1 (Bande Nere Station) - 900 m" data-it="Metropolitana Linea 1 (Stazione Bande Nere) - 900 m"></span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-bus"></i>
+                                    <span data-fr="Arrêt de Bus 67 - 300 m" data-en="Bus Stop 67 - 300 m" data-it="Fermata dell'Autobus 67 - 300 m"></span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-train"></i>
+                                    <span data-fr="Gare Centrale de Milan - 7 km" data-en="Milan Central Station - 7 km" data-it="Stazione Centrale di Milano - 7 km"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Deuxième section des boutons de réservation en bas de page -->
+        <section class="cta-section">
+            <div class="container">
+                <h2 class="section-title" data-fr="Réservez maintenant" data-en="Book Now" data-it="Prenota ora"></h2>
+                <p class="cta-text" data-fr="Ne manquez pas cette occasion de séjourner dans cet appartement idéalement situé au cœur de Milan." 
+                   data-en="Don't miss this opportunity to stay in this ideally located apartment in the heart of Milan." 
+                   data-it="Non perdere questa opportunità di soggiornare in questo appartamento situato nel cuore di Milano."></p>
+                   
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary" id="airbnb-link-bottom" data-fr="Réserver sur Airbnb" data-en="Book on Airbnb" data-it="Prenota su Airbnb"></a>
+                    <a href="#" class="btn btn-secondary" id="booking-link-bottom" data-fr="Réserver sur Booking" data-en="Book on Booking" data-it="Prenota su Booking"></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-fr="© 2025 Location d'Appartement à Milan. Tous droits réservés." data-en="© 2025 Milan Apartment Rental. All rights reserved." data-it="© 2025 Affitto Appartamento Milano. Tutti i diritti riservati."></p>
+        </div>
+    </footer>
+
+    <!-- Scripts JavaScript -->
+    <script>
+    // Vérification de chargement pour déboguer
+    console.log('HTML chargé');
+    </script>
+    
+    <!-- Scripts principaux -->
+    <script src="js/language.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/gallery-slider.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+    // Script pour synchroniser les boutons du haut et du bas
+    document.addEventListener('DOMContentLoaded', function() {
+        // Récupérer les liens Airbnb et Booking
+        const airbnbUrl = "https://www.airbnb.fr/rooms/1370963027643363967?adults=2&check_in=2025-04-10&check_out=2025-04-13&search_mode=regular_search&source_impression_id=p3_1741384692_P3X4CMiYSf8hsB6L&previous_page_section_name=1000&federated_search_id=053941b5-c6d5-4ab2-b578-e4863e4249e7";
+        const bookingUrl = "https://www.booking.com/Share-C54iPOs";
+        
+        // Configurer tous les liens (en haut et en bas)
+        const airbnbLinks = document.querySelectorAll('#airbnb-link-top, #airbnb-link-bottom');
+        const bookingLinks = document.querySelectorAll('#booking-link-top, #booking-link-bottom');
+        
+        // Ajouter les icônes et les URLs
+        airbnbLinks.forEach(link => {
+            link.href = airbnbUrl;
+            if (!link.querySelector('i')) {
+                const icon = document.createElement('i');
+                icon.className = 'fab fa-airbnb';
+                link.prepend(icon);
+            }
+        });
+        
+        bookingLinks.forEach(link => {
+            link.href = bookingUrl;
+            if (!link.querySelector('i')) {
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-hotel';
+                link.prepend(icon);
+            }
+        });
+        
+        // Animation des sections au scroll
+        const sections = document.querySelectorAll('section');
+        
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8
+            );
+        }
+        
+        function handleScroll() {
+            sections.forEach(section => {
+                if (isInViewport(section) && !section.classList.contains('animated')) {
+                    section.classList.add('animated');
+                }
+            });
+        }
+        
+        // Animer les sections déjà visibles au chargement
+        setTimeout(function() {
+            handleScroll();
+        }, 300);
+        
+        // Ajouter l'événement de scroll
+        window.addEventListener('scroll', handleScroll);
+    });
+    </script>
+</body>
+</html> 

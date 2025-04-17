@@ -1,0 +1,140 @@
+/* CORRECTIFS POUR FORCER LE CENTRAGE ET LA TAILLE DES GALERIES */
+
+/* Réinitialisation complète pour éviter les conflits */
+.gallery-section * {
+    box-sizing: border-box;
+}
+
+/* Force le centrage du conteneur principal */
+.gallery-section .container {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Force le centrage des onglets */
+.gallery-tabs {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 2rem !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Assure que le contenu de la galerie est centré et occupe toute la largeur */
+.gallery-content {
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+/* Force l'affichage et la taille des onglets de galerie */
+.gallery-tab {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    float: none !important;
+    width: 90% !important; /* Augmenté à 90% pour une plus grande taille */
+}
+
+.gallery-tab.active {
+    display: block !important;
+}
+
+/* Force la taille et le comportement du slider */
+.slider-container {
+    width: 100% !important;
+    height: 0 !important;
+    padding-top: 60% !important; /* Maintient le ratio 5:3 */
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    margin: 0 auto !important;
+    background-color: #f8f8f8 !important;
+}
+
+/* Force le positionnement absolu du wrapper de slides */
+.slides-wrapper {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Force le style des slides */
+.slide {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
+    transition: opacity 0.5s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.slide.active {
+    opacity: 1 !important;
+    z-index: 1 !important;
+}
+
+/* Force le style des images */
+.slide img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Styles de boutons et navigation forcés */
+.slider-nav {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 50px !important;
+    height: 50px !important;
+    z-index: 100 !important;
+}
+
+.prev-btn {
+    left: 20px !important;
+}
+
+.next-btn {
+    right: 20px !important;
+}
+
+/* Correction pour les écrans mobiles */
+@media screen and (max-width: 768px) {
+    .gallery-tab {
+        width: 95% !important;
+    }
+    
+    .slider-container {
+        padding-top: 70% !important;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .gallery-tab {
+        width: 100% !important;
+    }
+    
+    .slider-container {
+        padding-top: 75% !important;
+    }
+}
