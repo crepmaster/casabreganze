@@ -23,11 +23,11 @@
     <!-- Favicons -->
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     
-    <!-- Préchargement des images essentielles pour améliorer les performances -->
+    <!-- Préchargement des images -->
     <link rel="preload" href="img/building/vueimmeuble.jpeg" as="image">
     
-    <!-- Style CSS inline pour les améliorations spécifiques -->
     <style>
+        /* Styles précédents... */
         /* Styles pour les boutons de réservation */
         .cta-buttons {
             display: flex;
@@ -78,6 +78,98 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
+        /* Style pour le texte de présentation */
+        .overview-text {
+            text-align: justify;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        .overview-text p {
+            margin-bottom: 1rem;
+        }
+        
+        .highlight {
+            color: #e67e22;
+            font-weight: bold;
+        }
+        
+        /* Style pour la section des équipements */
+        .amenities-section {
+            background-color: #f8f9fa;
+            padding: 3rem 0;
+            margin-top: 2rem;
+        }
+        
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 2rem;
+        }
+        
+        .amenity-category {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .amenity-category h3 {
+            color: #2a6aa8;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e67e22;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .amenity-category h3 i {
+            margin-right: 10px;
+            color: #e67e22;
+        }
+        
+        .amenities-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .amenities-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        
+        .amenities-list li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .amenities-list li i {
+            width: 24px;
+            margin-right: 10px;
+            color: #2a6aa8;
+            text-align: center;
+        }
+        
+        .amenities-list .not-available {
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .amenities-list .not-available i {
+            color: #ccc;
+        }
+        
+        @media (max-width: 768px) {
+            .amenities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         /* Style pour la carte et les points d'intérêt */
         .location-wrapper {
             display: flex;
@@ -90,7 +182,7 @@
         .map-container {
             flex: 1 1 60%;
             min-width: 300px;
-            height: 500px; /* Hauteur augmentée pour correspondre aux POI */
+            height: 600px; /* Hauteur augmentée pour correspondre aux POI plus nombreux */
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -99,12 +191,22 @@
         .poi-section {
             flex: 1 1 35%;
             min-width: 300px;
-            max-height: 500px; /* Hauteur égale à la carte */
+            max-height: 600px; /* Hauteur augmentée */
             overflow-y: auto; /* Défilement si trop de contenu */
             padding-right: 10px; /* Espace pour la barre de défilement */
         }
         
         /* Styles améliorés pour les points d'intérêt */
+        .poi-section h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            padding-left: 3px; /* Marge augmentée à gauche */
+            font-size: 1.3rem;
+            color: #333;
+            border-bottom: 2px solid #2a6aa8;
+        }
+        
         .poi-category {
             background-color: #f8f8f8;
             border-radius: 10px;
@@ -153,16 +255,6 @@
             text-align: center;
         }
         
-        /* Style pour l'en-tête des POI */
-        .poi-section h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            font-size: 1.3rem;
-            color: #333;
-            border-bottom: 2px solid #2a6aa8;
-        }
-        
         @media (max-width: 992px) {
             .map-container, .poi-section {
                 height: auto;
@@ -184,7 +276,7 @@
             }
         }
         
-        /* Amélioration des animations pour les sections */
+        /* Animations */
         section {
             opacity: 0;
             transform: translateY(20px);
@@ -196,7 +288,7 @@
             transform: translateY(0);
         }
         
-        /* Amélioration du pied de page */
+        /* Pied de page */
         footer {
             margin-top: 4rem;
             padding: 2rem 0;
@@ -219,7 +311,7 @@
     </header>
 
     <main>
-        <!-- Première section des boutons de réservation en haut de page -->
+        <!-- Première section des boutons de réservation -->
         <section class="hero">
             <div class="container">
                 <div class="cta-buttons">
@@ -235,9 +327,10 @@
                 <h2 class="section-title" data-fr="Présentation de l'appartement" data-en="Apartment Overview" data-it="Panoramica dell'appartamento"></h2>
                 <div class="overview-content">
                     <div class="overview-text">
-                        <p data-fr="Découvrez ce magnifique appartement situé au cœur de Milan, Via Giovanni di Breganze 1. Parfait pour les voyageurs en quête de confort et d'élégance dans un quartier bien desservi. Idéal pour 2 personnes, cet appartement offre tout le nécessaire pour un séjour agréable à Milan." 
-                           data-en="Discover this beautiful apartment located in the heart of Milan, Via Giovanni di Breganze 1. Perfect for travelers seeking comfort and elegance in a well-connected neighborhood. Ideal for 2 people, this apartment offers everything you need for a pleasant stay in Milan." 
-                           data-it="Scopri questo bellissimo appartamento situato nel cuore di Milano, Via Giovanni di Breganze 1. Perfetto per i viaggiatori in cerca di comfort ed eleganza in un quartiere ben collegato. Ideale per 2 persone, questo appartamento offre tutto il necessario per un piacevole soggiorno a Milano."></p>
+                        <!-- Utilisation de JavaScript pour insérer le contenu et appliquer les styles -->
+                        <div id="overview-paragraph-1"></div>
+                        <div id="overview-paragraph-2"></div>
+                        <div id="overview-paragraph-3"></div>
                     </div>
                 </div>
             </div>
@@ -272,31 +365,208 @@
                 </div>
                 
                 <div class="gallery-content">
-                    <!-- Les galeries seront remplies par JavaScript sous forme de sliders -->
+                    <!-- Les galeries seront remplies par JavaScript -->
                     <div class="gallery-tab active" id="building-gallery">
-                        <!-- Slider pour l'immeuble sera injecté ici -->
+                        <!-- Slider pour l'immeuble -->
                     </div>
                     
                     <div class="gallery-tab" id="bedroom-gallery">
-                        <!-- Slider pour la chambre sera injecté ici -->
+                        <!-- Slider pour la chambre -->
                     </div>
                     
                     <div class="gallery-tab" id="bathroom-gallery">
-                        <!-- Slider pour la salle de bain sera injecté ici -->
+                        <!-- Slider pour la salle de bain -->
                     </div>
                     
                     <div class="gallery-tab" id="living-gallery">
-                        <!-- Slider pour le salon sera injecté ici -->
+                        <!-- Slider pour le salon -->
                     </div>
                     
                     <div class="gallery-tab" id="kitchen-gallery">
-                        <!-- Slider pour la cuisine sera injecté ici -->
+                        <!-- Slider pour la cuisine -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Équipements et Services -->
+        <section class="amenities-section">
+            <div class="container">
+                <h2 class="section-title" data-fr="Équipements et Services" data-en="Amenities and Services" data-it="Servizi e Comfort"></h2>
+                
+                <div class="amenities-grid">
+                    <!-- Catégorie: Général -->
+                    <div class="amenity-category">
+                        <h3>
+                            <i class="fas fa-home"></i>
+                            <span data-fr="Général" data-en="General" data-it="Generale"></span>
+                        </h3>
+                        <ul class="amenities-list">
+                            <li>
+                                <i class="fas fa-wifi"></i>
+                                <span data-fr="Wi-Fi gratuit" data-en="Free Wi-Fi" data-it="Wi-Fi gratuito"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-snowflake"></i>
+                                <span data-fr="Climatisation" data-en="Air conditioning" data-it="Aria condizionata"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-temperature-high"></i>
+                                <span data-fr="Chauffage" data-en="Heating" data-it="Riscaldamento"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-tv"></i>
+                                <span data-fr="TV à écran plat" data-en="Flat-screen TV" data-it="TV a schermo piatto"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-key"></i>
+                                <span data-fr="Clés privées" data-en="Private keys" data-it="Chiavi private"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Catégorie: Chambre -->
+                    <div class="amenity-category">
+                        <h3>
+                            <i class="fas fa-bed"></i>
+                            <span data-fr="Chambre" data-en="Bedroom" data-it="Camera da letto"></span>
+                        </h3>
+                        <ul class="amenities-list">
+                            <li>
+                                <i class="fas fa-bed"></i>
+                                <span data-fr="Lit double (160×200 cm)" data-en="Double bed (160×200 cm)" data-it="Letto matrimoniale (160×200 cm)"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-door-closed"></i>
+                                <span data-fr="Dressing" data-en="Wardrobe" data-it="Armadio"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-fan"></i>
+                                <span data-fr="Ventilateur" data-en="Fan" data-it="Ventilatore"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-shield-alt"></i>
+                                <span data-fr="Détecteur de fumée" data-en="Smoke detector" data-it="Rilevatore di fumo"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Catégorie: Salle de bain -->
+                    <div class="amenity-category">
+                        <h3>
+                            <i class="fas fa-bath"></i>
+                            <span data-fr="Salle de bain" data-en="Bathroom" data-it="Bagno"></span>
+                        </h3>
+                        <ul class="amenities-list">
+                            <li>
+                                <i class="fas fa-shower"></i>
+                                <span data-fr="Douche" data-en="Shower" data-it="Doccia"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-toilet"></i>
+                                <span data-fr="Toilettes" data-en="Toilet" data-it="WC"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-tint"></i>
+                                <span data-fr="Eau chaude" data-en="Hot water" data-it="Acqua calda"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-wind"></i>
+                                <span data-fr="Sèche-cheveux" data-en="Hair dryer" data-it="Asciugacapelli"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-soap"></i>
+                                <span data-fr="Produits de toilette" data-en="Toiletries" data-it="Prodotti da bagno"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Catégorie: Cuisine -->
+                    <div class="amenity-category">
+                        <h3>
+                            <i class="fas fa-utensils"></i>
+                            <span data-fr="Cuisine" data-en="Kitchen" data-it="Cucina"></span>
+                        </h3>
+                        <ul class="amenities-list">
+                            <li>
+                                <i class="fas fa-blender"></i>
+                                <span data-fr="Cuisine équipée" data-en="Fully equipped kitchen" data-it="Cucina attrezzata"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-mug-hot"></i>
+                                <span data-fr="Machine à café" data-en="Coffee machine" data-it="Macchina da caffè"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-cube"></i>
+                                <span data-fr="Réfrigérateur" data-en="Refrigerator" data-it="Frigorifero"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-cookie"></i>
+                                <span data-fr="Four micro-ondes" data-en="Microwave" data-it="Microonde"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-wine-glass-alt"></i>
+                                <span data-fr="Vaisselle et couverts" data-en="Dishes and cutlery" data-it="Stoviglie e posate"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Catégorie: Services -->
+                    <div class="amenity-category">
+                        <h3>
+                            <i class="fas fa-concierge-bell"></i>
+                            <span data-fr="Services" data-en="Services" data-it="Servizi"></span>
+                        </h3>
+                        <ul class="amenities-list">
+                            <li>
+                                <i class="fas fa-broom"></i>
+                                <span data-fr="Ménage inclus" data-en="Cleaning included" data-it="Pulizia inclusa"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-tshirt"></i>
+                                <span data-fr="Linge de lit" data-en="Bed linen" data-it="Biancheria da letto"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-bath"></i>
+                                <span data-fr="Serviettes" data-en="Towels" data-it="Asciugamani"></span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span data-fr="Check-in 24h/24" data-en="24-hour check-in" data-it="Check-in 24 ore su 24"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Catégorie: Non disponible -->
+                    <div class="amenity-category">
+                        <h3>
+                            <i class="fas fa-times-circle"></i>
+                            <span data-fr="Non disponible" data-en="Not available" data-it="Non disponibile"></span>
+                        </h3>
+                        <ul class="amenities-list">
+                            <li class="not-available">
+                                <i class="fas fa-smoking-ban"></i>
+                                <span data-fr="Fumeurs" data-en="Smoking" data-it="Fumatori"></span>
+                            </li>
+                            <li class="not-available">
+                                <i class="fas fa-paw"></i>
+                                <span data-fr="Animaux domestiques" data-en="Pets" data-it="Animali domestici"></span>
+                            </li>
+                            <li class="not-available">
+                                <i class="fas fa-parking"></i>
+                                <span data-fr="Parking privé" data-en="Private parking" data-it="Parcheggio privato"></span>
+                            </li>
+                            <li class="not-available">
+                                <i class="fas fa-swimming-pool"></i>
+                                <span data-fr="Piscine" data-en="Swimming pool" data-it="Piscina"></span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section Emplacement avec carte et points d'intérêt côte à côte -->
+        <!-- Section Emplacement avec carte et points d'intérêt -->
         <section class="location-section">
             <div class="container">
                 <h2 class="section-title" data-fr="Emplacement et Points d'intérêt" data-en="Location and Points of Interest" data-it="Posizione e Punti di interesse"></h2>
@@ -340,6 +610,18 @@
                                     <i class="fas fa-store-alt"></i>
                                     <span data-fr="Galerie Vittorio Emanuele II - 5 km" data-en="Galleria Vittorio Emanuele II - 5 km" data-it="Galleria Vittorio Emanuele II - 5 km"></span>
                                 </li>
+                                <li>
+                                    <i class="fas fa-building"></i>
+                                    <span data-fr="Foire de Milan (Fiera Milano) - 4 km" data-en="Milan Trade Fair (Fiera Milano) - 4 km" data-it="Fiera di Milano - 4 km"></span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-futbol"></i>
+                                    <span data-fr="Stade San Siro - 2,5 km" data-en="San Siro Stadium - 2.5 km" data-it="Stadio San Siro - 2,5 km"></span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-tree"></i>
+                                    <span data-fr="Parc Sempione - 4 km" data-en="Sempione Park - 4 km" data-it="Parco Sempione - 4 km"></span>
+                                </li>
                             </ul>
                         </div>
                         
@@ -361,124 +643,178 @@
                                     <i class="fas fa-hamburger"></i>
                                     <span data-fr="Pizzeria Napoli - 800 m" data-en="Pizzeria Napoli - 800 m" data-it="Pizzeria Napoli - 800 m"></span>
                                 </li>
+                                <li>
+                                    <i class="fas fa-wine-glass"></i>
+                                    <span data-fr="Bar à vin Enoteca - 500 m" data-en="Enoteca Wine Bar - 500 m" data-it="Enoteca - 500 m"></span>
+                                </li>
                             </ul>
                         </div>
                         
                         <div class="poi-category">
                             <h4>
-                                <i class="fas fa-subway"></i>
-                                <span data-fr="Transports" data-en="Transportation" data-it="Trasporti"></span>
+                                <i class="fas fa-store"></i>
+                                <span data-fr="Shopping et Services" data-en="Shopping and Services" data-it="Shopping e Servizi"></span>
                             </h4>
                             <ul class="poi-list">
                                 <li>
-                                    <i class="fas fa-train"></i>
-                                    <span data-fr="Métro Ligne 1 (Station Bande Nere) - 900 m" data-en="Metro Line 1 (Bande Nere Station) - 900 m" data-it="Metropolitana Linea 1 (Stazione Bande Nere) - 900 m"></span>
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span data-fr="Supermarché - 200 m" data-en="Supermarket - 200 m" data-it="Supermercato - 200 m"></span>
                                 </li>
                                 <li>
-                                    <i class="fas fa-bus"></i>
-                                    <span data-fr="Arrêt de Bus 67 - 300 m" data-en="Bus Stop 67 - 300 m" data-it="Fermata dell'Autobus 67 - 300 m"></span>
+                                    <i class="fas fa-pills"></i>
+                                    <span data-fr="Pharmacie - 300 m" data-en="Pharmacy - 300 m" data-it="Farmacia - 300 m"></span>
                                 </li>
                                 <li>
-                                    <i class="fas fa-train"></i>
-                                    <span data-fr="Gare Centrale de Milan - 7 km" data-en="Milan Central Station - 7 km" data-it="Stazione Centrale di Milano - 7 km"></span>
+                                    <i class="fas fa-tshirt"></i>
+                                    <span data-fr="Centre commercial - 1 km" data-en="Shopping Mall - 1 km" data-it="Centro commerciale - 1 km"></span>
                                 </li>
-                            </ul>
+                                <li>
+                                        <i class="fas fa-hospital"></i>
+                                        <span data-fr="Hôpital San Carlo - 1,5 km" data-en="San Carlo Hospital - 1.5 km" data-it="Ospedale San Carlo - 1,5 km"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="poi-category">
+                                <h4>
+                                    <i class="fas fa-subway"></i>
+                                    <span data-fr="Transports" data-en="Transportation" data-it="Trasporti"></span>
+                                </h4>
+                                <ul class="poi-list">
+                                    <li>
+                                        <i class="fas fa-train"></i>
+                                        <span data-fr="Métro Ligne 1 (Station Bisceglie) - 800 m" data-en="Metro Line 1 (Bisceglie Station) - 800 m" data-it="Metropolitana Linea 1 (Stazione Bisceglie) - 800 m"></span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-bus"></i>
+                                        <span data-fr="Arrêt de Bus 67 - 300 m" data-en="Bus Stop 67 - 300 m" data-it="Fermata dell'Autobus 67 - 300 m"></span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-train"></i>
+                                        <span data-fr="Gare Centrale de Milan - 7 km" data-en="Milan Central Station - 7 km" data-it="Stazione Centrale di Milano - 7 km"></span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-plane"></i>
+                                        <span data-fr="Aéroport de Malpensa - 45 km" data-en="Malpensa Airport - 45 km" data-it="Aeroporto di Malpensa - 45 km"></span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        
-        <!-- Deuxième section des boutons de réservation en bas de page -->
-        <section class="cta-section">
-            <div class="container">
-                <h2 class="section-title" data-fr="Réservez maintenant" data-en="Book Now" data-it="Prenota ora"></h2>
-                <p class="cta-text" data-fr="Ne manquez pas cette occasion de séjourner dans cet appartement idéalement situé au cœur de Milan." 
-                   data-en="Don't miss this opportunity to stay in this ideally located apartment in the heart of Milan." 
-                   data-it="Non perdere questa opportunità di soggiornare in questo appartamento situato nel cuore di Milano."></p>
-                   
-                <div class="cta-buttons">
-                    <a href="#" class="btn btn-primary" id="airbnb-link-bottom" data-fr="Réserver sur Airbnb" data-en="Book on Airbnb" data-it="Prenota su Airbnb"></a>
-                    <a href="#" class="btn btn-secondary" id="booking-link-bottom" data-fr="Réserver sur Booking" data-en="Book on Booking" data-it="Prenota su Booking"></a>
+            </section>
+            
+            <!-- Deuxième section des boutons de réservation -->
+            <section class="cta-section">
+                <div class="container">
+                    <h2 class="section-title" data-fr="Réservez maintenant" data-en="Book Now" data-it="Prenota ora"></h2>
+                    <p class="cta-text" data-fr="Ne manquez pas cette occasion de séjourner dans cet appartement idéalement situé au cœur de Milan." 
+                       data-en="Don't miss this opportunity to stay in this ideally located apartment in the heart of Milan." 
+                       data-it="Non perdere questa opportunità di soggiornare in questo appartamento situato nel cuore di Milano."></p>
+                       
+                    <div class="cta-buttons">
+                        <a href="#" class="btn btn-primary" id="airbnb-link-bottom" data-fr="Réserver sur Airbnb" data-en="Book on Airbnb" data-it="Prenota su Airbnb"></a>
+                        <a href="#" class="btn btn-secondary" id="booking-link-bottom" data-fr="Réserver sur Booking" data-en="Book on Booking" data-it="Prenota su Booking"></a>
+                    </div>
                 </div>
+            </section>
+        </main>
+    
+        <footer>
+            <div class="container">
+                <p data-fr="© 2025 Location d'Appartement à Milan. Tous droits réservés." data-en="© 2025 Milan Apartment Rental. All rights reserved." data-it="© 2025 Affitto Appartamento Milano. Tutti i diritti riservati."></p>
             </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p data-fr="© 2025 Location d'Appartement à Milan. Tous droits réservés." data-en="© 2025 Milan Apartment Rental. All rights reserved." data-it="© 2025 Affitto Appartamento Milano. Tutti i diritti riservati."></p>
-        </div>
-    </footer>
-
-    <!-- Scripts JavaScript -->
-    <script>
-    // Vérification de chargement pour déboguer
-    console.log('HTML chargé');
-    </script>
+        </footer>
     
-    <!-- Scripts principaux -->
-    <script src="js/language.js"></script>
-    <script src="js/map.js"></script>
-    <script src="js/gallery-slider.js"></script>
-    <script src="js/main.js"></script>
-    
-    <script>
-    // Script pour synchroniser les boutons du haut et du bas
-    document.addEventListener('DOMContentLoaded', function() {
-        // Récupérer les liens Airbnb et Booking
-        const airbnbUrl = "https://www.airbnb.fr/rooms/1370963027643363967?adults=2&check_in=2025-04-10&check_out=2025-04-13&search_mode=regular_search&source_impression_id=p3_1741384692_P3X4CMiYSf8hsB6L&previous_page_section_name=1000&federated_search_id=053941b5-c6d5-4ab2-b578-e4863e4249e7";
-        const bookingUrl = "https://www.booking.com/Share-C54iPOs";
+        <!-- Scripts JavaScript -->
+        <script>
+        // Vérification de chargement
+        console.log('HTML chargé');
+        </script>
         
-        // Configurer tous les liens (en haut et en bas)
-        const airbnbLinks = document.querySelectorAll('#airbnb-link-top, #airbnb-link-bottom');
-        const bookingLinks = document.querySelectorAll('#booking-link-top, #booking-link-bottom');
+        <!-- Scripts principaux -->
+        <script src="js/language.js"></script>
+        <script src="js/map.js"></script>
+        <script src="js/gallery-slider.js"></script>
+        <script src="js/main.js"></script>
         
-        // Ajouter les icônes et les URLs
-        airbnbLinks.forEach(link => {
-            link.href = airbnbUrl;
-            if (!link.querySelector('i')) {
-                const icon = document.createElement('i');
-                icon.className = 'fab fa-airbnb';
-                link.prepend(icon);
+        <script>
+        // Script pour gérer les textes avec mise en forme
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fonction pour créer du HTML stylisé
+            function createStyledContent(elementId, content) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.innerHTML = content;
+                }
             }
-        });
-        
-        bookingLinks.forEach(link => {
-            link.href = bookingUrl;
-            if (!link.querySelector('i')) {
-                const icon = document.createElement('i');
-                icon.className = 'fas fa-hotel';
-                link.prepend(icon);
-            }
-        });
-        
-        // Animation des sections au scroll
-        const sections = document.querySelectorAll('section');
-        
-        function isInViewport(element) {
-            const rect = element.getBoundingClientRect();
-            return (
-                rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8
+            
+            // Création du contenu de présentation avec formatage HTML
+            createStyledContent('overview-paragraph-1', 
+                '<p>Bienvenue dans ce <strong style="color:#e67e22">magnifique appartement milanais</strong>, idéalement situé au cœur de la ville. Niché dans un quartier tranquille mais bien connecté, cet espace de vie élégant offre une combinaison parfaite entre confort moderne et charme italien.</p>'
             );
-        }
+            
+            createStyledContent('overview-paragraph-2', 
+                '<p>Conçu pour <strong style="color:#e67e22">2 personnes</strong>, notre appartement est parfait pour les couples en escapade romantique, les voyageurs d\'affaires ou les amis en citytrip. À seulement 800 mètres de la station de métro Bisceglie (ligne 1), vous pourrez facilement rejoindre le Duomo, les boutiques de luxe, le stade San Siro et même la célèbre Foire de Milan.</p>'
+            );
+            
+            createStyledContent('overview-paragraph-3', 
+                '<p><strong style="color:#e67e22">Ne cherchez plus</strong> et réservez dès maintenant pour découvrir Milan comme un véritable local, dans un cadre confortable et élégant qui deviendra votre chez-vous loin de chez vous.</p>'
+            );
         
-        function handleScroll() {
-            sections.forEach(section => {
-                if (isInViewport(section) && !section.classList.contains('animated')) {
-                    section.classList.add('animated');
+            // Récupérer les liens Airbnb et Booking
+            const airbnbUrl = "https://www.airbnb.fr/rooms/1370963027643363967?adults=2&check_in=2025-04-10&check_out=2025-04-13&search_mode=regular_search&source_impression_id=p3_1741384692_P3X4CMiYSf8hsB6L&previous_page_section_name=1000&federated_search_id=053941b5-c6d5-4ab2-b578-e4863e4249e7";
+            const bookingUrl = "https://www.booking.com/Share-C54iPOs";
+            
+            // Configurer tous les liens (en haut et en bas)
+            const airbnbLinks = document.querySelectorAll('#airbnb-link-top, #airbnb-link-bottom');
+            const bookingLinks = document.querySelectorAll('#booking-link-top, #booking-link-bottom');
+            
+            // Ajouter les icônes et les URLs
+            airbnbLinks.forEach(link => {
+                link.href = airbnbUrl;
+                if (!link.querySelector('i')) {
+                    const icon = document.createElement('i');
+                    icon.className = 'fab fa-airbnb';
+                    link.prepend(icon);
                 }
             });
-        }
-        
-        // Animer les sections déjà visibles au chargement
-        setTimeout(function() {
-            handleScroll();
-        }, 300);
-        
-        // Ajouter l'événement de scroll
-        window.addEventListener('scroll', handleScroll);
-    });
-    </script>
-</body>
-</html> 
+            
+            bookingLinks.forEach(link => {
+                link.href = bookingUrl;
+                if (!link.querySelector('i')) {
+                    const icon = document.createElement('i');
+                    icon.className = 'fas fa-hotel';
+                    link.prepend(icon);
+                }
+            });
+            
+            // Animation des sections au scroll
+            const sections = document.querySelectorAll('section');
+            
+            function isInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8
+                );
+            }
+            
+            function handleScroll() {
+                sections.forEach(section => {
+                    if (isInViewport(section) && !section.classList.contains('animated')) {
+                        section.classList.add('animated');
+                    }
+                });
+            }
+            
+            // Animer les sections déjà visibles au chargement
+            setTimeout(function() {
+                handleScroll();
+            }, 300);
+            
+            // Ajouter l'événement de scroll
+            window.addEventListener('scroll', handleScroll);
+        });
+        </script>
+    </body>
+    </html>
