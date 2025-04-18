@@ -32,6 +32,16 @@ function setLanguage(lang) {
     
     // Mettre à jour tous les éléments avec attributs de langue
     updateElementsWithLanguage(lang);
+    
+    // Mettre à jour le contenu HTML formaté (via la fonction du script principal)
+    if (typeof updateContentByLanguage === 'function') {
+        updateContentByLanguage(lang);
+    }
+    
+    // Enregistrer la préférence de langue dans localStorage
+    localStorage.setItem('preferredLanguage', lang);
+    
+    console.log(`Langue changée pour: ${lang}`);
 }
 
 // Fonction pour mettre à jour les éléments avec la langue sélectionnée
@@ -42,11 +52,18 @@ function updateElementsWithLanguage(lang) {
     elements.forEach(element => {
         const text = element.getAttribute(`data-${lang}`);
         if (text) {
-            // Si l'élément a un enfant de type texte, le mettre à jour
-            if (element.childNodes.length > 0 && element.childNodes[0].nodeType === 3) {
-                element.childNodes[0].nodeValue = text;
+            // Vérifier s'il s'agit d'un élément à contenu texte ou d'un attribut
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.placeholder = text;
+            } else if (element.tagName === 'IMG') {
+                element.alt = text;
             } else {
-                element.textContent = text;
+                // Si l'élément a un enfant de type texte, le mettre à jour
+                if (element.childNodes.length > 0 && element.childNodes[0].nodeType === 3) {
+                    element.childNodes[0].nodeValue = text;
+                } else {
+                    element.textContent = text;
+                }
             }
         }
     });
@@ -63,3 +80,31 @@ function updateImageAltTexts(lang) {
     // Pour l'instant, nous utilisons un système plus simple avec des attributs data-
     // mais cette fonction pourrait être étendue pour des besoins plus complexes
 }
+
+// Fonction pour déterminer la langue à utiliser au chargement
+function detectInitialLanguage() {
+    // Vérifier si une langue est enregistrée dans localStorage
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang) {
+        return savedLang;
+    }
+    
+    // Sinon, essayer de détecter la langue du navigateur
+    const browserLang = navigator.language || navigator.userLanguage;
+    const shortLang = browserLang.split('-')[0];
+    
+    // Vérifier si nous supportons cette langue
+    const supportedLanguages = ['fr', 'en', 'it', 'es', 'pt', 'zh'];
+    if (supportedLanguages.includes(shortLang)) {
+        return shortLang;
+    }
+    
+    // Par défaut, utiliser le français
+    return 'fr';
+}
+
+// Initialiser la langue au chargement de la page
+window.addEventListener('load', function() {
+    const initialLang = detectInitialLanguage();
+    setLanguage(initialLang);
+});
