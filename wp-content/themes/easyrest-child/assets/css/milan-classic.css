@@ -192,6 +192,103 @@ body.easyrest-milan-classic-body .easyrest-hero {
   overflow-x: hidden;
 }
 
+.easyrest-milan-classic .latest-guides-section {
+  padding: 2.5rem 0;
+}
+
+.easyrest-milan-classic .latest-guides-section .section-head {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.easyrest-milan-classic .latest-guides-section .section-subtitle {
+  max-width: 720px;
+  margin: 0 auto;
+  color: #4b5563;
+}
+
+.easyrest-milan-classic .guides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.easyrest-milan-classic .guide-card {
+  background: var(--white-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.easyrest-milan-classic .guide-thumb {
+  position: relative;
+  display: block;
+  padding-top: 56.25%;
+  background-size: cover;
+  background-position: center;
+}
+
+.easyrest-milan-classic .guide-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--secondary-color);
+  color: var(--white-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.easyrest-milan-classic .guide-body {
+  padding: 16px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.easyrest-milan-classic .guide-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.easyrest-milan-classic .guide-title {
+  font-size: 1.1rem;
+  margin: 0;
+  color: var(--dark-color);
+}
+
+.easyrest-milan-classic .guide-title a:hover {
+  color: var(--primary-color);
+}
+
+.easyrest-milan-classic .guide-excerpt {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.easyrest-milan-classic .guide-link {
+  margin-top: auto;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.easyrest-milan-classic .guides-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  background: var(--white-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--box-shadow);
+}
+
 .easyrest-milan-classic .cta-buttons {
   display: flex;
   justify-content: center;

@@ -116,6 +116,78 @@ $logo_url = $assets_url . '/images/gallery/logo esayrest.png';
             </div>
         </section>
 
+        <!-- Latest Guides -->
+        <section class="latest-guides-section" id="easyrest-guides">
+            <div class="container">
+                <div class="section-head">
+                    <h2 class="section-title"
+                        data-fr="Derniers guides"
+                        data-en="Latest guides"
+                        data-it="Ultime guide"
+                        data-es="Ultimas guias"
+                        data-pt="Ultimos guias"
+                        data-zh="æœ€æ–°æŒ‡å—">Derniers guides</h2>
+                    <p class="section-subtitle"
+                       data-fr="Nos articles rÃ©cents pour planifier votre sÃ©jour et dÃ©couvrir Milan avant de rÃ©server."
+                       data-en="Fresh guides to help plan your stay and discover Milan before you book."
+                       data-it="Guide recenti per organizzare il tuo soggiorno e scoprire Milano prima di prenotare."
+                       data-es="GuÃ­as recientes para planear tu estancia y descubrir MilÃ¡n antes de reservar."
+                       data-pt="Guias recentes para planejar sua estadia e descobrir MilÃ£o antes de reservar."
+                       data-zh="æœ€æ–°æŒ‡å—å¸®åŠ©æ‚¨è§„åˆ’è¡Œç¨‹ï¼Œäº†è§£ç±³å…°ï¼Œå†å†³å®šé¢„è®¢ã€‚">Nos articles rÃ©cents pour planifier votre sÃ©jour et dÃ©couvrir Milan avant de rÃ©server.</p>
+                </div>
+
+                <div class="guides-grid">
+                    <?php
+                    $guides = new WP_Query([
+                        'post_type'      => 'easyrest_guide',
+                        'posts_per_page' => 3,
+                        'post_status'    => 'publish',
+                        'no_found_rows'  => true,
+                        'meta_query'     => [
+                            [
+                                'key'   => '_easyrest_has_content',
+                                'value' => '1',
+                            ],
+                        ],
+                    ]);
+
+                    if ($guides->have_posts()) :
+                        while ($guides->have_posts()) :
+                            $guides->the_post();
+                            $thumb = get_the_post_thumbnail_url(get_the_ID(), 'easyrest-blog-thumb');
+                            $thumb = $thumb ? $thumb : EASYREST_CHILD_URI . '/assets/images/gallery/livingvuensemble.webp';
+                            $lang_terms = get_the_terms(get_the_ID(), 'easyrest_lang');
+                            $type_terms = get_the_terms(get_the_ID(), 'easyrest_content_type');
+                            $lang_label = $lang_terms && !is_wp_error($lang_terms) ? strtoupper($lang_terms[0]->slug) : 'EN';
+                            $type_label = $type_terms && !is_wp_error($type_terms) ? $type_terms[0]->name : 'Guide';
+                    ?>
+                        <article class="guide-card">
+                            <a class="guide-thumb" href="<?php the_permalink(); ?>" style="background-image: url('<?php echo esc_url($thumb); ?>');">
+                                <span class="guide-badge"><?php echo esc_html($lang_label); ?></span>
+                            </a>
+                            <div class="guide-body">
+                                <div class="guide-meta">
+                                    <span class="guide-type"><?php echo esc_html($type_label); ?></span>
+                                    <span class="guide-date"><?php echo esc_html(get_the_date('M j, Y')); ?></span>
+                                </div>
+                                <h3 class="guide-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                                <p class="guide-excerpt"><?php echo esc_html(wp_trim_words(get_the_excerpt(), 18)); ?></p>
+                                <a class="guide-link" href="<?php the_permalink(); ?>">Read guide</a>
+                            </div>
+                        </article>
+                    <?php
+                        endwhile;
+                        wp_reset_postdata();
+                    else :
+                    ?>
+                        <div class="guides-empty">
+                            <p>No guides yet. New articles will appear here soon.</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </section>
+
         <!-- Galeries de photos -->
         <section class="gallery-section">
             <div class="container">
