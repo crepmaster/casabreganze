@@ -1,0 +1,29 @@
+# WordPress repo: track only custom theme & plugins
+*
+!.gitignore
+
+# Allow wp-content tree
+!wp-content/
+wp-content/*
+
+# Theme
+!wp-content/themes/
+wp-content/themes/*
+!wp-content/themes/easyrest-child/
+wp-content/themes/easyrest-child/*
+!wp-content/themes/easyrest-child/**
+
+# Plugins
+!wp-content/plugins/
+wp-content/plugins/*
+!wp-content/plugins/easyrest-core/
+wp-content/plugins/easyrest-core/*
+!wp-content/plugins/easyrest-core/**
+!wp-content/plugins/easyrest-content-engine/
+wp-content/plugins/easyrest-content-engine/*
+!wp-content/plugins/easyrest-content-engine/**
+
+# Exclude heavy/secret plugin subfolders
+wp-content/plugins/easyrest-core/scraper-node/node_modules/
+wp-content/plugins/easyrest-core/scraper-node/.env
+wp-content/plugins/easyrest-core/scraper-node/logs/

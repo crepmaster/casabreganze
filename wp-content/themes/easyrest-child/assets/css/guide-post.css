@@ -1,0 +1,403 @@
+/**
+ * EasyRest Guide Post — Light theme
+ *
+ * Hero stays dark (image overlay), body content is white bg + dark text.
+ * Gold accents (#d4af37) and Poppins/Open Sans typography match the landing.
+ *
+ * @package EasyRest_Child
+ */
+
+/* ==========================================================================
+   BASE: light body
+   ========================================================================== */
+
+body.easyrest-guide-body {
+    background: #f8f9fa;
+    color: #2d3436;
+}
+
+body.easyrest-guide-body a {
+    color: #2d3436;
+}
+
+/* Force light on all Astra wrappers (overrides Customizer inline CSS) */
+body.easyrest-guide-body,
+body.easyrest-guide-body .site-content,
+body.easyrest-guide-body .ast-container,
+body.easyrest-guide-body .ast-separate-container,
+body.easyrest-guide-body .ast-separate-container .ast-article-single,
+body.easyrest-guide-body .ast-separate-container .ast-article-post,
+body.easyrest-guide-body .content-area,
+body.easyrest-guide-body .site-main,
+body.easyrest-guide-body .site-main > article,
+body.easyrest-guide-body #primary,
+body.easyrest-guide-body .entry-content {
+    background: #f8f9fa !important;
+    background-color: #f8f9fa !important;
+}
+
+body.easyrest-guide-body .site-content,
+body.easyrest-guide-body #primary.content-area {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.easyrest-guide-body .ast-container {
+    max-width: none;
+    padding: 0;
+}
+
+/* Hide Astra header menus on guide posts (keep branding if present) */
+body.easyrest-guide-body .main-header-menu,
+body.easyrest-guide-body .ast-builder-menu,
+body.easyrest-guide-body .ast-builder-menu-mobile,
+body.easyrest-guide-body .main-header-bar-navigation,
+body.easyrest-guide-body #ast-hf-menu-1,
+body.easyrest-guide-body #ast-hf-mobile-menu {
+    display: none !important;
+}
+
+/* Hide Astra's duplicate post title */
+body.easyrest-guide-body .entry-header,
+body.easyrest-guide-body .ast-single-post-order .entry-header {
+    display: none !important;
+}
+
+body.easyrest-guide-body .site-content {
+    padding-top: 0;
+}
+
+/* ==========================================================================
+   MINIMAL NAV (dark bar at top)
+   ========================================================================== */
+
+.easyrest-guide-post .guide-nav {
+    background: #f8f9fa;
+    padding: 16px 0;
+}
+
+.easyrest-guide-post .guide-nav-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2d3436;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.easyrest-guide-post .guide-nav-home:hover {
+    color: #d4af37;
+}
+
+/* ==========================================================================
+   CONTAINER
+   ========================================================================== */
+
+.easyrest-guide-post .container {
+    width: min(1080px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   HERO (stays dark — it's an image with overlay)
+   ========================================================================== */
+
+.easyrest-guide-post .guide-hero {
+    position: relative;
+    min-height: 44vh;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    margin: 0 0 0;
+    box-shadow: 0 12px 40px rgba(0,0,0,.15);
+}
+
+.easyrest-guide-post .guide-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11,16,32,.30), rgba(11,16,32,.88));
+}
+
+.easyrest-guide-post .guide-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 40px 40px 46px;
+    max-width: 820px;
+    width: min(1080px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+.easyrest-guide-post .guide-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,.72);
+    font-weight: 600;
+}
+
+.easyrest-guide-post .guide-title {
+    margin: 12px 0 8px;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+    color: #fff;
+}
+
+.easyrest-guide-post .guide-deck {
+    margin: 0;
+    color: rgba(255,255,255,.78);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   CONTENT AREA (light theme)
+   ========================================================================== */
+
+.easyrest-guide-post .guide-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 32px;
+    padding: 40px 0;
+}
+
+.easyrest-guide-post .guide-body-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #2d3436;
+}
+
+.easyrest-guide-post .guide-body-content h2,
+.easyrest-guide-post .guide-body-content h3 {
+    color: #1a1a2e;
+    margin-top: 28px;
+    margin-bottom: 12px;
+}
+
+.easyrest-guide-post .guide-body-content a {
+    color: #d4af37;
+    text-decoration: underline;
+}
+
+.easyrest-guide-post .guide-body-content ul,
+.easyrest-guide-post .guide-body-content ol {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+.easyrest-guide-post .guide-body-content li {
+    margin-bottom: 0.4em;
+}
+
+/* ==========================================================================
+   SIDEBAR CTA (light card)
+   ========================================================================== */
+
+.easyrest-guide-post .guide-aside {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+}
+
+.easyrest-guide-post .guide-cta-card {
+    border-radius: 16px;
+    border: 1px solid #e0e0e0;
+    padding: 22px;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
+
+.easyrest-guide-post .guide-cta-card h3 {
+    margin: 0 0 8px;
+    color: #1a1a2e;
+    font-size: 18px;
+}
+
+.easyrest-guide-post .guide-cta-card p {
+    margin: 0 0 16px;
+    color: #636e72;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.easyrest-guide-post .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.easyrest-guide-post .btn-primary {
+    background: linear-gradient(135deg, #d4af37, #ffe380);
+    color: #111;
+    box-shadow: 0 6px 20px rgba(212,175,55,.2);
+}
+
+.easyrest-guide-post .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(212,175,55,.3);
+}
+
+/* ==========================================================================
+   MORE GUIDES SECTION (dark band for contrast)
+   ========================================================================== */
+
+.easyrest-guide-post .guide-more {
+    background: #0b1020;
+    padding: 48px 0 70px;
+    margin-top: 40px;
+}
+
+.easyrest-guide-post .section-title {
+    margin: 0 0 20px;
+    font-size: clamp(22px, 2.6vw, 32px);
+    color: rgba(255,255,255,.92);
+}
+
+.easyrest-guide-post .guides-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.easyrest-guide-post .guide-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,.26);
+}
+
+.easyrest-guide-post .guide-thumb {
+    display: block;
+    position: relative;
+    padding-top: 56%;
+    background-size: cover;
+    background-position: center;
+}
+
+.easyrest-guide-post .guide-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.18);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,.9);
+    font-weight: 700;
+}
+
+.easyrest-guide-post .guide-body {
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.easyrest-guide-post .guide-type,
+.easyrest-guide-post .guide-date {
+    color: rgba(255,255,255,.72);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.easyrest-guide-post .guide-excerpt {
+    margin: 0;
+    color: rgba(255,255,255,.72);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.easyrest-guide-post .guide-link {
+    margin-top: auto;
+    font-weight: 700;
+    color: #d4af37;
+}
+
+.easyrest-guide-post .guides-empty {
+    border-radius: 16px;
+    border: 1px dashed rgba(255,255,255,.2);
+    padding: 24px;
+    text-align: center;
+    color: rgba(255,255,255,.7);
+}
+
+/* ==========================================================================
+   EMPTY / SHORT CONTENT STATE
+   ========================================================================== */
+
+.easyrest-guide--short .guide-content--empty {
+    display: block;
+    text-align: center;
+    padding: 60px 0;
+}
+
+.easyrest-guide-post .guide-coming-soon {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    border-radius: 18px;
+    border: 1px dashed #e0e0e0;
+    background: #fff;
+}
+
+.easyrest-guide-post .guide-coming-soon p {
+    margin: 0 0 20px;
+    color: #636e72;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 980px) {
+    .easyrest-guide-post .guide-content {
+        grid-template-columns: 1fr;
+    }
+
+    .easyrest-guide-post .guide-aside {
+        position: static;
+    }
+
+    .easyrest-guide-post .guides-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .easyrest-guide-post .guide-hero {
+        min-height: 36vh;
+    }
+
+    .easyrest-guide-post .guide-hero-inner {
+        padding: 28px 22px 32px;
+    }
+}
+
+@media (max-width: 560px) {
+    .easyrest-guide-post .guides-grid {
+        grid-template-columns: 1fr;
+    }
+}

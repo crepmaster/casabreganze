@@ -1,0 +1,722 @@
+/**
+ * EasyRest Milan Landing Page - Phase Pro
+ *
+ * Design premium sombre avec accents dorés
+ * Landing page pure sans header/footer Astra
+ *
+ * @package EasyRest_Child
+ * @version 4.0.0
+ */
+
+/* ==========================================================================
+   CSS VARIABLES
+   ========================================================================== */
+
+:root {
+    --er-bg: #0b1020;
+    --er-surface: rgba(255,255,255,.06);
+    --er-surface-2: rgba(255,255,255,.10);
+    --er-text: rgba(255,255,255,.92);
+    --er-muted: rgba(255,255,255,.70);
+    --er-border: rgba(255,255,255,.14);
+    --er-shadow: 0 18px 60px rgba(0,0,0,.35);
+    --er-radius: 18px;
+    --er-radius-sm: 12px;
+    --er-accent: #d4af37;
+    --er-accent-2: #00c2a8;
+    --er-max: 1180px;
+}
+
+/* ==========================================================================
+   LANDING PURE - HIDE ASTRA CHROME
+   ========================================================================== */
+
+body.easyrest-milan-landing-body .main-header-bar,
+body.easyrest-milan-landing-body .ast-main-header-wrap,
+body.easyrest-milan-landing-body .ast-primary-header-bar,
+body.easyrest-milan-landing-body .ast-mobile-header-wrap,
+body.easyrest-milan-landing-body .ast-desktop-header,
+body.easyrest-milan-landing-body .site-header,
+body.easyrest-milan-landing-body header.site-header,
+body.easyrest-milan-landing-body #masthead,
+body.easyrest-milan-landing-body .site-footer,
+body.easyrest-milan-landing-body footer.site-footer,
+body.easyrest-milan-landing-body #colophon,
+body.easyrest-milan-landing-body .ast-footer-overlay,
+body.easyrest-milan-landing-body .ast-footer-wrap,
+body.easyrest-milan-landing-body .ast-small-footer {
+    display: none !important;
+}
+
+body.easyrest-milan-landing-body .site-content,
+body.easyrest-milan-landing-body #primary.content-area {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.easyrest-milan-landing-body .ast-container {
+    max-width: none;
+    padding: 0;
+}
+
+/* ==========================================================================
+   BASE STYLES
+   ========================================================================== */
+
+.easyrest-milan-landing {
+    background:
+        radial-gradient(1200px 700px at 18% 8%, rgba(212,175,55,.18), transparent 60%),
+        radial-gradient(900px 600px at 82% 24%, rgba(0,194,168,.14), transparent 55%),
+        var(--er-bg);
+    color: var(--er-text);
+}
+
+.easyrest-milan-landing * {
+    box-sizing: border-box;
+}
+
+.easyrest-milan-landing a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.easyrest-milan-landing img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.easyrest-milan-landing .container {
+    width: min(var(--er-max), calc(100% - 40px));
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.easyrest-milan-landing .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    will-change: transform;
+}
+
+.easyrest-milan-landing .btn:focus-visible {
+    outline: 2px solid rgba(212,175,55,.8);
+    outline-offset: 3px;
+}
+
+.easyrest-milan-landing .btn-primary {
+    background: linear-gradient(135deg, rgba(212,175,55,1), rgba(255,227,128,1));
+    color: #111;
+    box-shadow: 0 14px 34px rgba(212,175,55,.22);
+}
+
+.easyrest-milan-landing .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 45px rgba(212,175,55,.28);
+    color: #111;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+
+.easyrest-milan-landing .easyrest-hero {
+    position: relative;
+    min-height: auto;
+    max-height: none;
+    display: grid;
+    align-items: center;
+    padding: 32px 0 20px;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(11,16,32,.65), rgba(11,16,32,.94)),
+        url('/wp-content/uploads/easyrest-hero.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.easyrest-milan-landing .easyrest-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(900px 600px at 30% 22%, rgba(255,255,255,.10), transparent 55%),
+        radial-gradient(900px 600px at 70% 28%, rgba(212,175,55,.10), transparent 55%);
+    pointer-events: none;
+}
+
+.easyrest-milan-landing .easyrest-hero-content {
+    position: relative;
+    width: min(var(--er-max), calc(100% - 40px));
+    margin: 0 auto;
+    text-align: left;
+    background: rgba(0,0,0,.22);
+    border: 1px solid var(--er-border);
+    border-radius: calc(var(--er-radius) + 6px);
+    padding: 26px 28px;
+    box-shadow: var(--er-shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* JO Badge */
+.easyrest-milan-landing .jo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.easyrest-milan-landing .jo-badge span {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(212,175,55,.55);
+    background: rgba(212,175,55,.12);
+    color: rgba(255,255,255,.92);
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.easyrest-milan-landing .easyrest-hero h1 {
+    margin: 0 0 8px 0;
+    font-size: clamp(30px, 3.5vw, 44px);
+    line-height: 1.08;
+    color: #fff !important;
+    letter-spacing: -0.5px;
+    font-weight: 700;
+}
+
+.easyrest-milan-landing .easyrest-hero .subtitle {
+    margin: 0 0 18px 0;
+    color: rgba(255,255,255,.78) !important;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   LANGUAGE SELECTOR
+   ========================================================================== */
+
+.easyrest-milan-landing .language-selector {
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+    width: min(var(--er-max), calc(100% - 40px));
+    margin: -18px auto 0;
+    padding: 10px;
+    border-radius: 999px;
+    background: rgba(7,10,18,.72);
+    border: 1px solid var(--er-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 18px 55px rgba(0,0,0,.35);
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    justify-content: center;
+}
+
+.easyrest-milan-landing .language-selector button {
+    appearance: none;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.88);
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+
+.easyrest-milan-landing .language-selector button:hover {
+    transform: translateY(-1px);
+    background: rgba(255,255,255,.10);
+}
+
+.easyrest-milan-landing .language-selector button.active {
+    background: rgba(212,175,55,.18);
+    border-color: rgba(212,175,55,.55);
+    color: #fff;
+}
+
+/* ==========================================================================
+   LATEST GUIDES SECTION
+   ========================================================================== */
+
+.easyrest-milan-landing .latest-guides-section {
+    padding: 54px 0 40px;
+}
+
+.easyrest-milan-landing .latest-guides-section .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+}
+
+.easyrest-milan-landing .guides-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.easyrest-milan-landing .guide-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--er-radius);
+    border: 1px solid var(--er-border);
+    background: rgba(255,255,255,.06);
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,.26);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.easyrest-milan-landing .guide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 55px rgba(0,0,0,.34);
+    border-color: rgba(212,175,55,.3);
+}
+
+.easyrest-milan-landing .guide-thumb {
+    display: block;
+    position: relative;
+    padding-top: 56%;
+    background-size: cover;
+    background-position: center;
+}
+
+.easyrest-milan-landing .guide-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.18);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,.9);
+    font-weight: 700;
+}
+
+.easyrest-milan-landing .guide-body {
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.easyrest-milan-landing .guide-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--er-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.easyrest-milan-landing .guide-type {
+    color: rgba(255,255,255,.85);
+    font-weight: 600;
+}
+
+.easyrest-milan-landing .guide-title {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.3;
+    color: #fff;
+}
+
+.easyrest-milan-landing .guide-title a {
+    color: inherit;
+}
+
+.easyrest-milan-landing .guide-excerpt {
+    margin: 0;
+    color: var(--er-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.easyrest-milan-landing .guide-link {
+    margin-top: auto;
+    font-weight: 700;
+    color: var(--er-accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.easyrest-milan-landing .guides-empty {
+    border-radius: var(--er-radius);
+    border: 1px dashed rgba(255,255,255,.18);
+    padding: 26px;
+    text-align: center;
+    color: var(--er-muted);
+    background: rgba(255,255,255,.04);
+}
+
+/* ==========================================================================
+   SECTION STYLES
+   ========================================================================== */
+
+.easyrest-milan-landing section {
+    padding: 58px 0;
+}
+
+.easyrest-milan-landing .section-title {
+    margin: 0 0 12px 0;
+    font-size: clamp(24px, 2.2vw, 34px);
+    letter-spacing: -0.2px;
+    color: var(--er-text);
+    font-weight: 700;
+}
+
+.easyrest-milan-landing .section-subtitle {
+    margin: 0 0 26px 0;
+    color: var(--er-muted);
+    max-width: 860px;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+/* Centered section titles */
+.easyrest-milan-landing .reservation-section .section-title,
+.easyrest-milan-landing .gallery-section .section-title,
+.easyrest-milan-landing .amenities-section .section-title {
+    text-align: center;
+}
+
+.easyrest-milan-landing .reservation-section .section-subtitle {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ==========================================================================
+   RESERVATION SECTION
+   ========================================================================== */
+
+.easyrest-milan-landing .reservation-section {
+    padding: 70px 0;
+}
+
+.easyrest-milan-landing .booking-form-wrapper {
+    max-width: 520px;
+    margin: 0 auto;
+    border-radius: calc(var(--er-radius) + 8px);
+    border: 1px solid var(--er-border);
+    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+    box-shadow: var(--er-shadow);
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Style inputs inside booking form */
+.easyrest-milan-landing .booking-form-wrapper input,
+.easyrest-milan-landing .booking-form-wrapper select,
+.easyrest-milan-landing .booking-form-wrapper textarea {
+    border-radius: 12px !important;
+    border: 1px solid rgba(255,255,255,.18) !important;
+    background: rgba(0,0,0,.22) !important;
+    color: rgba(255,255,255,.92) !important;
+    padding: 12px 14px !important;
+}
+
+.easyrest-milan-landing .booking-form-wrapper input:focus,
+.easyrest-milan-landing .booking-form-wrapper select:focus,
+.easyrest-milan-landing .booking-form-wrapper textarea:focus {
+    border-color: rgba(212,175,55,.55) !important;
+    outline: none !important;
+}
+
+.easyrest-milan-landing .booking-form-wrapper label {
+    color: rgba(255,255,255,.84) !important;
+    font-weight: 600;
+}
+
+.easyrest-milan-landing .booking-form-wrapper ::placeholder {
+    color: rgba(255,255,255,.5) !important;
+}
+
+/* ==========================================================================
+   GALLERY SECTION
+   ========================================================================== */
+
+.easyrest-milan-landing .gallery-section {
+    padding: 58px 0;
+}
+
+.easyrest-milan-landing .gallery-section .section-title {
+    margin-bottom: 30px;
+}
+
+.easyrest-milan-landing .easyrest-gallery {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 14px;
+}
+
+.easyrest-milan-landing .easyrest-gallery-item {
+    border-radius: var(--er-radius);
+    overflow: hidden;
+    border: 1px solid var(--er-border);
+    background: rgba(255,255,255,.04);
+    box-shadow: 0 12px 36px rgba(0,0,0,.28);
+    min-height: 180px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.easyrest-milan-landing .easyrest-gallery-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 48px rgba(0,0,0,.35);
+}
+
+.easyrest-milan-landing .easyrest-gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Featured image: large mosaic */
+.easyrest-milan-landing .easyrest-gallery-item.featured {
+    grid-column: span 7;
+    grid-row: span 2;
+    min-height: 380px;
+}
+
+.easyrest-milan-landing .easyrest-gallery-item:not(.featured) {
+    grid-column: span 5;
+}
+
+/* ==========================================================================
+   AMENITIES SECTION
+   ========================================================================== */
+
+.easyrest-milan-landing .amenities-section {
+    padding: 58px 0;
+}
+
+.easyrest-milan-landing .amenities-section .section-title {
+    margin-bottom: 30px;
+}
+
+/* Style amenities list output from shortcode */
+.easyrest-milan-landing .amenities-section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.easyrest-milan-landing .amenities-section li {
+    padding: 16px;
+    border-radius: var(--er-radius-sm);
+    border: 1px solid var(--er-border);
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.88);
+    font-weight: 500;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.easyrest-milan-landing .amenities-section li:hover {
+    background: rgba(255,255,255,.10);
+    border-color: rgba(212,175,55,.3);
+}
+
+/* ==========================================================================
+   CTA SECTION
+   ========================================================================== */
+
+.easyrest-milan-landing .cta-section {
+    padding: 64px 0 72px;
+}
+
+.easyrest-milan-landing .cta-section .container {
+    border-radius: calc(var(--er-radius) + 10px);
+    border: 1px solid rgba(212,175,55,.30);
+    background:
+        radial-gradient(800px 420px at 18% 30%, rgba(212,175,55,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+    box-shadow: var(--er-shadow);
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.easyrest-milan-landing .cta-section h2 {
+    margin: 0 0 12px 0;
+    font-size: clamp(26px, 2.4vw, 40px);
+    color: var(--er-text) !important;
+    font-weight: 700;
+}
+
+.easyrest-milan-landing .cta-section p {
+    margin: 0 0 24px 0;
+    color: var(--er-muted) !important;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.65;
+    font-size: 16px;
+}
+
+.easyrest-milan-landing .cta-section .btn-primary {
+    font-size: 16px;
+    padding: 14px 32px;
+}
+
+/* ==========================================================================
+   LANDING FOOTER
+   ========================================================================== */
+
+.easyrest-milan-landing .landing-footer {
+    padding: 22px 0 40px;
+    color: rgba(255,255,255,.60);
+    font-size: 14px;
+}
+
+.easyrest-milan-landing .landing-footer p {
+    margin: 0;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,.10);
+    padding-top: 18px;
+}
+
+.easyrest-milan-landing .landing-footer a {
+    color: var(--er-accent);
+    transition: opacity 0.2s ease;
+}
+
+.easyrest-milan-landing .landing-footer a:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 980px) {
+    .easyrest-milan-landing .easyrest-hero {
+        min-height: auto;
+        padding: 36px 0 22px;
+    }
+
+    .easyrest-milan-landing .easyrest-hero-content {
+        padding: 28px 20px;
+    }
+
+    .easyrest-milan-landing section {
+        padding: 44px 0;
+    }
+
+    .easyrest-milan-landing .easyrest-gallery-item.featured {
+        grid-column: span 12;
+        grid-row: auto;
+        min-height: 320px;
+    }
+
+    .easyrest-milan-landing .easyrest-gallery-item:not(.featured) {
+        grid-column: span 6;
+    }
+
+    .easyrest-milan-landing .amenities-section ul {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .easyrest-milan-landing .guides-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .easyrest-milan-landing .cta-section .container {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .easyrest-milan-landing .easyrest-hero {
+        min-height: auto;
+    }
+
+    .easyrest-milan-landing .easyrest-hero h1 {
+        font-size: clamp(28px, 6vw, 38px);
+    }
+
+    .easyrest-milan-landing .language-selector {
+        margin-top: -12px;
+        padding: 8px;
+        gap: 6px;
+        justify-content: flex-start;
+    }
+
+    .easyrest-milan-landing .language-selector button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .easyrest-milan-landing .section-title {
+        font-size: clamp(22px, 5vw, 28px);
+    }
+
+    .easyrest-milan-landing .booking-form-wrapper {
+        padding: 18px;
+    }
+
+    .easyrest-milan-landing .latest-guides-section {
+        padding: 44px 0 32px;
+    }
+}
+
+@media (max-width: 560px) {
+    .easyrest-milan-landing .easyrest-hero-content {
+        padding: 24px 16px;
+    }
+
+    .easyrest-milan-landing .easyrest-gallery-item:not(.featured) {
+        grid-column: span 12;
+    }
+
+    .easyrest-milan-landing .amenities-section ul {
+        grid-template-columns: 1fr;
+    }
+
+    .easyrest-milan-landing .guides-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .easyrest-milan-landing .btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .easyrest-milan-landing .container {
+        width: calc(100% - 32px);
+    }
+
+    .easyrest-milan-landing .cta-section .container {
+        padding: 28px 18px;
+    }
+}

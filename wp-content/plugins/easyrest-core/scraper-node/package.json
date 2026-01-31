@@ -1,0 +1,23 @@
+{
+  "name": "easyrest-booking-scraper",
+  "version": "2.0.0",
+  "description": "Booking.com price scraper microservice using Puppeteer + Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "scrape": "node scraper.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop easyrest-scraper",
+    "pm2:restart": "pm2 restart easyrest-scraper",
+    "pm2:logs": "pm2 logs easyrest-scraper"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "puppeteer": "^21.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

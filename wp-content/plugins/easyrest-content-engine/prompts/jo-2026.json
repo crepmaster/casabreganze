@@ -1,0 +1,42 @@
+{
+    "system_prompt": "You are a professional travel and sports content writer specializing in the Milan-Cortina 2026 Winter Olympics. You create engaging, informative content for visitors planning to attend Olympic events in Milan.\n\nContext: The 2026 Winter Olympics will be held across Milan and Cortina d'Ampezzo from February 6-22, 2026. Milan hosts ice sports (hockey, figure skating, short track) at multiple venues.\n\nYour content should:\n- Build excitement for the Olympic experience\n- Provide practical information for international visitors\n- Highlight the unique opportunity of attending the Olympics\n- Naturally promote the EasyRest Milan apartment as an ideal accommodation\n- Include transport information specific to Olympic venues\n\nKey Milan Olympic Venues:\n- San Siro Stadium (Opening/Closing Ceremonies)\n- PalaItalia Santa Giulia (Ice Hockey)\n- Milano Ice Arena/Mediolanum Forum (Figure Skating, Short Track)\n- Rho Ice Hockey Arena (Ice Hockey)\n\nAll venues are accessible via Milan's metro system from the Bisceglie area.",
+
+    "variables": {
+        "event_name": "Milan-Cortina 2026 Winter Olympics",
+        "event_dates": "February 6-22, 2026",
+        "host_cities": "Milan and Cortina d'Ampezzo",
+        "sports_milan": "Ice Hockey, Figure Skating, Short Track Speed Skating",
+        "olympic_website": "https://www.milanocortina2026.org"
+    },
+
+    "content_types": {
+        "weekly_guide": {
+            "title": "Olympic Week Guide",
+            "template": "Write an exciting Olympic week guide for the Milan-Cortina 2026 Winter Olympics during {{week_dates}}.\n\nTarget keyword: {{keyword}}\nLanguage: {{lang}}\n\n## This Week at the Olympics\n- Overview of Olympic events happening this week in Milan\n- Medal events and key matchups to watch\n- Atmosphere and excitement level expected\n\n## Olympic Events Schedule\n{{events_list}}\n- Detail each event with venue, time, and what to expect\n- Highlight medal events\n- Include ticket availability notes\n\n## Olympic Venue Access\n- Transport from Bisceglie to each venue\n- Include [easyrest_jo_distances]\n- Olympic transport passes and special services\n- Recommended arrival times for Olympic events\n\n## Olympic Fan Experience\n- Live sites and fan zones in Milan\n- Where to watch events if you don't have tickets\n- Olympic merchandise and souvenirs\n- Best spots for atmosphere\n\n## Weather and Preparation\n- February weather in Milan\n- What to wear to Olympic events\n- What to bring to venues\n\n## Your Olympic Base\n- Why Bisceglie is perfect for Olympics\n- Direct M1 access to all Milan Olympic venues\n- [easyrest_booking_cta style=\"banner\"]\n\nBuild Olympic excitement while providing practical information!",
+            "word_count": [1400, 2000]
+        },
+
+        "sport_guide": {
+            "title": "Olympic Sport Guide",
+            "template": "Write an engaging guide about {{sport}} at the Milan-Cortina 2026 Winter Olympics.\n\nTarget keyword: {{keyword}}\nLanguage: {{lang}}\n\n## {{sport}} at Milan 2026\n- Introduction to {{sport}} at the Olympics\n- Why it's exciting to watch live\n- Key nations and athletes to watch\n\n## Olympic {{sport}} Schedule\n{{events_list}}\n- Preliminary rounds and medal events\n- Key dates to mark in your calendar\n\n## Olympic Venue: {{venue_name}}\n- About the venue and its Olympic setup\n- Capacity and atmosphere\n- [easyrest_venue_info venue=\"{{venue_slug}}\"]\n- Best seats for {{sport}}\n\n## Getting There\n- Transport from Bisceglie\n- [easyrest_jo_distances]\n- Olympic day travel tips\n\n## First-Timer's Guide\n- Understanding {{sport}} rules\n- What to expect at an Olympic {{sport}} event\n- Fan etiquette\n\n## Stay Near the Action\n- Perfect location for {{sport}} fans\n- [easyrest_booking_cta]\n\nMake readers excited to experience Olympic {{sport}}!",
+            "word_count": [1100, 1600]
+        },
+
+        "venue_guide": {
+            "title": "Olympic Venue Guide",
+            "template": "Write a comprehensive guide to {{venue_name}} for the Milan-Cortina 2026 Winter Olympics.\n\nTarget keyword: {{keyword}}\nLanguage: {{lang}}\n\n## About {{venue_name}}\n- History and significance\n- Olympic transformation and upgrades\n- Capacity for Olympic events\n\n## Olympic Events Here\n{{events_list}}\n- Sports hosted at this venue\n- Medal events schedule\n- Atmosphere expected\n\n## Getting to {{venue_name}}\n- Detailed transport from Bisceglie metro\n- [easyrest_venue_info venue=\"{{venue_slug}}\"]\n- Olympic special transport services\n- Recommended arrival times\n\n## Venue Tips\n- What to bring/not bring (Olympic security)\n- Food and drink options\n- Best viewing spots\n- Accessibility information\n\n## Around the Venue\n- Nearby Olympic activities\n- Where to eat before/after events\n- Photo opportunities\n\n## Your Olympic Accommodation\n- Easy access to {{venue_name}} from Bisceglie\n- [easyrest_booking_cta style=\"banner\"]\n\nHelp visitors make the most of their Olympic venue experience!"
+        },
+
+        "transport_guide": {
+            "title": "Olympic Transport Guide",
+            "template": "Write a detailed transport guide for getting to Olympic venues in Milan during the 2026 Winter Olympics.\n\nTarget keyword: {{keyword}}\nLanguage: {{lang}}\n\n## Olympic Transport Overview\n- Milan's public transport during the Olympics\n- Special Olympic services and schedules\n- Olympic transport passes\n\n## From Bisceglie to Olympic Venues\n[easyrest_jo_distances]\n\n### To San Siro (Ceremonies)\n- Step-by-step directions\n- Travel time and connections\n- Tips for ceremony days\n\n### To PalaItalia Santa Giulia (Hockey)\n- Route details\n- Best times to travel\n- Post-game transport\n\n### To Mediolanum Forum (Figure Skating)\n- Detailed instructions\n- Alternative routes\n\n### To Rho Arena (Hockey)\n- Direct M1 connection\n- Travel tips\n\n## Olympic Day Transport Tips\n- When to leave for events\n- Avoiding crowds\n- Late-night transport after events\n\n## Perfect Olympic Location\n- Why Bisceglie area is ideal\n- M1 connects to all Milan Olympic venues\n- [easyrest_booking_cta style=\"compact\"]\n\nMake Olympic travel stress-free!"
+        }
+    },
+
+    "enabled_content_types": ["weekly_guide", "sport_guide", "venue_guide", "transport_guide", "match_preview"],
+
+    "examples": {
+        "good_olympic_intro": "The Olympic flame arrives in Milan this week, bringing with it the world's best winter athletes and an electric atmosphere across the city. From nail-biting ice hockey showdowns at the brand-new PalaItalia to the grace of figure skating at the Mediolanum Forum, this is your chance to witness Olympic history.",
+        "good_venue_description": "San Siro, the legendary 'La Scala del Calcio', transforms into the heart of the Winter Olympics for the opening and closing ceremonies. With a capacity of 80,000 for Olympic events, the atmosphere promises to be unforgettable as athletes from around the world parade under the famous San Siro lights."
+    }
+}

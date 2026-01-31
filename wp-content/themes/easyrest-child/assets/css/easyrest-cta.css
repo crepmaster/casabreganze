@@ -1,0 +1,130 @@
+/**
+ * EasyRest CTA Styles
+ *
+ * Minimal CSS for the booking CTA button and reservation section.
+ * Add this to your WordPress child theme or include via wp_enqueue_style().
+ *
+ * Usage in WordPress:
+ * wp_enqueue_style('easyrest-cta', get_stylesheet_directory_uri() . '/assets/css/easyrest-cta.css');
+ */
+
+/* ===== EasyRest CTA Button ===== */
+.easyrest-cta-btn {
+    display: inline-block;
+    padding: 16px 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.easyrest-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    color: #fff;
+    text-decoration: none;
+}
+
+.easyrest-cta-btn:active {
+    transform: translateY(0);
+}
+
+.easyrest-cta-btn:focus {
+    outline: 3px solid rgba(231, 76, 60, 0.5);
+    outline-offset: 2px;
+}
+
+/* Hero CTA wrapper */
+.hero-cta-wrapper {
+    text-align: center;
+    margin: 30px 0;
+}
+
+/* Pricing CTA wrapper */
+.pricing-cta {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* CTA buttons container */
+.cta-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* ===== EasyRest Reservation Section ===== */
+#easyrest-reservation {
+    padding: 60px 0;
+    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+#easyrest-reservation .section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2rem;
+    color: #333;
+}
+
+.easyrest-reservation-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Shortcode placeholder styling (for development only) */
+.easyrest-shortcode-placeholder {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    color: #666;
+    font-style: italic;
+    font-family: monospace;
+}
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 768px) {
+    .easyrest-cta-btn {
+        padding: 14px 30px;
+        font-size: 1.1rem;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    #easyrest-reservation {
+        padding: 40px 15px;
+    }
+
+    .easyrest-reservation-wrapper {
+        padding: 20px;
+    }
+
+    #easyrest-reservation .section-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .easyrest-cta-btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+
+    .hero-cta-wrapper {
+        margin: 20px 15px;
+    }
+}

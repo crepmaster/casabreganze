@@ -1,0 +1,1157 @@
+/* ============================================================================
+ * EASYREST MILAN CLASSIC - CSS
+ * Adapté de layout.css pour WordPress/Astra
+ * Scoped to .easyrest-milan-classic to avoid conflicts
+ * @version 1.0.0
+ * ============================================================================ */
+
+/* Variables globales */
+.easyrest-milan-classic {
+  --primary-color: #2a6aa8;
+  --secondary-color: #e67e22;
+  --accent-color: #f1c40f;
+  --dark-color: #333333;
+  --light-color: #f4f4f4;
+  --white-color: #ffffff;
+  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* ============================================================================
+ * BASE STYLES
+ * ============================================================================ */
+
+.easyrest-milan-classic {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--dark-color);
+  background-color: var(--light-color);
+}
+
+.easyrest-milan-classic a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.easyrest-milan-classic ul {
+  list-style: none;
+}
+
+.easyrest-milan-classic img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========================================================================
+ * HERO SIZE OVERRIDE (Classic Template)
+ * ======================================================================== */
+
+body.easyrest-milan-classic-body .easyrest-hero {
+  min-height: auto;
+  padding: 44px 0 28px;
+}
+
+@media (max-width: 768px) {
+  body.easyrest-milan-classic-body .easyrest-hero {
+    padding: 32px 0 22px;
+  }
+}
+
+.easyrest-milan-classic .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Section titles */
+.easyrest-milan-classic .section-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+/* Buttons */
+.easyrest-milan-classic .btn {
+  padding: 15px 30px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+}
+
+.easyrest-milan-classic .btn i {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
+.easyrest-milan-classic .btn-primary {
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+}
+
+.easyrest-milan-classic .btn-secondary {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.easyrest-milan-classic .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--box-shadow);
+}
+
+/* Section animations */
+.easyrest-milan-classic section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic section.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================================
+ * LANGUAGE SELECTOR
+ * ============================================================================ */
+
+.easyrest-milan-classic .language-selector {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px;
+  background-color: #333333;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .language-selector button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  margin: 5px;
+  padding: 5px 10px;
+  opacity: 0.7;
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+.easyrest-milan-classic .language-selector button:hover,
+.easyrest-milan-classic .language-selector button.active {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* ============================================================================
+ * HEADER / HERO
+ * ============================================================================ */
+
+.easyrest-milan-classic .classic-header {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 2rem 0;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .main-title {
+  font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+  padding: 0 10px;
+}
+
+.easyrest-milan-classic .subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.easyrest-milan-classic .hero {
+  background-color: var(--white-color);
+  padding: 2rem 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 2rem auto;
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+/* ============================================================================
+ * APARTMENT OVERVIEW
+ * ============================================================================ */
+
+.easyrest-milan-classic .apartment-overview {
+  padding: 3rem 0;
+  background-color: var(--light-color);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .overview-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+.easyrest-milan-classic .overview-text {
+  text-align: justify;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .overview-text p {
+  margin-bottom: 1rem;
+}
+
+.easyrest-milan-classic .highlight {
+  color: #cc5500;
+  font-weight: bold;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 0 3px;
+  border-radius: 2px;
+}
+
+/* ============================================================================
+ * WHY BOOK SECTION
+ * ============================================================================ */
+
+.easyrest-milan-classic .why-book-section {
+  background-color: #f0f8ff;
+  padding: 4rem 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .reason-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  text-align: center;
+  transition: transform 0.3s ease;
+  width: 100%;
+}
+
+.easyrest-milan-classic .reason-card:hover {
+  transform: translateY(-10px);
+}
+
+.easyrest-milan-classic .reason-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.easyrest-milan-classic .reason-title {
+  color: var(--secondary-color);
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.easyrest-milan-classic .reason-description {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ============================================================================
+ * GALLERY SECTION
+ * ============================================================================ */
+
+.easyrest-milan-classic .gallery-section {
+  padding: 3rem 0;
+  background-color: var(--white-color);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Tab navigation */
+.easyrest-milan-classic .gallery-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 15px;
+}
+
+.easyrest-milan-classic .tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: var(--transition);
+  color: var(--dark-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.easyrest-milan-classic .tab-btn i {
+  font-size: 1.2rem;
+}
+
+.easyrest-milan-classic .tab-btn:hover,
+.easyrest-milan-classic .tab-btn.active {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+/* Gallery content */
+.easyrest-milan-classic .gallery-content {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+/* Gallery tabs */
+.easyrest-milan-classic .gallery-tab {
+  display: none;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.easyrest-milan-classic .gallery-tab.active {
+  display: block !important;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Gallery items (slides) */
+.easyrest-milan-classic .gallery-item {
+  display: none;
+  position: relative;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.easyrest-milan-classic .gallery-item.active {
+  display: block;
+}
+
+.easyrest-milan-classic .gallery-item:hover {
+  transform: translateY(-5px);
+}
+
+.easyrest-milan-classic .gallery-item img {
+  max-width: 100%;
+  max-height: 500px;
+  object-fit: contain !important;
+  background-color: #f5f5f5;
+  margin: 0 auto;
+  display: block;
+  width: auto;
+  height: auto;
+}
+
+/* Slider navigation */
+.easyrest-milan-classic .gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.easyrest-milan-classic .prev-btn {
+  left: 10px;
+}
+
+.easyrest-milan-classic .next-btn {
+  right: 10px;
+}
+
+/* Slider indicators */
+.easyrest-milan-classic .slider-indicators {
+  display: flex !important;
+  justify-content: center;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+}
+
+.easyrest-milan-classic .indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  margin: 0 5px;
+  cursor: pointer;
+  border: none;
+}
+
+.easyrest-milan-classic .indicator.active {
+  background-color: var(--primary-color);
+}
+
+/* Modal for image zoom */
+.easyrest-milan-classic .modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.easyrest-milan-classic .modal.active {
+  display: flex;
+}
+
+.easyrest-milan-classic .modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
+.easyrest-milan-classic .modal-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: var(--white-color);
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* ============================================================================
+ * AMENITIES SECTION
+ * ============================================================================ */
+
+.easyrest-milan-classic .amenities-section {
+  background-color: #f8f9fa;
+  padding: 3rem 0;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .amenity-category {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .amenity-category h3 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--secondary-color);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.easyrest-milan-classic .amenity-category h3 i {
+  margin-right: 10px;
+  color: var(--secondary-color);
+}
+
+.easyrest-milan-classic .amenities-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.easyrest-milan-classic .amenities-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.easyrest-milan-classic .amenities-list li:last-child {
+  margin-bottom: 0;
+}
+
+.easyrest-milan-classic .amenities-list li i {
+  width: 24px;
+  margin-right: 10px;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.easyrest-milan-classic .amenities-list .not-available {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.easyrest-milan-classic .amenities-list .not-available i {
+  color: #ccc;
+}
+
+/* ============================================================================
+ * PRICING SECTION
+ * ============================================================================ */
+
+.easyrest-milan-classic .pricing-section {
+  background-color: #f9f9f9;
+  padding: 3rem 0;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .price-tag {
+  font-size: 2.5rem;
+  color: #cc5500;
+  font-weight: bold;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.easyrest-milan-classic .price-period {
+  color: #cc5500;
+  font-weight: bold;
+}
+
+.easyrest-milan-classic .price-info {
+  margin: 1rem auto;
+  max-width: 600px;
+  font-size: 1.1rem;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .pricing-cta {
+  margin-top: 2rem;
+}
+
+/* Booking form wrapper */
+.easyrest-milan-classic .booking-form-wrapper {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 20px;
+}
+
+/* ============================================================================
+ * TESTIMONIALS SECTION
+ * ============================================================================ */
+
+.easyrest-milan-classic .testimonials-section {
+  padding: 4rem 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .testimonials-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+.easyrest-milan-classic .testimonial-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  position: relative;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .testimonial-card:before {
+  content: "\201C";
+  font-family: Georgia, serif;
+  font-size: 4rem;
+  position: absolute;
+  color: var(--secondary-color);
+  opacity: 0.3;
+  top: 10px;
+  left: 10px;
+}
+
+.easyrest-milan-classic .testimonial-content {
+  font-style: italic;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  flex-grow: 1;
+}
+
+.easyrest-milan-classic .testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.easyrest-milan-classic .testimonial-author .author-info {
+  text-align: right;
+}
+
+.easyrest-milan-classic .testimonial-author .author-name {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.easyrest-milan-classic .testimonial-author .author-date {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.easyrest-milan-classic .testimonial-rating {
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+/* ============================================================================
+ * LOCATION SECTION
+ * ============================================================================ */
+
+.easyrest-milan-classic .location-section {
+  padding: 3rem 0;
+  background-color: var(--light-color);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .address-info {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .location-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin: 2rem auto;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .map-container {
+  flex: 1 1 60%;
+  min-width: 300px;
+  height: 600px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #e0e0e0;
+}
+
+.easyrest-milan-classic .map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Points of Interest */
+.easyrest-milan-classic .poi-section {
+  flex: 1 1 35%;
+  min-width: 300px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .poi-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  padding-left: 3px;
+  font-size: 1.3rem;
+  color: #333;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.easyrest-milan-classic .poi-category {
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.easyrest-milan-classic .poi-category h4 {
+  color: var(--primary-color);
+  margin: 0 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--secondary-color);
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+.easyrest-milan-classic .poi-category h4 i {
+  margin-right: 10px;
+  color: var(--secondary-color);
+}
+
+.easyrest-milan-classic .poi-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.easyrest-milan-classic .poi-list li {
+  padding: 10px 0;
+  border-bottom: 1px dashed #e0e0e0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.easyrest-milan-classic .poi-list li:last-child {
+  border-bottom: none;
+}
+
+.easyrest-milan-classic .poi-list li i {
+  margin-right: 10px;
+  color: var(--primary-color);
+  width: 20px;
+  text-align: center;
+}
+
+/* ============================================================================
+ * CTA SECTION
+ * ============================================================================ */
+
+.easyrest-milan-classic .cta-section {
+  background-color: var(--white-color);
+  padding: 3rem 0;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.easyrest-milan-classic .cta-text {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  font-size: 1.1rem;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ============================================================================
+ * FOOTER
+ * ============================================================================ */
+
+.easyrest-milan-classic .classic-footer {
+  background-color: var(--dark-color);
+  color: var(--white-color);
+  text-align: center;
+  padding: 2rem 0;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Hide Astra header and footer on Milan Classic template */
+.easyrest-milan-classic-body .site-header,
+.easyrest-milan-classic-body #masthead,
+.easyrest-milan-classic-body .ast-primary-header,
+.easyrest-milan-classic-body .ast-mobile-header-wrap,
+.easyrest-milan-classic-body .site-footer,
+.easyrest-milan-classic-body .ast-footer-overlay,
+.easyrest-milan-classic-body #colophon,
+.easyrest-milan-classic-body .ast-small-footer {
+  display: none !important;
+}
+
+/* Custom header for Milan Classic */
+.easyrest-milan-classic .custom-header {
+  background: var(--dark-bg);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.easyrest-milan-classic .custom-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.easyrest-milan-classic .site-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.easyrest-milan-classic .site-logo img {
+  height: 40px;
+  width: auto;
+}
+
+.easyrest-milan-classic .site-logo-text {
+  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.easyrest-milan-classic .header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.easyrest-milan-classic .header-nav a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.easyrest-milan-classic .header-nav a:hover {
+  color: var(--white);
+}
+
+/* Language selector in header */
+.easyrest-milan-classic .language-selector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.easyrest-milan-classic .language-selector button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.easyrest-milan-classic .language-selector button:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: var(--white);
+}
+
+.easyrest-milan-classic .language-selector button.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--white);
+}
+
+/* ============================================================================
+ * MEDIA QUERIES
+ * ============================================================================ */
+
+/* Tablets (up to 1200px) */
+@media (max-width: 1200px) {
+  .easyrest-milan-classic .reasons-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 15px;
+  }
+
+  .easyrest-milan-classic .testimonials-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .easyrest-milan-classic .map-container,
+  .easyrest-milan-classic .poi-section {
+    height: auto;
+    max-height: none;
+  }
+
+  .easyrest-milan-classic .map-container {
+    height: 400px;
+  }
+
+  .easyrest-milan-classic .location-wrapper {
+    flex-direction: column;
+  }
+}
+
+/* Tablets and small screens (up to 992px) */
+@media (max-width: 992px) {
+  .easyrest-milan-classic .testimonials-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .easyrest-milan-classic .amenities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablets and mobiles (up to 768px) */
+@media (max-width: 768px) {
+  .easyrest-milan-classic .language-selector {
+    justify-content: center;
+  }
+
+  .easyrest-milan-classic .subtitle {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+
+  .easyrest-milan-classic .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    max-width: 300px;
+    width: 100%;
+  }
+
+  .easyrest-milan-classic .overview-text {
+    padding: 0 15px;
+  }
+
+  .easyrest-milan-classic .reasons-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .easyrest-milan-classic .amenities-grid {
+    grid-template-columns: 1fr;
+    padding: 0 15px;
+  }
+
+  .easyrest-milan-classic .amenity-category {
+    max-width: 100%;
+  }
+
+  .easyrest-milan-classic .gallery-content {
+    padding: 0 10px;
+  }
+
+  .easyrest-milan-classic .modal-content {
+    max-width: 95%;
+  }
+
+  .easyrest-milan-classic .price-tag {
+    font-size: 2rem;
+  }
+
+  .easyrest-milan-classic .price-info {
+    font-size: 1rem;
+    padding: 0 15px;
+  }
+
+  .easyrest-milan-classic .testimonials-container {
+    grid-template-columns: 1fr;
+    padding: 0 15px;
+  }
+
+  .easyrest-milan-classic .testimonial-card {
+    padding: 20px;
+    min-height: auto;
+  }
+
+  .easyrest-milan-classic .address-info {
+    font-size: 1.1rem;
+    padding: 0 15px;
+  }
+
+  .easyrest-milan-classic .location-wrapper {
+    padding: 0 15px;
+  }
+
+  .easyrest-milan-classic .poi-section {
+    padding-right: 0;
+  }
+
+  .easyrest-milan-classic .cta-text {
+    font-size: 1rem;
+    padding: 0 15px;
+  }
+}
+
+/* Small mobiles (up to 480px) */
+@media (max-width: 480px) {
+  .easyrest-milan-classic .container {
+    padding: 0 10px;
+  }
+
+  .easyrest-milan-classic .cta-buttons {
+    max-width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .easyrest-milan-classic .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .easyrest-milan-classic .reason-card,
+  .easyrest-milan-classic .amenity-category {
+    padding: 15px;
+  }
+
+  .easyrest-milan-classic .reason-icon {
+    font-size: 2rem;
+  }
+
+  .easyrest-milan-classic .reason-title,
+  .easyrest-milan-classic .amenity-category h3 {
+    font-size: 1.1rem;
+  }
+
+  .easyrest-milan-classic .gallery-item {
+    height: 200px;
+  }
+
+  .easyrest-milan-classic .tab-btn {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+
+  .easyrest-milan-classic .testimonial-card {
+    padding: 15px;
+  }
+
+  .easyrest-milan-classic .testimonial-card:before {
+    font-size: 3rem;
+  }
+
+  .easyrest-milan-classic .map-container {
+    height: 300px;
+  }
+
+  .easyrest-milan-classic .poi-category {
+    padding: 12px;
+  }
+
+  .easyrest-milan-classic .poi-category h4 {
+    font-size: 1rem;
+  }
+
+  .easyrest-milan-classic .classic-footer {
+    padding: 1.5rem 10px;
+    font-size: 0.9rem;
+  }
+}

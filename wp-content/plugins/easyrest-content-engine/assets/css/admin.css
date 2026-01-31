@@ -1,0 +1,352 @@
+/**
+ * EasyRest Content Engine - Admin Styles
+ */
+
+/* Dashboard Stats */
+.easyrest-ce-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    min-width: 120px;
+    text-align: center;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.stat-card .stat-number {
+    display: block;
+    font-size: 32px;
+    font-weight: 600;
+    color: #1d2327;
+    line-height: 1.2;
+}
+
+.stat-card .stat-label {
+    display: block;
+    font-size: 13px;
+    color: #646970;
+    margin-top: 5px;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #f0f0f1;
+    color: #50575e;
+}
+
+.status-locked,
+.status-generating {
+    background: #dba617;
+    color: #fff;
+}
+
+.status-review {
+    background: #72aee6;
+    color: #fff;
+}
+
+.status-published,
+.status-active {
+    background: #00a32a;
+    color: #fff;
+}
+
+.status-failed {
+    background: #d63638;
+    color: #fff;
+}
+
+.status-paused {
+    background: #f0c33c;
+    color: #1d2327;
+}
+
+.status-archived {
+    background: #787c82;
+    color: #fff;
+}
+
+/* Tabs */
+.easyrest-ce-tabs {
+    display: flex;
+    gap: 0;
+    margin: 20px 0;
+    border-bottom: 1px solid #ccd0d4;
+}
+
+.easyrest-ce-tabs .tab {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #50575e;
+    border: 1px solid transparent;
+    border-bottom: none;
+    margin-bottom: -1px;
+    background: #f6f7f7;
+}
+
+.easyrest-ce-tabs .tab:hover {
+    background: #fff;
+}
+
+.easyrest-ce-tabs .tab.active {
+    background: #fff;
+    border-color: #ccd0d4;
+    color: #1d2327;
+    font-weight: 600;
+}
+
+.easyrest-ce-tabs .tab .count {
+    background: #787c82;
+    color: #fff;
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 11px;
+    margin-left: 5px;
+}
+
+.easyrest-ce-tabs .tab.active .count {
+    background: #2271b1;
+}
+
+/* Filters */
+.easyrest-ce-filters {
+    margin: 20px 0;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+}
+
+.easyrest-ce-filters form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Actions */
+.easyrest-ce-actions {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.easyrest-ce-actions h3 {
+    margin-top: 0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.action-result {
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+}
+
+.action-result.success {
+    display: block;
+    background: #d1e7dd;
+    border: 1px solid #badbcc;
+    color: #0f5132;
+}
+
+.action-result.error {
+    display: block;
+    background: #f8d7da;
+    border: 1px solid #f5c2c7;
+    color: #842029;
+}
+
+/* Cost Stats */
+.easyrest-ce-cost-stats {
+    margin: 20px 0;
+}
+
+.cost-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.cost-card h3 {
+    margin-top: 0;
+}
+
+.cost-card table td {
+    padding: 8px 12px;
+}
+
+/* Log Stats */
+.easyrest-ce-log-stats {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+/* Contexts */
+.easyrest-ce-contexts-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.easyrest-ce-context-form {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.easyrest-ce-context-form h2 {
+    margin-top: 0;
+}
+
+/* Queue */
+.easyrest-ce-bulk-actions {
+    margin: 15px 0;
+}
+
+.easyrest-ce-manual-queue {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.easyrest-ce-manual-queue h3 {
+    margin-top: 0;
+}
+
+/* Table Columns */
+.column-id {
+    width: 60px;
+}
+
+.column-status {
+    width: 120px;
+}
+
+.column-lang {
+    width: 60px;
+}
+
+.column-scheduled,
+.column-attempts {
+    width: 100px;
+}
+
+.column-tokens,
+.column-cost,
+.column-duration {
+    width: 80px;
+}
+
+.column-actions {
+    width: 200px;
+}
+
+/* Error message in table */
+.error-message {
+    color: #d63638;
+    display: block;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Logs */
+.log-error td {
+    background: #fcf0f1 !important;
+}
+
+.log-metadata {
+    color: #787c82;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+/* Cron Info */
+.easyrest-ce-cron-info {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.easyrest-ce-cron-info h3 {
+    margin-top: 0;
+}
+
+.easyrest-ce-cron-info code {
+    background: #f0f0f1;
+    padding: 5px 10px;
+    display: inline-block;
+    word-break: break-all;
+}
+
+/* Settings */
+.easyrest-ce-settings {
+    max-width: 800px;
+}
+
+.easyrest-ce-settings h2 {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ccd0d4;
+}
+
+.easyrest-ce-settings h2:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .easyrest-ce-stats {
+        flex-direction: column;
+    }
+
+    .stat-card {
+        width: 100%;
+    }
+
+    .easyrest-ce-filters form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .easyrest-ce-tabs {
+        flex-wrap: wrap;
+    }
+}
