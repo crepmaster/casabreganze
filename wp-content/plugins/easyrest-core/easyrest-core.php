@@ -261,6 +261,8 @@ function easyrest_get_price($checkin, $checkout, $adults = 2, $children = 0) {
  * @param mixed  $default Default value
  * @return mixed Option value
  */
-function easyrest_get_option($key, $default = null) {
-    return get_option('easyrest_' . $key, $default);
+if (!function_exists('easyrest_get_option')) {
+    function easyrest_get_option($key, $default = null) {
+        return get_option('easyrest_' . $key, $default);
+    }
 }
