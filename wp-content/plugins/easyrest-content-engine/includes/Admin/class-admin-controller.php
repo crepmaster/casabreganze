@@ -29,6 +29,7 @@ class EasyRest_CE_Admin_Controller {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
         add_action('admin_init', [$this, 'register_settings']);
         add_action('wp_ajax_easyrest_ce_action', [$this, 'handle_ajax']);
+        add_action('admin_post_easyrest_ce_backfill_images', [$this, 'handle_backfill_images']);
     }
 
     /**
@@ -222,6 +223,48 @@ class EasyRest_CE_Admin_Controller {
             'default'           => '/reservation/',
             'sanitize_callback' => 'esc_url_raw',
         ]);
+
+        register_setting('easyrest_ce_content', 'easyrest_ce_pexels_api_key', [
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+        ]);
+    }
+
+    /**
+     * Backfill featured images for existing guides.
+     */
+    public function handle_backfill_images(): void {
+        if (!current_user_can('manage_options')) {
+            wp_die('Permission denied');
+        }
+
+        check_admin_referer('easyrest_ce_backfill_images');
+
+        $publisher = new EasyRest_CE_Post_Publisher();
+        $force = !empty($_POST['force_replace']);
+        $posts = get_posts([
+            'post_type'      => 'easyrest_guide',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+        ]);
+
+        $updated = 0;
+        foreach ($posts as $post_id) {
+            if ($publisher->backfill_featured_image($post_id, $force)) {
+                $updated++;
+            }
+        }
+
+        $redirect = add_query_arg([
+            'page'    => $this->menu_slug . '-settings',
+            'backfill' => 'done',
+            'count'   => $updated,
+            'force'   => $force ? '1' : '0',
+        ], admin_url('admin.php'));
+
+        wp_safe_redirect($redirect);
+        exit;
     }
 
     /**

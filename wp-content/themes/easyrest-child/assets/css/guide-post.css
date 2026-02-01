@@ -155,6 +155,18 @@ body.easyrest-guide-body .site-content {
     line-height: 1.6;
 }
 
+.easyrest-guide-post .guide-image-credit {
+    width: min(1080px, calc(100% - 40px));
+    margin: 10px auto 0;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.easyrest-guide-post .guide-image-credit a {
+    color: inherit;
+    text-decoration: underline;
+}
+
 /* ==========================================================================
    CONTENT AREA (light theme)
    ========================================================================== */

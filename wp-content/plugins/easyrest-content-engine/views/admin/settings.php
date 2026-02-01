@@ -252,6 +252,21 @@ if (!defined('ABSPATH')) {
                         </p>
                     </td>
                 </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="easyrest_ce_pexels_api_key"><?php esc_html_e('Pexels API Key', 'easyrest-ce'); ?></label>
+                    </th>
+                    <td>
+                        <input type="password"
+                               name="easyrest_ce_pexels_api_key"
+                               id="easyrest_ce_pexels_api_key"
+                               value="<?php echo esc_attr(get_option('easyrest_ce_pexels_api_key', '')); ?>"
+                               class="regular-text">
+                        <p class="description">
+                            <?php esc_html_e('Used to fetch featured images for guides. Leave empty if using wp-config.php.', 'easyrest-ce'); ?>
+                        </p>
+                    </td>
+                </tr>
             </table>
 
             <!-- SEO Plugin Info -->
@@ -273,5 +288,30 @@ if (!defined('ABSPATH')) {
 
             <?php submit_button(); ?>
         </form>
+
+        <h2><?php esc_html_e('Maintenance', 'easyrest-ce'); ?></h2>
+        <table class="form-table">
+            <tr>
+                <th scope="row"><?php esc_html_e('Backfill Featured Images', 'easyrest-ce'); ?></th>
+                <td>
+                    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                        <?php wp_nonce_field('easyrest_ce_backfill_images'); ?>
+                        <input type="hidden" name="action" value="easyrest_ce_backfill_images">
+                        <label style="display:inline-block;margin-right:10px;">
+                            <input type="checkbox" name="force_replace" value="1">
+                            <?php esc_html_e('Replace existing featured images', 'easyrest-ce'); ?>
+                        </label>
+                        <button type="submit" class="button">
+                            <?php esc_html_e('Fetch images for existing guides', 'easyrest-ce'); ?>
+                        </button>
+                        <?php if (!empty($_GET['backfill']) && $_GET['backfill'] === 'done') : ?>
+                            <p class="description" style="margin-top: 8px;">
+                                <?php echo esc_html(sprintf(__('Backfill complete. Updated %d guides.', 'easyrest-ce'), absint($_GET['count'] ?? 0))); ?>
+                            </p>
+                        <?php endif; ?>
+                    </form>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>

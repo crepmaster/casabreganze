@@ -79,6 +79,9 @@ class EasyRest_CE_Post_Publisher {
         // Set taxonomies
         $this->set_taxonomies($post_id, $content, $item, $context);
 
+        // Attach a featured image if missing (Pexels)
+        $this->maybe_set_featured_image($post_id, $content, $context);
+
         // Set SEO meta
         $this->seo_adapter->set_seo_meta($post_id, $content['seo'] ?? []);
 
@@ -278,6 +281,117 @@ class EasyRest_CE_Post_Publisher {
         if (!empty($source_data['venue_slug'])) {
             wp_set_object_terms($post_id, $source_data['venue_slug'], 'easyrest_topic', true);
         }
+    }
+
+    /**
+     * Fetch and set a featured image from Pexels if none is set.
+     *
+     * Requires API key in:
+     *  - wp-config.php: define('EASYREST_PEXELS_API_KEY', '...'); OR
+     *  - option: easyrest_ce_pexels_api_key
+     */
+    private function maybe_set_featured_image(int $post_id, array $content, ?EasyRest_CE_Context_Model $context = null): void {
+        if (has_post_thumbnail($post_id)) {
+            return;
+        }
+
+        $api_key = defined('EASYREST_PEXELS_API_KEY') ? EASYREST_PEXELS_API_KEY : get_option('easyrest_ce_pexels_api_key');
+        if (empty($api_key)) {
+            return;
+        }
+
+        $query = 'milan';
+        if (!empty($content['title'])) {
+            $query .= ' ' . $content['title'];
+        }
+
+        $url = 'https://api.pexels.com/v1/search?per_page=1&orientation=landscape&query=' . rawurlencode($query);
+        $response = wp_remote_get($url, [
+            'headers' => [
+                'Authorization' => $api_key,
+            ],
+            'timeout' => 12,
+        ]);
+
+        if (is_wp_error($response)) {
+            return;
+        }
+
+        $code = wp_remote_retrieve_response_code($response);
+        if ($code !== 200) {
+            return;
+        }
+
+        $data = json_decode(wp_remote_retrieve_body($response), true);
+        if (empty($data['photos'][0])) {
+            return;
+        }
+
+        $photo = $data['photos'][0];
+        $image_url = $photo['src']['large'] ?? $photo['src']['original'] ?? '';
+        if (!$image_url) {
+            return;
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        $tmp = download_url($image_url);
+        if (is_wp_error($tmp)) {
+            return;
+        }
+
+        $filename = 'pexels-' . ($photo['id'] ?? $post_id) . '.jpg';
+        $file = [
+            'name'     => $filename,
+            'tmp_name' => $tmp,
+        ];
+
+        $attachment_id = media_handle_sideload($file, $post_id);
+        if (is_wp_error($attachment_id)) {
+            @unlink($tmp);
+            return;
+        }
+
+        set_post_thumbnail($post_id, $attachment_id);
+
+        // Store attribution data
+        if (!empty($photo['photographer'])) {
+            update_post_meta($post_id, '_easyrest_image_credit_name', sanitize_text_field($photo['photographer']));
+        }
+        if (!empty($photo['photographer_url'])) {
+            update_post_meta($post_id, '_easyrest_image_credit_url', esc_url_raw($photo['photographer_url']));
+        }
+        if (!empty($photo['url'])) {
+            update_post_meta($post_id, '_easyrest_image_source_url', esc_url_raw($photo['url']));
+        }
+        update_post_meta($post_id, '_easyrest_image_source', 'Pexels');
+    }
+
+    /**
+     * Backfill a featured image for an existing guide post (if missing).
+     *
+     * @param int $post_id
+     * @return bool True if a thumbnail exists after processing.
+     */
+    public function backfill_featured_image(int $post_id, bool $force = false): bool {
+        if (!$force && has_post_thumbnail($post_id)) {
+            return true;
+        }
+
+        $title = get_the_title($post_id);
+        $content = [
+            'title' => $title ? $title : 'Milan guide',
+        ];
+
+        if ($force && has_post_thumbnail($post_id)) {
+            delete_post_thumbnail($post_id);
+        }
+
+        $this->maybe_set_featured_image($post_id, $content, null);
+
+        return has_post_thumbnail($post_id);
     }
 
     /**

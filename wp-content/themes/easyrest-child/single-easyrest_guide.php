@@ -53,7 +53,6 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                         <?php endif; ?>
                     </div>
                 </header>
-
                 <?php if ($has_content) : ?>
                 <div class="guide-content container">
                     <div class="guide-body-content">
@@ -79,6 +78,35 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                         </a>
                     </div>
                 </div>
+                <?php endif; ?>
+
+                <?php
+                $credit_name = get_post_meta(get_the_ID(), '_easyrest_image_credit_name', true);
+                $credit_url  = get_post_meta(get_the_ID(), '_easyrest_image_credit_url', true);
+                $source_name = get_post_meta(get_the_ID(), '_easyrest_image_source', true);
+                $source_url  = get_post_meta(get_the_ID(), '_easyrest_image_source_url', true);
+                ?>
+                <?php if ($credit_name || $source_name) : ?>
+                    <div class="guide-image-credit container">
+                        <small>
+                            <?php if ($credit_name) : ?>
+                                Photo by
+                                <?php if ($credit_url) : ?>
+                                    <a href="<?php echo esc_url($credit_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($credit_name); ?></a>
+                                <?php else : ?>
+                                    <?php echo esc_html($credit_name); ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <?php if ($source_name) : ?>
+                                <?php echo $credit_name ? ' on ' : 'Photo on '; ?>
+                                <?php if ($source_url) : ?>
+                                    <a href="<?php echo esc_url($source_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($source_name); ?></a>
+                                <?php else : ?>
+                                    <?php echo esc_html($source_name); ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </small>
+                    </div>
                 <?php endif; ?>
             </article>
 
