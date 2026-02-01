@@ -1,0 +1,8 @@
+/* ============================================================================
+ * EasyRest booking pages (minimal header + clean layout)
+ * Scoped to body.easyrest-booking-page
+ * ============================================================================ */
+
+body.easyrest-booking-page #content {
+  padding-top: 0;
+}

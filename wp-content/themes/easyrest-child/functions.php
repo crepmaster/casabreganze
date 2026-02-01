@@ -709,11 +709,77 @@ add_filter('body_class', function($classes) {
     if ( function_exists( 'easyrest_is_guide' ) && easyrest_is_guide() ) {
         $classes[] = 'easyrest-guide-body';
     }
+    if ( function_exists( 'easyrest_is_booking_page' ) && easyrest_is_booking_page() ) {
+        $classes[] = 'easyrest-booking-page';
+    }
     return $classes;
 });
+
+/**
+ * Helper: detect booking-related pages (WP Hotel Booking).
+ */
+function easyrest_is_booking_page() {
+    if ( ! is_page() ) {
+        return false;
+    }
+
+    global $post;
+    if ( ! $post instanceof WP_Post ) {
+        return false;
+    }
+
+    $slugs = array(
+        'hotel-rooms',
+        'hotel-cart',
+        'hotel-checkout',
+        'hotel-account',
+        'hotel-booking-search',
+        'search-results',
+        'search-availability',
+        'booking-confirmation',
+        'booking-cancellation',
+        'hotel-thank-you',
+        'hotel-term-condition',
+    );
+
+    if ( in_array( $post->post_name, $slugs, true ) ) {
+        return true;
+    }
+
+    // Fallback: look for known booking shortcodes.
+    $content = $post->post_content;
+    $shortcodes = array( 'hotel_booking', 'hb_search_rooms', 'hb_cart', 'hb_checkout', 'hb_account' );
+    foreach ( $shortcodes as $sc ) {
+        if ( has_shortcode( $content, $sc ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Enqueue booking page styles (minimal header + clean layout).
+ */
+add_action( 'wp_enqueue_scripts', function () {
+    if ( ! easyrest_is_booking_page() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'easyrest-booking-pages',
+        get_stylesheet_directory_uri() . '/assets/css/booking-pages.css',
+        array( 'easyrest-child-style' ),
+        EASYREST_CHILD_VERSION
+    );
+}, 30 );
+
+/**
+ * Inject a minimal header on booking pages.
+ */
 add_action('wp_enqueue_scripts', function () {
-  if (is_page_template('page-easyrest-milan.php')) {
-    $base = get_stylesheet_directory_uri();
+    if (is_page_template('page-easyrest-milan.php')) {
+        $base = get_stylesheet_directory_uri();
 
     wp_enqueue_style(
       'easyrest-milan-css',
@@ -729,8 +795,24 @@ add_action('wp_enqueue_scripts', function () {
       '1.0.0',
       true
     );
-  }
+    }
 });
+
+/**
+ * Guides page template assets
+ */
+add_action('wp_enqueue_scripts', function () {
+    if (!is_page_template('page-easyrest-guides.php')) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'easyrest-guides-page',
+        get_stylesheet_directory_uri() . '/assets/css/guides-page.css',
+        array('easyrest-child-style'),
+        EASYREST_CHILD_VERSION
+    );
+}, 30);
 
 /**
  * Helper: check if a post has meaningful content (> 50 visible chars).

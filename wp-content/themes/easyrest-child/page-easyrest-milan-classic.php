@@ -128,12 +128,12 @@ $logo_url = $assets_url . '/images/gallery/logo esayrest.png';
                         data-pt="Ultimos guias"
                         data-zh="æœ€æ–°æŒ‡å—">Derniers guides</h2>
                     <p class="section-subtitle"
-                       data-fr="Nos articles rÃ©cents pour planifier votre sÃ©jour et dÃ©couvrir Milan avant de rÃ©server."
+                       data-fr="Nos articles récents pour planifier votre séjour et découvrir Milan avant de réserver."
                        data-en="Fresh guides to help plan your stay and discover Milan before you book."
                        data-it="Guide recenti per organizzare il tuo soggiorno e scoprire Milano prima di prenotare."
-                       data-es="GuÃ­as recientes para planear tu estancia y descubrir MilÃ¡n antes de reservar."
-                       data-pt="Guias recentes para planejar sua estadia e descobrir MilÃ£o antes de reservar."
-                       data-zh="æœ€æ–°æŒ‡å—å¸®åŠ©æ‚¨è§„åˆ’è¡Œç¨‹ï¼Œäº†è§£ç±³å…°ï¼Œå†å†³å®šé¢„è®¢ã€‚">Nos articles rÃ©cents pour planifier votre sÃ©jour et dÃ©couvrir Milan avant de rÃ©server.</p>
+                       data-es="Guías recientes para planear tu estancia y descubrir Milán antes de reservar."
+                       data-pt="Guias recentes para planejar sua estadia e descobrir Milão antes de reservar."
+                       data-zh="最新指南帮助您规划行程，了解米兰，再决定预订。">Nos articles récents pour planifier votre séjour et découvrir Milan avant de réserver.</p>
                 </div>
 
                 <div class="guides-grid">
