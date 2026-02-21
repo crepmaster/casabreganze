@@ -774,29 +774,6 @@ add_action( 'wp_enqueue_scripts', function () {
     );
 }, 30 );
 
-/**
- * Inject a minimal header on booking pages.
- */
-add_action('wp_enqueue_scripts', function () {
-    if (is_page_template('page-easyrest-milan.php')) {
-        $base = get_stylesheet_directory_uri();
-
-    wp_enqueue_style(
-      'easyrest-milan-css',
-      $base . '/assets/easyrest/easyrest-milan.css',
-      [],
-      '1.0.0'
-    );
-
-    wp_enqueue_script(
-      'easyrest-milan-js',
-      $base . '/assets/easyrest/easyrest-milan.js',
-      [],
-      '1.0.0',
-      true
-    );
-    }
-});
 
 /**
  * Guides page template assets

@@ -41,33 +41,71 @@
         /**
          * Bindage des evenements
          */
+        // Max total guests for the apartment
+        MAX_GUESTS: 4,
+        MAX_CHILDREN: 2,
+
         bindEvents: function() {
             var self = this;
-            
+
             // Changement de dates
             $('#checkin, #checkout').on('change', function() {
                 self.validateDates();
             });
-            
+
             // Bouton verifier disponibilite
             $('#check-availability').on('click', function(e) {
                 e.preventDefault();
                 self.checkPriceAndAvailability();
             });
-            
+
             // MAJ checkout min quand checkin change
             $('#checkin').on('change', function() {
                 var checkin = $(this).val();
                 if (checkin) {
                     var minCheckout = self.addDays(new Date(checkin), 1);
                     $('#checkout').attr('min', self.formatDate(minCheckout));
-                    
+
                     var currentCheckout = $('#checkout').val();
                     if (currentCheckout && new Date(currentCheckout) <= new Date(checkin)) {
                         $('#checkout').val('');
                     }
                 }
             });
+
+            // Enforce max guests: adjust children options when adults change, and vice versa
+            $('#adults').on('change', function() {
+                self.enforceMaxGuests();
+            });
+            $('#children').on('change', function() {
+                self.enforceMaxGuests();
+            });
+
+            // Initialize on load
+            this.enforceMaxGuests();
+        },
+
+        /**
+         * Enforce max 4 guests total by capping children options
+         */
+        enforceMaxGuests: function() {
+            var adults = parseInt($('#adults').val(), 10) || 1;
+            var maxChildren = Math.min(this.MAX_GUESTS - adults, this.MAX_CHILDREN);
+            var currentChildren = parseInt($('#children').val(), 10) || 0;
+
+            // Rebuild children options
+            var $children = $('#children');
+            $children.empty();
+            for (var i = 0; i <= maxChildren; i++) {
+                $children.append($('<option>').val(i).text(i));
+            }
+
+            // Restore selection if still valid, otherwise cap it
+            if (currentChildren > maxChildren) {
+                $children.val(maxChildren);
+            } else {
+                $children.val(currentChildren);
+            }
         },
 
         /**
@@ -124,7 +162,14 @@
             if (!this.validateDates()) {
                 return;
             }
-            
+
+            // Validate guest count
+            var totalGuests = parseInt(adults, 10) + parseInt(children, 10);
+            if (totalGuests > this.MAX_GUESTS) {
+                this.showNotification('Maximum ' + this.MAX_GUESTS + ' guests allowed.', 'error');
+                return;
+            }
+
             // Rate limiting cote client (protection basique)
             this.state.requestCount++;
             if (this.state.requestCount > 20) {

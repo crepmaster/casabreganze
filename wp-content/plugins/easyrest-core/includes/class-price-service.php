@@ -330,9 +330,9 @@ class EasyRest_Price_Service {
         if ($total > 4) {
             return array('valid' => false, 'error' => 'Maximum 4 guests allowed.');
         }
-        
-        if ($children < 0 || $children > 3) {
-            return array('valid' => false, 'error' => 'Invalid number of children.');
+
+        if ($children < 0 || $children > 2) {
+            return array('valid' => false, 'error' => 'Maximum 2 children allowed.');
         }
         
         return array('valid' => true);

@@ -679,6 +679,12 @@ $logo_url = $assets_url . '/images/gallery/logo esayrest.png';
             </div>
         </section>
 
+        <!-- Image Modal / Lightbox -->
+        <div class="modal" aria-hidden="true">
+            <button class="modal-close" aria-label="<?php esc_attr_e('Close', 'easyrest-child'); ?>">&times;</button>
+            <img class="modal-content" src="" alt="">
+        </div>
+
         <!-- Footer simple -->
         <footer class="classic-footer">
             <div class="container">

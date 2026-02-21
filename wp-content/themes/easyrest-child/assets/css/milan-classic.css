@@ -954,6 +954,54 @@ body.easyrest-milan-classic-body .easyrest-hero {
 }
 
 /* ============================================================================
+ * IMAGE MODAL / LIGHTBOX
+ * ============================================================================ */
+
+.easyrest-milan-classic .modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.easyrest-milan-classic .modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.easyrest-milan-classic .modal-content {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.easyrest-milan-classic .modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  line-height: 1;
+  z-index: 10;
+}
+
+.easyrest-milan-classic .modal-close:hover {
+  opacity: 1;
+}
+
+/* ============================================================================
  * FOOTER
  * ============================================================================ */
 
