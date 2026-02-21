@@ -465,6 +465,31 @@ a:hover {
 }
 
 /* ==========================================================================
+   NOTIFICATIONS INLINE (booking form)
+   ========================================================================== */
+
+.easyrest-notification {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: var(--spacing-sm);
+    animation: fadeInUp 0.3s ease;
+}
+
+.easyrest-notification--error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.easyrest-notification--info {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+/* ==========================================================================
    FORMULAIRE DE RÉSERVATION
    ========================================================================== */
 

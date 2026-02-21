@@ -63,7 +63,7 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                         <div class="guide-cta-card">
                             <h3><?php esc_html_e('Book EasyRest Milan', 'easyrest-child'); ?></h3>
                             <p><?php esc_html_e('Check availability and book direct in a few clicks.', 'easyrest-child'); ?></p>
-                            <a class="btn btn-primary" href="<?php echo esc_url(home_url('/?lang=fr#easyrest-booking')); ?>">
+                            <a class="btn btn-primary" href="<?php echo esc_url(home_url('/#easyrest-booking')); ?>">
                                 <?php esc_html_e('Check availability', 'easyrest-child'); ?>
                             </a>
                         </div>
@@ -73,7 +73,7 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                 <div class="guide-content guide-content--empty container">
                     <div class="guide-coming-soon">
                         <p><?php esc_html_e('This guide is coming soon. Check back shortly for the full article.', 'easyrest-child'); ?></p>
-                        <a class="btn btn-primary" href="<?php echo esc_url(home_url('/?lang=fr#easyrest-booking')); ?>">
+                        <a class="btn btn-primary" href="<?php echo esc_url(home_url('/#easyrest-booking')); ?>">
                             <?php esc_html_e('Check availability', 'easyrest-child'); ?>
                         </a>
                     </div>
@@ -121,6 +121,12 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                             'post__not_in'   => [get_the_ID()],
                             'post_status'    => 'publish',
                             'no_found_rows'  => true,
+                            'meta_query'     => [
+                                [
+                                    'key'   => '_easyrest_has_content',
+                                    'value' => '1',
+                                ],
+                            ],
                         ]);
 
                         if ($more_guides->have_posts()) :

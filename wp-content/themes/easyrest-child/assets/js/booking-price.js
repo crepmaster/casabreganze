@@ -374,13 +374,23 @@
         },
 
         /**
-         * Notification utilisateur
+         * Notification utilisateur (inline, pas d'alert)
          */
         showNotification: function(message, type) {
-            // TODO: Remplacer par une notification plus elegante
-            if (type === 'error') {
-                alert(message);
-            }
+            // Remove any existing notification
+            $('.easyrest-notification').remove();
+
+            var $notif = $('<div>')
+                .addClass('easyrest-notification')
+                .addClass(type === 'error' ? 'easyrest-notification--error' : 'easyrest-notification--info')
+                .text(message);
+
+            $('#easyrest-booking-form').prepend($notif);
+
+            // Auto-dismiss after 5 seconds
+            setTimeout(function() {
+                $notif.fadeOut(300, function() { $(this).remove(); });
+            }, 5000);
         },
 
         /**

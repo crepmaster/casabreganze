@@ -335,12 +335,17 @@ class EasyRest_CE_Admin_Controller {
         ];
 
         $args = array_filter($filters);
-        $args['limit'] = 50;
+        $per_page = 50;
+        $page     = max(1, absint($_GET['paged'] ?? 1));
+        $args['limit']  = $per_page;
+        $args['offset'] = ($page - 1) * $per_page;
 
         $data = [
             'items'       => $repo->get_all($args),
             'counts'      => $repo->get_status_counts(),
             'filters'     => $filters,
+            'page'        => $page,
+            'per_page'    => $per_page,
             'statuses'    => [
                 EasyRest_CE_Queue_Status::PENDING,
                 EasyRest_CE_Queue_Status::LOCKED,

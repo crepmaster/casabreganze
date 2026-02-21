@@ -143,6 +143,40 @@ if (!defined('ABSPATH')) {
             <?php endforeach; ?>
         </tbody>
     </table>
+
+    <!-- Pagination -->
+    <?php
+    $total_current = array_sum($data['counts']);
+    if ($data['filters']['status'] && isset($data['counts'][$data['filters']['status']])) {
+        $total_current = $data['counts'][$data['filters']['status']];
+    }
+    $total_pages = max(1, ceil($total_current / $data['per_page']));
+    if ($total_pages > 1): ?>
+    <div class="tablenav bottom">
+        <div class="tablenav-pages">
+            <span class="displaying-num">
+                <?php echo esc_html(sprintf(_n('%s item', '%s items', $total_current, 'easyrest-ce'), number_format_i18n($total_current))); ?>
+            </span>
+            <span class="pagination-links">
+                <?php if ($data['page'] > 1): ?>
+                    <a class="prev-page button" href="<?php echo esc_url(add_query_arg('paged', $data['page'] - 1)); ?>">‹</a>
+                <?php else: ?>
+                    <span class="tablenav-pages-navspan button disabled">‹</span>
+                <?php endif; ?>
+
+                <span class="paging-input">
+                    <?php echo esc_html($data['page']); ?> / <?php echo esc_html($total_pages); ?>
+                </span>
+
+                <?php if ($data['page'] < $total_pages): ?>
+                    <a class="next-page button" href="<?php echo esc_url(add_query_arg('paged', $data['page'] + 1)); ?>">›</a>
+                <?php else: ?>
+                    <span class="tablenav-pages-navspan button disabled">›</span>
+                <?php endif; ?>
+            </span>
+        </div>
+    </div>
+    <?php endif; ?>
     <?php endif; ?>
 
     <!-- Manual Queue Form -->
