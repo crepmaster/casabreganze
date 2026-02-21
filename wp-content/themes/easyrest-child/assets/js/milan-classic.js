@@ -10,71 +10,7 @@
     const root = document.querySelector('.easyrest-milan-classic');
     if (!root) return;
 
-    // ========================================================================
-    // LANGUAGE SELECTOR
-    // ========================================================================
-
-    const langSelector = root.querySelector('.language-selector');
-    if (langSelector) {
-        const buttons = Array.from(langSelector.querySelectorAll('button[data-lang]'));
-        const supported = new Set(buttons.map(b => b.dataset.lang));
-
-        // Default language
-        let lang = 'fr';
-
-        // Check URL param
-        const urlLang = new URLSearchParams(window.location.search).get('lang');
-        if (urlLang && supported.has(urlLang)) lang = urlLang;
-
-        // Check localStorage
-        try {
-            const savedLang = localStorage.getItem('easyrest_lang');
-            if (savedLang && supported.has(savedLang)) lang = savedLang;
-        } catch (e) {}
-
-        // Apply language function
-        function applyLang(newLang) {
-            lang = newLang;
-
-            // Update button states
-            buttons.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
-
-            // Update all elements with data-[lang] attribute
-            const all = root.querySelectorAll('[data-fr],[data-en],[data-it],[data-es],[data-pt],[data-zh]');
-            all.forEach(el => {
-                const val = el.getAttribute('data-' + lang);
-                if (val !== null) el.textContent = val;
-            });
-
-            // Update html lang attribute
-            document.documentElement.setAttribute('lang', lang);
-
-            // Save preference
-            try {
-                localStorage.setItem('easyrest_lang', lang);
-            } catch (e) {}
-
-            // Update URL without reload
-            if (history.replaceState) {
-                const url = new URL(window.location);
-                url.searchParams.set('lang', lang);
-                history.replaceState(null, '', url);
-            }
-
-            // Dispatch event for other scripts
-            document.dispatchEvent(new CustomEvent('easyrest:languageChange', {
-                detail: { lang: lang }
-            }));
-        }
-
-        // Bind click events
-        buttons.forEach(btn => {
-            btn.addEventListener('click', () => applyLang(btn.dataset.lang));
-        });
-
-        // Initialize
-        applyLang(lang);
-    }
+    // Note: language selector is now handled by the global language-switcher.js
 
     // ========================================================================
     // GALLERY TABS SLIDER

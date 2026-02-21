@@ -47,15 +47,7 @@ body.easyrest-guide-body .ast-container {
     padding: 0;
 }
 
-/* Hide Astra header menus on guide posts (keep branding if present) */
-body.easyrest-guide-body .main-header-menu,
-body.easyrest-guide-body .ast-builder-menu,
-body.easyrest-guide-body .ast-builder-menu-mobile,
-body.easyrest-guide-body .main-header-bar-navigation,
-body.easyrest-guide-body #ast-hf-menu-1,
-body.easyrest-guide-body #ast-hf-mobile-menu {
-    display: none !important;
-}
+/* Note: Astra hiding and old guide-nav styles moved to shared styles in style.css */
 
 /* Hide Astra's duplicate post title */
 body.easyrest-guide-body .entry-header,
@@ -65,30 +57,6 @@ body.easyrest-guide-body .ast-single-post-order .entry-header {
 
 body.easyrest-guide-body .site-content {
     padding-top: 0;
-}
-
-/* ==========================================================================
-   MINIMAL NAV (dark bar at top)
-   ========================================================================== */
-
-.easyrest-guide-post .guide-nav {
-    background: #f8f9fa;
-    padding: 16px 0;
-}
-
-.easyrest-guide-post .guide-nav-home {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #2d3436;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.15s ease;
-}
-
-.easyrest-guide-post .guide-nav-home:hover {
-    color: #d4af37;
 }
 
 /* ==========================================================================

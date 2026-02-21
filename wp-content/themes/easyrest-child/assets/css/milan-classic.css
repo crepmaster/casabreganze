@@ -125,38 +125,7 @@ body.easyrest-milan-classic-body .easyrest-hero {
   transform: translateY(0);
 }
 
-/* ============================================================================
- * LANGUAGE SELECTOR
- * ============================================================================ */
-
-.easyrest-milan-classic .language-selector {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 20px;
-  background-color: #333333;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.easyrest-milan-classic .language-selector button {
-  background: none;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  margin: 5px;
-  padding: 5px 10px;
-  opacity: 0.7;
-  transition: var(--transition);
-  font-size: 0.9rem;
-}
-
-.easyrest-milan-classic .language-selector button:hover,
-.easyrest-milan-classic .language-selector button.active {
-  opacity: 1;
-  text-decoration: underline;
-}
+/* Note: language selector styles moved to shared styles in style.css */
 
 /* ============================================================================
  * HEADER / HERO
@@ -1005,112 +974,8 @@ body.easyrest-milan-classic-body .easyrest-hero {
  * FOOTER
  * ============================================================================ */
 
-.easyrest-milan-classic .classic-footer {
-  background-color: var(--dark-color);
-  color: var(--white-color);
-  text-align: center;
-  padding: 2rem 0;
-  margin-top: 2rem;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-
-/* Hide Astra header and footer on Milan Classic template */
-.easyrest-milan-classic-body .site-header,
-.easyrest-milan-classic-body #masthead,
-.easyrest-milan-classic-body .ast-primary-header,
-.easyrest-milan-classic-body .ast-mobile-header-wrap,
-.easyrest-milan-classic-body .site-footer,
-.easyrest-milan-classic-body .ast-footer-overlay,
-.easyrest-milan-classic-body #colophon,
-.easyrest-milan-classic-body .ast-small-footer {
-  display: none !important;
-}
-
-/* Custom header for Milan Classic */
-.easyrest-milan-classic .custom-header {
-  background: var(--dark-bg);
-  padding: 1rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.easyrest-milan-classic .custom-header .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.easyrest-milan-classic .site-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
-}
-
-.easyrest-milan-classic .site-logo img {
-  height: 40px;
-  width: auto;
-}
-
-.easyrest-milan-classic .site-logo-text {
-  color: var(--white);
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.easyrest-milan-classic .header-nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.easyrest-milan-classic .header-nav a {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: color 0.2s ease;
-}
-
-.easyrest-milan-classic .header-nav a:hover {
-  color: var(--white);
-}
-
-/* Language selector in header */
-.easyrest-milan-classic .language-selector {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-.easyrest-milan-classic .language-selector button {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 0.35rem 0.75rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.2s ease;
-}
-
-.easyrest-milan-classic .language-selector button:hover {
-  border-color: rgba(255, 255, 255, 0.6);
-  color: var(--white);
-}
-
-.easyrest-milan-classic .language-selector button.active {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-  color: var(--white);
-}
+/* Note: footer, header, language selector, and Astra-hiding rules
+ * have been moved to the shared styles in style.css */
 
 /* ============================================================================
  * MEDIA QUERIES
@@ -1155,10 +1020,6 @@ body.easyrest-milan-classic-body .easyrest-hero {
 
 /* Tablets and mobiles (up to 768px) */
 @media (max-width: 768px) {
-  .easyrest-milan-classic .language-selector {
-    justify-content: center;
-  }
-
   .easyrest-milan-classic .subtitle {
     font-size: 1rem;
     padding: 0 10px;
@@ -1293,10 +1154,5 @@ body.easyrest-milan-classic-body .easyrest-hero {
 
   .easyrest-milan-classic .poi-category h4 {
     font-size: 1rem;
-  }
-
-  .easyrest-milan-classic .classic-footer {
-    padding: 1.5rem 10px;
-    font-size: 0.9rem;
   }
 }

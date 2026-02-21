@@ -19,34 +19,12 @@ $assets_url = get_stylesheet_directory_uri() . '/assets';
 $img_url = $assets_url . '/images/gallery';
 
 get_header();
-
-// Logo URL - using existing logo file
-$logo_url = $assets_url . '/images/gallery/logo esayrest.png';
 ?>
+
+<?php get_template_part( 'template-parts/site-header' ); ?>
 
 <div id="primary" class="content-area easyrest-milan-classic">
     <main id="main" class="site-main">
-
-        <!-- Custom Header with Logo and Language Selector -->
-        <header class="custom-header">
-            <div class="container">
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="site-logo">
-                    <img src="<?php echo esc_url($logo_url); ?>" alt="EasyRest" onerror="this.style.display='none'">
-                    <span class="site-logo-text">EasyRest</span>
-                </a>
-
-                <nav class="header-nav">
-                    <div class="language-selector">
-                        <button data-lang="fr" class="active">FR</button>
-                        <button data-lang="en">EN</button>
-                        <button data-lang="it">IT</button>
-                        <button data-lang="es">ES</button>
-                        <button data-lang="pt">PT</button>
-                        <button data-lang="zh">中文</button>
-                    </div>
-                </nav>
-            </div>
-        </header>
 
         <!-- Hero Section -->
         <header class="classic-header">
@@ -685,20 +663,10 @@ $logo_url = $assets_url . '/images/gallery/logo esayrest.png';
             <img class="modal-content" src="" alt="">
         </div>
 
-        <!-- Footer simple -->
-        <footer class="classic-footer">
-            <div class="container">
-                <p data-fr="© <?php echo date('Y'); ?> Location d'Appartement à Milan. Tous droits réservés."
-                   data-en="© <?php echo date('Y'); ?> Milan Apartment Rental. All rights reserved."
-                   data-it="© <?php echo date('Y'); ?> Affitto Appartamento Milano. Tutti i diritti riservati."
-                   data-es="© <?php echo date('Y'); ?> Alquiler de Apartamentos en Milán. Todos los derechos reservados."
-                   data-pt="© <?php echo date('Y'); ?> Aluguer de Apartamentos em Milão. Todos os direitos reservados."
-                   data-zh="© <?php echo date('Y'); ?> 米兰公寓出租。保留所有权利。">© <?php echo date('Y'); ?> Location d'Appartement à Milan. Tous droits réservés.</p>
-            </div>
-        </footer>
-
     </main>
 </div>
+
+<?php get_template_part( 'template-parts/site-footer' ); ?>
 
 <?php
 get_footer();

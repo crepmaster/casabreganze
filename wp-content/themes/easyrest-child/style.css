@@ -861,3 +861,216 @@ body.lightbox-open {
         font-size: 2rem;
     }
 }
+
+/* ==========================================================================
+   GLOBAL: Hide Astra header/footer on all EasyRest pages
+   ========================================================================== */
+
+body.easyrest-page .site-header,
+body.easyrest-page #masthead,
+body.easyrest-page .ast-primary-header,
+body.easyrest-page .ast-mobile-header-wrap,
+body.easyrest-page .main-header-bar,
+body.easyrest-page .ast-main-header-wrap,
+body.easyrest-page .ast-primary-header-bar,
+body.easyrest-page .ast-desktop-header,
+body.easyrest-page .ast-builder-menu,
+body.easyrest-page .ast-builder-menu-mobile,
+body.easyrest-page .main-header-bar-navigation,
+body.easyrest-page #ast-hf-menu-1,
+body.easyrest-page #ast-hf-mobile-menu,
+body.easyrest-page .site-footer,
+body.easyrest-page .ast-footer-overlay,
+body.easyrest-page #colophon,
+body.easyrest-page .ast-small-footer,
+body.easyrest-page .ast-footer-wrap {
+    display: none !important;
+}
+
+/* ==========================================================================
+   SHARED EASYREST HEADER
+   ========================================================================== */
+
+.easyrest-site-header {
+    background: var(--easyrest-dark, #2d3436);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.easyrest-site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Logo */
+.easyrest-site-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+}
+
+.easyrest-site-logo:hover {
+    text-decoration: none;
+}
+
+.easyrest-site-logo img {
+    height: 40px;
+    width: auto;
+}
+
+.easyrest-site-logo-text {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    font-family: var(--font-heading, 'Poppins', sans-serif);
+}
+
+/* Nav container */
+.easyrest-header-nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+/* Menu links */
+.easyrest-nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.5rem;
+}
+
+.easyrest-nav-menu a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.easyrest-nav-menu a:hover {
+    color: #ffffff;
+}
+
+/* Language selector */
+.easyrest-language-selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.easyrest-language-selector button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.easyrest-language-selector button:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #ffffff;
+}
+
+.easyrest-language-selector button.active {
+    background: var(--easyrest-orange, #F5A623);
+    border-color: var(--easyrest-orange, #F5A623);
+    color: #ffffff;
+}
+
+/* Hamburger toggle (hidden on desktop) */
+.easyrest-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.easyrest-menu-toggle .hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .easyrest-menu-toggle {
+        display: flex;
+    }
+
+    .easyrest-header-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--easyrest-dark, #2d3436);
+        flex-direction: column;
+        padding: 1rem 20px 1.5rem;
+        gap: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .easyrest-header-nav.is-open {
+        display: flex;
+    }
+
+    .easyrest-nav-menu {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .easyrest-nav-menu a {
+        font-size: 1.1rem;
+        padding: 0.5rem 0;
+        display: block;
+    }
+
+    .easyrest-language-selector {
+        justify-content: flex-start;
+    }
+}
+
+/* ==========================================================================
+   SHARED EASYREST FOOTER
+   ========================================================================== */
+
+.easyrest-site-footer {
+    background-color: var(--easyrest-dark, #2d3436);
+    color: #ffffff;
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.easyrest-site-footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.easyrest-site-footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}

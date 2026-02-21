@@ -22,12 +22,19 @@ if (!$paged) {
 }
 ?>
 
+<?php get_template_part( 'template-parts/site-header' ); ?>
+
 <div id="primary" class="content-area easyrest-guides-page">
     <main id="main" class="site-main">
         <section class="guides-hero">
             <div class="container">
-                <h1>Guides</h1>
-                <p>Discover Milan tips, events, and weekly updates.</p>
+                <h1 data-fr="Guides" data-en="Guides" data-it="Guide" data-es="Guías" data-pt="Guias" data-zh="指南">Guides</h1>
+                <p data-fr="Découvrez nos conseils, événements et actualités sur Milan."
+                   data-en="Discover Milan tips, events, and weekly updates."
+                   data-it="Scopri consigli, eventi e aggiornamenti settimanali su Milano."
+                   data-es="Descubre consejos, eventos y actualizaciones semanales sobre Milán."
+                   data-pt="Descubra dicas, eventos e atualizações semanais sobre Milão."
+                   data-zh="发现米兰的提示、活动和每周更新。">Discover Milan tips, events, and weekly updates.</p>
             </div>
         </section>
 
@@ -69,7 +76,9 @@ if (!$paged) {
                                 </div>
                                 <h3 class="guide-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                                 <p class="guide-excerpt"><?php echo esc_html(wp_trim_words(get_the_excerpt(), 24)); ?></p>
-                                <a class="guide-link" href="<?php the_permalink(); ?>">Read guide</a>
+                                <a class="guide-link" href="<?php the_permalink(); ?>"
+                                   data-fr="Lire le guide" data-en="Read guide" data-it="Leggi la guida"
+                                   data-es="Leer guía" data-pt="Ler guia" data-zh="阅读指南">Read guide</a>
                             </div>
                         </article>
                     <?php
@@ -78,7 +87,12 @@ if (!$paged) {
                     else :
                     ?>
                         <div class="guides-empty">
-                            <p>No guides yet. New articles will appear here soon.</p>
+                            <p data-fr="Pas encore de guides. De nouveaux articles apparaîtront bientôt."
+                               data-en="No guides yet. New articles will appear here soon."
+                               data-it="Nessuna guida ancora. Nuovi articoli appariranno presto."
+                               data-es="No hay guías todavía. Nuevos artículos aparecerán pronto."
+                               data-pt="Ainda sem guias. Novos artigos aparecerão em breve."
+                               data-zh="暂无指南。新文章即将推出。">No guides yet. New articles will appear here soon.</p>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -97,6 +111,8 @@ if (!$paged) {
         </section>
     </main>
 </div>
+
+<?php get_template_part( 'template-parts/site-footer' ); ?>
 
 <?php
 get_footer();

@@ -89,6 +89,15 @@ function easyrest_child_enqueue_assets() {
         EASYREST_CHILD_VERSION,
         true
     );
+
+    // Global language switcher (shared header)
+    wp_enqueue_script(
+        'easyrest-language-switcher',
+        EASYREST_CHILD_URI . '/assets/js/language-switcher.js',
+        array(),
+        EASYREST_CHILD_VERSION,
+        true
+    );
 }
 add_action('wp_enqueue_scripts', 'easyrest_child_enqueue_assets');
 
@@ -700,18 +709,33 @@ add_action('wp_enqueue_scripts', function () {
  * This allows more reliable CSS targeting
  */
 add_filter('body_class', function($classes) {
+    $is_easyrest = false;
+
     if (is_page_template('page-easyrest-milan.php')) {
-        $classes[] = 'easyrest-milan-landing-body';
+        $classes[]   = 'easyrest-milan-landing-body';
+        $is_easyrest = true;
     }
     if (is_page_template('page-easyrest-milan-classic.php')) {
-        $classes[] = 'easyrest-milan-classic-body';
+        $classes[]   = 'easyrest-milan-classic-body';
+        $is_easyrest = true;
+    }
+    if (is_page_template('page-easyrest-guides.php')) {
+        $classes[]   = 'easyrest-guides-page-body';
+        $is_easyrest = true;
     }
     if ( function_exists( 'easyrest_is_guide' ) && easyrest_is_guide() ) {
-        $classes[] = 'easyrest-guide-body';
+        $classes[]   = 'easyrest-guide-body';
+        $is_easyrest = true;
     }
     if ( function_exists( 'easyrest_is_booking_page' ) && easyrest_is_booking_page() ) {
-        $classes[] = 'easyrest-booking-page';
+        $classes[]   = 'easyrest-booking-page';
+        $is_easyrest = true;
     }
+
+    if ( $is_easyrest ) {
+        $classes[] = 'easyrest-page';
+    }
+
     return $classes;
 });
 

@@ -24,17 +24,10 @@ $has_content = easyrest_has_meaningful_content( get_the_ID() );
 $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' easyrest-guide--short');
 ?>
 
+<?php get_template_part( 'template-parts/site-header' ); ?>
+
 <div id="primary" class="<?php echo esc_attr($wrapper_class); ?>">
     <main id="main" class="site-main">
-
-        <!-- Minimal guide header (Astra header is hidden via CSS) -->
-        <nav class="guide-nav">
-            <div class="container">
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="guide-nav-home">
-                    ← <?php esc_html_e( 'Home', 'easyrest-child' ); ?>
-                </a>
-            </div>
-        </nav>
 
         <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
             <article <?php post_class('guide-article'); ?>>
@@ -170,6 +163,8 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
         <?php endwhile; endif; ?>
     </main>
 </div>
+
+<?php get_template_part( 'template-parts/site-footer' ); ?>
 
 <?php
 get_footer();
