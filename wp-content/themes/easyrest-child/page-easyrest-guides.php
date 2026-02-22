@@ -34,7 +34,7 @@ if (!$paged) {
                    data-it="Scopri consigli, eventi e aggiornamenti settimanali su Milano."
                    data-es="Descubre consejos, eventos y actualizaciones semanales sobre Milán."
                    data-pt="Descubra dicas, eventos e atualizações semanais sobre Milão."
-                   data-zh="发现米兰的提示、活动和每周更新。">Discover Milan tips, events, and weekly updates.</p>
+                   data-zh="发现米兰的提示、活动和每周更新。">Découvrez nos conseils, événements et actualités sur Milan.</p>
             </div>
         </section>
 
@@ -78,7 +78,7 @@ if (!$paged) {
                                 <p class="guide-excerpt"><?php echo esc_html(wp_trim_words(get_the_excerpt(), 24)); ?></p>
                                 <a class="guide-link" href="<?php the_permalink(); ?>"
                                    data-fr="Lire le guide" data-en="Read guide" data-it="Leggi la guida"
-                                   data-es="Leer guía" data-pt="Ler guia" data-zh="阅读指南">Read guide</a>
+                                   data-es="Leer guía" data-pt="Ler guia" data-zh="阅读指南">Lire le guide</a>
                             </div>
                         </article>
                     <?php
@@ -92,7 +92,7 @@ if (!$paged) {
                                data-it="Nessuna guida ancora. Nuovi articoli appariranno presto."
                                data-es="No hay guías todavía. Nuevos artículos aparecerán pronto."
                                data-pt="Ainda sem guias. Novos artigos aparecerão em breve."
-                               data-zh="暂无指南。新文章即将推出。">No guides yet. New articles will appear here soon.</p>
+                               data-zh="暂无指南。新文章即将推出。">Pas encore de guides. De nouveaux articles apparaîtront bientôt.</p>
                         </div>
                     <?php endif; ?>
                 </div>

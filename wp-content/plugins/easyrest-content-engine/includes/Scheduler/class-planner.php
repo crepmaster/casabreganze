@@ -34,7 +34,7 @@ class EasyRest_CE_Planner {
     /**
      * @var array Supported languages
      */
-    private $languages = ['en', 'fr', 'it', 'de', 'es'];
+    private $languages = ['fr', 'en', 'it', 'es'];
 
     /**
      * @var array Content type configurations
@@ -594,14 +594,22 @@ class EasyRest_CE_Planner {
      * Get configured default languages from EasyRest plugin option
      *
      * This allows multilingual content generation without Polylang/WPML.
-     * Reads the 'easyrest_ce_default_languages' option which can be:
+     * Checks 'easyrest_ce_default_languages' first, then falls back to
+     * 'easyrest_ce_active_langs' (set by the activator).
+     *
+     * Accepts:
      * - An array of language codes: ['en', 'fr', 'it']
      * - A comma-separated string: 'en,fr,it'
      *
      * @return array Normalized language codes, or empty array if not configured
      */
     private function get_configured_default_languages(): array {
-        $option = get_option('easyrest_ce_default_languages', []);
+        $option = get_option('easyrest_ce_default_languages', null);
+
+        // Fall back to the activation-created option
+        if (empty($option)) {
+            $option = get_option('easyrest_ce_active_langs', []);
+        }
 
         // Handle comma-separated string
         if (is_string($option) && !empty($option)) {

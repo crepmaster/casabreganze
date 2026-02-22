@@ -495,7 +495,7 @@ class EasyRest_CE_Activator {
             'easyrest_ce_max_attempts'       => 5,
             'easyrest_ce_lock_timeout_min'   => 10,
             'easyrest_ce_quality_threshold'  => 70,
-            'easyrest_ce_active_langs'       => ['en', 'fr'],
+            'easyrest_ce_active_langs'       => ['fr', 'en', 'it', 'es'],
             'easyrest_ce_active_types'       => ['weekly', 'sport_guide', 'nationality_guide', 'transport', 'match_preview'],
             // Lot B: Worker batching and retry options
             'easyrest_ce_worker_batch_size'     => 3,
@@ -503,6 +503,9 @@ class EasyRest_CE_Activator {
             'easyrest_ce_retry_base_min'        => 15,
             'easyrest_ce_retry_cap_min'         => 240,
         ];
+
+        // Force-update languages to FR/EN/IT/ES (one-time migration)
+        update_option('easyrest_ce_active_langs', ['fr', 'en', 'it', 'es']);
 
         foreach ($defaults as $key => $value) {
             if (get_option($key) === false) {
@@ -533,7 +536,7 @@ class EasyRest_CE_Activator {
                 'priority'   => 3,
                 'daily_quota' => 1,
                 'settings'   => wp_json_encode([
-                    'active_langs' => ['en', 'fr'],
+                    'active_langs' => ['fr', 'en', 'it', 'es'],
                     'active_types' => ['venue_guide', 'neighborhood_guide'],
                 ]),
                 'created_at' => current_time('mysql'),

@@ -887,6 +887,38 @@ body.easyrest-page .ast-footer-wrap {
     display: none !important;
 }
 
+/* Override Astra container constraints so our templates go full-width */
+body.easyrest-page .site-content,
+body.easyrest-page #primary.content-area,
+body.easyrest-page #primary {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+}
+
+body.easyrest-page .ast-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+body.easyrest-page .ast-separate-container .ast-article-single,
+body.easyrest-page .ast-separate-container .ast-article-post,
+body.easyrest-page .ast-separate-container .ast-article-page {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+body.easyrest-page .ast-separate-container {
+    background: transparent !important;
+}
+
+body.easyrest-page .site-content .ast-container {
+    display: block !important;
+}
+
 /* ==========================================================================
    SHARED EASYREST HEADER
    ========================================================================== */

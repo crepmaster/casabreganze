@@ -320,6 +320,13 @@ class EasyRest_CE_Prompt_Renderer {
                 'match_preview'   => 'anteprima partita Milano',
                 'venue_guide'     => 'guida luoghi Milano',
             ],
+            'es' => [
+                'weekly_guide'    => 'eventos Milán esta semana',
+                'sport_guide'     => 'guía deportes Milán',
+                'transport_guide' => 'guía transporte Milán',
+                'match_preview'   => 'previa partido Milán',
+                'venue_guide'     => 'guía lugares Milán',
+            ],
         ];
 
         $lang_keywords = $keywords[$lang] ?? $keywords['en'];

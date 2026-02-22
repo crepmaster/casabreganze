@@ -54,21 +54,44 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
 
                     <aside class="guide-aside">
                         <div class="guide-cta-card">
-                            <h3><?php esc_html_e('Book EasyRest Milan', 'easyrest-child'); ?></h3>
-                            <p><?php esc_html_e('Check availability and book direct in a few clicks.', 'easyrest-child'); ?></p>
-                            <a class="btn btn-primary" href="<?php echo esc_url(home_url('/#easyrest-booking')); ?>">
-                                <?php esc_html_e('Check availability', 'easyrest-child'); ?>
-                            </a>
+                            <h3 data-fr="Réservez EasyRest Milan"
+                                data-en="Book EasyRest Milan"
+                                data-it="Prenota EasyRest Milano"
+                                data-es="Reserva EasyRest Milán"
+                                data-pt="Reserve EasyRest Milão"
+                                data-zh="预订 EasyRest 米兰">Réservez EasyRest Milan</h3>
+                            <p data-fr="Vérifiez la disponibilité et réservez en direct en quelques clics."
+                               data-en="Check availability and book direct in a few clicks."
+                               data-it="Verifica la disponibilità e prenota direttamente in pochi clic."
+                               data-es="Consulta disponibilidad y reserva directo en pocos clics."
+                               data-pt="Verifique a disponibilidade e reserve diretamente em poucos cliques."
+                               data-zh="查看空房并直接预订，仅需几步。">Vérifiez la disponibilité et réservez en direct en quelques clics.</p>
+                            <a class="btn btn-primary" href="<?php echo esc_url(home_url('/#easyrest-booking')); ?>"
+                               data-fr="Vérifier la disponibilité"
+                               data-en="Check availability"
+                               data-it="Verifica disponibilità"
+                               data-es="Ver disponibilidad"
+                               data-pt="Verificar disponibilidade"
+                               data-zh="查看空房">Vérifier la disponibilité</a>
                         </div>
                     </aside>
                 </div>
                 <?php else : ?>
                 <div class="guide-content guide-content--empty container">
                     <div class="guide-coming-soon">
-                        <p><?php esc_html_e('This guide is coming soon. Check back shortly for the full article.', 'easyrest-child'); ?></p>
-                        <a class="btn btn-primary" href="<?php echo esc_url(home_url('/#easyrest-booking')); ?>">
-                            <?php esc_html_e('Check availability', 'easyrest-child'); ?>
-                        </a>
+                        <p data-fr="Ce guide arrive bientôt. Revenez prochainement pour l'article complet."
+                           data-en="This guide is coming soon. Check back shortly for the full article."
+                           data-it="Questa guida sarà disponibile a breve. Torna presto per l'articolo completo."
+                           data-es="Esta guía estará disponible pronto. Vuelve pronto para el artículo completo."
+                           data-pt="Este guia estará disponível em breve. Volte em breve para o artigo completo."
+                           data-zh="本指南即将推出，请稍后回来查看完整文章。">Ce guide arrive bientôt. Revenez prochainement pour l'article complet.</p>
+                        <a class="btn btn-primary" href="<?php echo esc_url(home_url('/#easyrest-booking')); ?>"
+                           data-fr="Vérifier la disponibilité"
+                           data-en="Check availability"
+                           data-it="Verifica disponibilità"
+                           data-es="Ver disponibilidad"
+                           data-pt="Verificar disponibilidade"
+                           data-zh="查看空房">Vérifier la disponibilité</a>
                     </div>
                 </div>
                 <?php endif; ?>
@@ -83,7 +106,8 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                     <div class="guide-image-credit container">
                         <small>
                             <?php if ($credit_name) : ?>
-                                Photo by
+                                <span data-fr="Photo par" data-en="Photo by" data-it="Foto di"
+                                      data-es="Foto de" data-pt="Foto de" data-zh="照片由">Photo par</span>
                                 <?php if ($credit_url) : ?>
                                     <a href="<?php echo esc_url($credit_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($credit_name); ?></a>
                                 <?php else : ?>
@@ -91,7 +115,13 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                                 <?php endif; ?>
                             <?php endif; ?>
                             <?php if ($source_name) : ?>
-                                <?php echo $credit_name ? ' on ' : 'Photo on '; ?>
+                                <?php if ($credit_name) : ?>
+                                    <span data-fr="sur" data-en="on" data-it="su"
+                                          data-es="en" data-pt="no" data-zh="来自">sur</span>
+                                <?php else : ?>
+                                    <span data-fr="Photo sur" data-en="Photo on" data-it="Foto su"
+                                          data-es="Foto en" data-pt="Foto no" data-zh="照片来自">Photo sur</span>
+                                <?php endif; ?>
                                 <?php if ($source_url) : ?>
                                     <a href="<?php echo esc_url($source_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($source_name); ?></a>
                                 <?php else : ?>
@@ -105,7 +135,13 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
 
             <section class="guide-more">
                 <div class="container">
-                    <h2 class="section-title"><?php esc_html_e('More guides', 'easyrest-child'); ?></h2>
+                    <h2 class="section-title"
+                        data-fr="Plus de guides"
+                        data-en="More guides"
+                        data-it="Altre guide"
+                        data-es="Más guías"
+                        data-pt="Mais guias"
+                        data-zh="更多指南">Plus de guides</h2>
                     <div class="guides-grid">
                         <?php
                         $more_guides = new WP_Query([
@@ -143,9 +179,9 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                                     </div>
                                     <h3 class="guide-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                                     <p class="guide-excerpt"><?php echo esc_html(wp_trim_words(get_the_excerpt(), 18)); ?></p>
-                                    <a class="guide-link" href="<?php the_permalink(); ?>">
-                                        <?php esc_html_e('Read guide', 'easyrest-child'); ?>
-                                    </a>
+                                    <a class="guide-link" href="<?php the_permalink(); ?>"
+                                       data-fr="Lire le guide" data-en="Read guide" data-it="Leggi la guida"
+                                       data-es="Leer guía" data-pt="Ler guia" data-zh="阅读指南">Lire le guide</a>
                                 </div>
                             </article>
                         <?php
@@ -154,7 +190,12 @@ $wrapper_class = 'content-area easyrest-guide-post' . ($has_content ? '' : ' eas
                         else :
                         ?>
                             <div class="guides-empty">
-                                <p><?php esc_html_e('No guides yet. New articles will appear here soon.', 'easyrest-child'); ?></p>
+                                <p data-fr="Pas encore de guides. De nouveaux articles apparaîtront bientôt."
+                                   data-en="No guides yet. New articles will appear here soon."
+                                   data-it="Nessuna guida ancora. Nuovi articoli appariranno presto."
+                                   data-es="No hay guías todavía. Nuevos artículos aparecerán pronto."
+                                   data-pt="Ainda sem guias. Novos artigos aparecerão em breve."
+                                   data-zh="暂无指南。新文章即将推出。">Pas encore de guides. De nouveaux articles apparaîtront bientôt.</p>
                             </div>
                         <?php endif; ?>
                     </div>

@@ -20,7 +20,7 @@ body.easyrest-guide-body a {
     color: #2d3436;
 }
 
-/* Force light on all Astra wrappers (overrides Customizer inline CSS) */
+/* Force light background on Astra wrappers (overrides Customizer inline CSS) */
 body.easyrest-guide-body,
 body.easyrest-guide-body .site-content,
 body.easyrest-guide-body .ast-container,
@@ -36,27 +36,12 @@ body.easyrest-guide-body .entry-content {
     background-color: #f8f9fa !important;
 }
 
-body.easyrest-guide-body .site-content,
-body.easyrest-guide-body #primary.content-area {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-body.easyrest-guide-body .ast-container {
-    max-width: none;
-    padding: 0;
-}
-
-/* Note: Astra hiding and old guide-nav styles moved to shared styles in style.css */
+/* Note: Astra layout overrides (padding, margin, max-width) are in style.css under body.easyrest-page */
 
 /* Hide Astra's duplicate post title */
 body.easyrest-guide-body .entry-header,
 body.easyrest-guide-body .ast-single-post-order .entry-header {
     display: none !important;
-}
-
-body.easyrest-guide-body .site-content {
-    padding-top: 0;
 }
 
 /* ==========================================================================
