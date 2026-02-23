@@ -144,6 +144,18 @@ function easyrest_child_enqueue_booking_script() {
         EASYREST_CHILD_VERSION,
         true
     );
+
+    // Resolve MPHB room type for direct search -> reserve -> checkout flow.
+    $mphb_room_type_id = 0;
+    $mphb_room_types = get_posts(array(
+        'post_type' => 'mphb_room_type',
+        'posts_per_page' => 1,
+        'post_status' => 'publish',
+        'fields' => 'ids',
+    ));
+    if (!empty($mphb_room_types)) {
+        $mphb_room_type_id = absint($mphb_room_types[0]);
+    }
     
     // Localize script with data from plugin
     wp_localize_script('easyrest-booking-price', 'easyrestConfig', array(
@@ -151,6 +163,10 @@ function easyrest_child_enqueue_booking_script() {
         'nonce' => wp_create_nonce('easyrest_price_nonce'),
         'currency' => '€',
         'discountPercent' => absint(easyrest_get_option('discount_percent', 15)),
+        'fastCheckout' => (bool) apply_filters('easyrest_fast_checkout_enabled', true),
+        'mphbSearchUrl' => esc_url(easyrest_get_option('mphb_search_url', home_url('/search-availability/'))),
+        'mphbCheckoutUrl' => esc_url(easyrest_get_option('mphb_checkout_url', home_url('/hotel-checkout/'))),
+        'mphbRoomTypeId' => $mphb_room_type_id,
         // WhatsApp: numéro par défaut si non configuré (remplacez par votre numéro)
         'whatsappNumber' => sanitize_text_field(easyrest_get_option('whatsapp_number', '33612345678')),
         'email' => sanitize_email(easyrest_get_option('email', 'contact@easyrest.eu')),
@@ -167,6 +183,7 @@ function easyrest_child_enqueue_booking_script() {
             'selectDates' => esc_html__('Please select dates', 'easyrest-child'),
             'invalidDates' => esc_html__('Check-out must be after check-in', 'easyrest-child'),
             'tooManyRequests' => esc_html__('Too many requests. Please wait.', 'easyrest-child'),
+            'redirectingToCheckout' => esc_html__('Availability found. Redirecting to checkout...', 'easyrest-child'),
         ),
     ));
 }
@@ -727,7 +744,10 @@ add_filter('body_class', function($classes) {
         $classes[]   = 'easyrest-guide-body';
         $is_easyrest = true;
     }
-    if ( function_exists( 'easyrest_is_booking_page' ) && easyrest_is_booking_page() ) {
+    $is_booking_context = ( function_exists( 'easyrest_is_booking_page' ) && easyrest_is_booking_page() )
+        || ( function_exists( 'easyrest_is_booking_request_slug' ) && easyrest_is_booking_request_slug() );
+
+    if ( $is_booking_context ) {
         $classes[]   = 'easyrest-booking-page';
         $is_easyrest = true;
     }
@@ -756,10 +776,13 @@ function easyrest_is_booking_page() {
         'hotel-rooms',
         'hotel-cart',
         'hotel-checkout',
+        'easyrest-checkout',
         'hotel-account',
+        'hotel-search',
         'hotel-booking-search',
         'search-results',
         'search-availability',
+        'accommodations',
         'booking-confirmation',
         'booking-cancellation',
         'hotel-thank-you',
@@ -783,10 +806,74 @@ function easyrest_is_booking_page() {
 }
 
 /**
+ * Helper: detect booking request by URL slug fallback.
+ *
+ * Useful when booking plugins alter the page template flow.
+ *
+ * @return bool
+ */
+function easyrest_is_booking_request_slug() {
+    if ( empty( $_SERVER['REQUEST_URI'] ) ) {
+        return false;
+    }
+
+    $path = wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ), PHP_URL_PATH );
+    if ( ! is_string( $path ) || $path === '' ) {
+        return false;
+    }
+
+    $slugs = array(
+        'hotel-rooms',
+        'hotel-cart',
+        'hotel-checkout',
+        'easyrest-checkout',
+        'hotel-account',
+        'hotel-search',
+        'hotel-booking-search',
+        'search-results',
+        'search-availability',
+        'accommodations',
+        'booking-confirmation',
+        'booking-cancellation',
+        'hotel-thank-you',
+        'hotel-term-condition',
+    );
+
+    foreach ( $slugs as $slug ) {
+        if ( preg_match( '#/' . preg_quote( $slug, '#' ) . '/?$#i', $path ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Force booking pages to use the child theme booking shell (Option 2 style).
+ */
+add_filter( 'template_include', function ( $template ) {
+    if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
+        return $template;
+    }
+
+    $is_booking = easyrest_is_booking_page() || easyrest_is_booking_request_slug();
+    if ( ! $is_booking ) {
+        return $template;
+    }
+
+    $booking_template = get_stylesheet_directory() . '/page-easyrest-booking.php';
+    if ( file_exists( $booking_template ) ) {
+        return $booking_template;
+    }
+
+    return $template;
+}, 99 );
+
+/**
  * Enqueue booking page styles (minimal header + clean layout).
  */
 add_action( 'wp_enqueue_scripts', function () {
-    if ( ! easyrest_is_booking_page() ) {
+    if ( ! easyrest_is_booking_page() && ! easyrest_is_booking_request_slug() ) {
         return;
     }
 
@@ -796,7 +883,145 @@ add_action( 'wp_enqueue_scripts', function () {
         array( 'easyrest-child-style' ),
         EASYREST_CHILD_VERSION
     );
+
 }, 30 );
+
+/**
+ * Enqueue checkout guest pre-fill script on booking pages AND pages with MPHB forms.
+ *
+ * Captures adults/children on the homepage booking form and pre-fills them
+ * on the checkout page so the guest doesn't have to re-enter them.
+ */
+add_action( 'wp_enqueue_scripts', function () {
+    $has_mphb_query = isset( $_GET['mphb_check_in_date'] )
+        || isset( $_GET['mphb_check_out_date'] )
+        || isset( $_GET['mphb_room_type_id'] )
+        || isset( $_GET['mphb-checkout-nonce'] );
+
+    $load = easyrest_is_booking_page()
+         || is_page_template( 'page-easyrest-milan-classic.php' )
+         || $has_mphb_query;
+
+    if ( ! $load ) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'easyrest-checkout-prefill',
+        get_stylesheet_directory_uri() . '/assets/js/checkout-prefill.js',
+        array(),
+        EASYREST_CHILD_VERSION,
+        true
+    );
+}, 30 );
+
+/**
+ * Fast checkout: skip search-results page for single-room direct booking.
+ *
+ * When the homepage booking form redirects to /search-availability/ with
+ * MPHB params (dates + room type), this intercepts the request, sets MPHB
+ * cookies, and redirects to the checkout page. The checkout shortcode
+ * reads dates and room details from cookies (its standard fallback path).
+ *
+ * Can be disabled via: add_filter( 'easyrest_fast_checkout_enabled', '__return_false' );
+ */
+if ( apply_filters( 'easyrest_fast_checkout_enabled', true ) ) {
+add_action( 'template_redirect', function () {
+    if ( is_admin() || wp_doing_ajax() || wp_doing_cron() ) {
+        return;
+    }
+
+    $slug          = '';
+    $queried       = get_queried_object();
+    $allowed_slugs = array( 'search-results', 'search-availability' );
+
+    if ( $queried instanceof WP_Post ) {
+        $slug = $queried->post_name;
+    }
+
+    if ( empty( $slug ) && ! empty( $_SERVER['REQUEST_URI'] ) ) {
+        $request_path = wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ), PHP_URL_PATH );
+        if ( is_string( $request_path ) ) {
+            foreach ( $allowed_slugs as $candidate ) {
+                if ( preg_match( '#/' . preg_quote( $candidate, '#' ) . '/?$#i', $request_path ) ) {
+                    $slug = $candidate;
+                    break;
+                }
+            }
+        }
+    }
+
+    if ( ! in_array( $slug, $allowed_slugs, true ) ) {
+        return;
+    }
+
+    $room_type_id = 0;
+    foreach ( array( 'mphb_room_type_id', 'mphb_room_type', 'room_type' ) as $key ) {
+        if ( ! empty( $_GET[ $key ] ) ) {
+            $room_type_id = absint( $_GET[ $key ] );
+            break;
+        }
+    }
+
+    $checkin  = isset( $_GET['mphb_check_in_date'] ) ? sanitize_text_field( wp_unslash( $_GET['mphb_check_in_date'] ) ) : '';
+    $checkout = isset( $_GET['mphb_check_out_date'] ) ? sanitize_text_field( wp_unslash( $_GET['mphb_check_out_date'] ) ) : '';
+
+    if ( $room_type_id <= 0 || empty( $checkin ) || empty( $checkout ) ) {
+        return;
+    }
+
+    if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $checkin ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $checkout ) ) {
+        return;
+    }
+
+    $target_base = '';
+    if ( function_exists( 'MPHB' ) ) {
+        try {
+            $target_base = MPHB()->settings()->pages()->getCheckoutPageUrl();
+        } catch ( \Exception $e ) {
+            $target_base = '';
+        }
+    }
+
+    if ( empty( $target_base ) ) {
+        $mphb_page_id = absint( get_option( 'mphb_checkout_page', 0 ) );
+        if ( $mphb_page_id > 0 ) {
+            $target_base = get_permalink( $mphb_page_id );
+        }
+    }
+
+    if ( empty( $target_base ) ) {
+        return;
+    }
+
+    $cookie_path   = defined( 'COOKIEPATH' ) ? COOKIEPATH : '/';
+    $cookie_domain = defined( 'COOKIE_DOMAIN' ) ? COOKIE_DOMAIN : '';
+    $rooms_details = wp_json_encode( array( (string) $room_type_id => 1 ) );
+
+    setcookie( 'mphb_check_in_date', $checkin, 0, $cookie_path, $cookie_domain );
+    setcookie( 'mphb_check_out_date', $checkout, 0, $cookie_path, $cookie_domain );
+    setcookie( 'mphb_rooms_details', $rooms_details, 0, $cookie_path, $cookie_domain );
+
+    // Clear stale checkout step cookie so MPHB defaults to STEP_CHECKOUT.
+    setcookie( 'mphb_checkout_step', '', time() - 3600, $cookie_path, $cookie_domain );
+
+    if ( defined( 'SITECOOKIEPATH' ) && SITECOOKIEPATH !== $cookie_path ) {
+        setcookie( 'mphb_check_in_date', $checkin, 0, SITECOOKIEPATH, $cookie_domain );
+        setcookie( 'mphb_check_out_date', $checkout, 0, SITECOOKIEPATH, $cookie_domain );
+        setcookie( 'mphb_rooms_details', $rooms_details, 0, SITECOOKIEPATH, $cookie_domain );
+        setcookie( 'mphb_checkout_step', '', time() - 3600, SITECOOKIEPATH, $cookie_domain );
+    }
+
+    $checkout_params = array(
+        'mphb_check_in_date'  => $checkin,
+        'mphb_check_out_date' => $checkout,
+    );
+
+    $target_url = add_query_arg( $checkout_params, $target_base );
+    wp_safe_redirect( $target_url, 302 );
+    exit;
+}, 1 );
+} // end fast-checkout
 
 
 /**

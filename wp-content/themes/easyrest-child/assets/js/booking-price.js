@@ -180,6 +180,9 @@
             // Verifier le cache
             var cacheKey = checkin + '_' + checkout + '_' + adults + '_' + children;
             if (this.state.priceCache[cacheKey]) {
+                if (this.redirectToCheckout(this.state.priceCache[cacheKey])) {
+                    return;
+                }
                 this.displayPrice(this.state.priceCache[cacheKey]);
                 return;
             }
@@ -222,6 +225,12 @@
                         if (priceData.bookingPrice > 0 && priceData.directPrice > 0) {
                             // Mettre en cache
                             self.state.priceCache[cacheKey] = priceData;
+
+                            // Fast flow: direct to MPHB checkout path
+                            if (self.redirectToCheckout(priceData)) {
+                                return;
+                            }
+
                             self.displayPrice(priceData);
                             
                             // Afficher warnings si présents
@@ -245,6 +254,98 @@
                     self.state.isLoading = false;
                 }
             });
+        },
+
+        /**
+         * Fast checkout: redirect to MPHB search/checkout flow when available
+         */
+        redirectToCheckout: function(data) {
+            if (this.config.fastCheckout === false) {
+                return false;
+            }
+
+            var targetUrl = this.buildFastCheckoutUrl(data);
+            if (!targetUrl) {
+                return false;
+            }
+
+            this.persistCheckoutContext(data);
+            this.showNotification(
+                this.config.i18n.redirectingToCheckout || 'Availability found. Redirecting to checkout...',
+                'info'
+            );
+
+            window.location.href = targetUrl;
+            return true;
+        },
+
+        /**
+         * Persist booking context so checkout pages can prefill guests reliably
+         */
+        persistCheckoutContext: function(data) {
+            var guestsPayload = {
+                adults: String(data.adults),
+                children: String(data.children)
+            };
+            var contextPayload = {
+                checkin: data.checkin,
+                checkout: data.checkout,
+                adults: String(data.adults),
+                children: String(data.children),
+                roomTypeId: this.config.mphbRoomTypeId || 0
+            };
+
+            try {
+                sessionStorage.setItem('easyrest_booking_guests', JSON.stringify(guestsPayload));
+                sessionStorage.setItem('easyrest_booking_context', JSON.stringify(contextPayload));
+            } catch (e) {
+                // Ignore private browsing/sessionStorage restrictions
+            }
+        },
+
+        /**
+         * Build MPHB URL with multiple known parameter variants for compatibility
+         */
+        buildFastCheckoutUrl: function(data) {
+            var baseUrl = this.config.mphbSearchUrl || this.config.mphbCheckoutUrl || '';
+            if (!baseUrl) {
+                return '';
+            }
+
+            try {
+                var url = new URL(baseUrl, window.location.origin);
+                var params = url.searchParams;
+
+                // Core params used by EasyRest integration
+                params.set('checkin', data.checkin);
+                params.set('checkout', data.checkout);
+                params.set('adults', String(data.adults));
+                params.set('children', String(data.children));
+
+                // Common MPHB variants
+                params.set('check_in_date', data.checkin);
+                params.set('check_out_date', data.checkout);
+                params.set('check-in-date', data.checkin);
+                params.set('check-out-date', data.checkout);
+                params.set('mphb_check_in_date', data.checkin);
+                params.set('mphb_check_out_date', data.checkout);
+                params.set('mphb_adults', String(data.adults));
+                params.set('mphb_children', String(data.children));
+
+                if (this.config.mphbRoomTypeId) {
+                    params.set('room_type', String(this.config.mphbRoomTypeId));
+                    params.set('mphb_room_type', String(this.config.mphbRoomTypeId));
+                }
+
+                return url.toString();
+            } catch (e) {
+                var separator = baseUrl.indexOf('?') !== -1 ? '&' : '?';
+                return baseUrl + separator +
+                    'checkin=' + encodeURIComponent(data.checkin) +
+                    '&checkout=' + encodeURIComponent(data.checkout) +
+                    '&adults=' + encodeURIComponent(String(data.adults)) +
+                    '&children=' + encodeURIComponent(String(data.children));
+            }
         },
 
         /**

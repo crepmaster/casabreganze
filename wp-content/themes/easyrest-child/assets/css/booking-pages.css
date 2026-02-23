@@ -6,3 +6,17 @@
 body.easyrest-booking-page #content {
   padding-top: 0;
 }
+
+body.easyrest-booking-page .easyrest-booking-shell__content {
+  padding: 32px 0 56px;
+}
+
+body.easyrest-booking-page .easyrest-booking-shell__content .container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+body.easyrest-booking-page .easyrest-booking-shell__content .entry-title {
+  margin-bottom: 16px;
+}
