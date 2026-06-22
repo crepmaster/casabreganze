@@ -2,6 +2,10 @@
 *
 !.gitignore
 
+# Project documentation (planning, refactoring, architecture)
+!docs/
+!docs/**
+
 # Allow wp-content tree
 !wp-content/
 wp-content/*
