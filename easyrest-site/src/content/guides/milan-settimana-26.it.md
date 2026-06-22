@@ -2,7 +2,7 @@
 title: "Cosa fare a Milano dal 22 al 28 giugno 2026"
 description: "Mostre, concerti e consigli locali a Milano questa settimana, a due passi dall'appartamento EasyRest."
 lang: it
-translationKey: milan-2026-w26
+translationKey: milan-2026-demo
 pubDate: 2026-06-22
 tags: ["agenda", "milano", "eventi"]
 cover: /og-default.png

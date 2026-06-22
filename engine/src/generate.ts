@@ -32,6 +32,7 @@ function stubBody(lang: Lang, label: string): string {
 function stubSeo(lang: Lang): GeneratedSeo {
   return {
     title: `Que faire à Milan cette semaine — ${lang.toUpperCase()}`,
+    seoTitle: `Que faire à Milan cette semaine | EasyRest (${lang.toUpperCase()})`,
     description:
       'Notre sélection hebdomadaire des activités à Milan : expositions, concerts, bonnes adresses et conseils pratiques près de l’appartement EasyRest.',
     focusKeyword: 'que faire à Milan cette semaine',
@@ -82,6 +83,8 @@ async function main(): Promise<void> {
 
   // 3) Écriture des 4 fichiers (reliés par translationKey ; draft si sous le seuil qualité)
   for (const v of versions) {
+    // Override <title> uniquement s'il diffère réellement du H1 (sinon le site retombe sur title).
+    const seoTitle = v.seo.seoTitle && v.seo.seoTitle !== v.seo.title ? v.seo.seoTitle : undefined;
     const fm: Frontmatter = {
       title: v.seo.title,
       description: v.seo.description,
@@ -89,10 +92,10 @@ async function main(): Promise<void> {
       translationKey,
       pubDate,
       tags: v.seo.tags,
-      cover: '/og-default.png', // TODO : visuel dédié par article
+      cover: '/og-default.png', // image OG de marque par défaut ; visuel dédié par article = amélioration future
       coverAlt: v.seo.coverAlt,
       draft: v.quality < MIN_QUALITY,
-      seo: { focusKeyword: v.seo.focusKeyword },
+      seo: { title: seoTitle, focusKeyword: v.seo.focusKeyword },
     };
     const path = await writeGuide(fm, v.body);
     console.log(`  ✓ ${v.lang} → ${path}${fm.draft ? '  (draft)' : ''}`);

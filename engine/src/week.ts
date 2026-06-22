@@ -1,3 +1,5 @@
+// Calculs en UTC de bout en bout (lecture des composants getUTC*, sortie toISOString).
+// Volontaire : pour un cron hebdomadaire, l'éventuel décalage de date au minuit local est sans effet.
 // Numéro de semaine ISO-8601 (lundi = premier jour, semaine 1 = celle du premier jeudi).
 export function isoWeek(date: Date): { year: number; week: number } {
   const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));

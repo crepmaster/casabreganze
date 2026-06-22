@@ -2,7 +2,7 @@
 title: "Qué hacer en Milán del 22 al 28 de junio de 2026"
 description: "Exposiciones, conciertos y consejos locales en Milán esta semana, a un paso del apartamento EasyRest."
 lang: es
-translationKey: milan-2026-w26
+translationKey: milan-2026-demo
 pubDate: 2026-06-22
 tags: ["agenda", "milan", "eventos"]
 cover: /og-default.png

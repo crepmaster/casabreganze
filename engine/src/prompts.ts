@@ -23,12 +23,14 @@ export function articleUserPrompt(weekLabel: string): string {
 
 export function seoUserPrompt(lang: Lang, body: string): string {
   return [
-    `À partir de l'article ci-dessous (rédigé en ${LANG_NAMES[lang]}), produis ses métadonnées SEO, dans la MÊME langue.`,
-    '- title : titre accrocheur de moins de 60 caractères.',
-    '- description : meta description de 120 à 160 caractères.',
-    '- focusKeyword : le mot-clé principal visé.',
-    '- tags : 3 à 5 mots-clés courts.',
-    "- coverAlt : texte alternatif descriptif pour l'image de couverture.",
+    `À partir de l'article ci-dessous (rédigé en ${LANG_NAMES[lang]}), produis ses métadonnées SEO dans la MÊME langue.`,
+    'Réponds UNIQUEMENT par un objet JSON valide (aucun texte autour, pas de bloc de code), avec ces clés :',
+    '- "title" : titre d\'affichage (H1) accrocheur, moins de 60 caractères.',
+    '- "seoTitle" : balise <title> optimisée pour le référencement (peut différer du H1, inclure « Milan »), 60 caractères max.',
+    '- "description" : meta description de 120 à 160 caractères.',
+    '- "focusKeyword" : le mot-clé principal visé.',
+    '- "tags" : tableau de 3 à 5 mots-clés courts.',
+    '- "coverAlt" : texte alternatif descriptif pour l\'image de couverture.',
     '',
     '--- ARTICLE ---',
     body.slice(0, 6000),

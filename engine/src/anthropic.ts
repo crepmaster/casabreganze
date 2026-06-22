@@ -18,6 +18,25 @@ function textOf(content: Anthropic.ContentBlock[]): string {
     .trim();
 }
 
+// Refuse une réponse inutilisable : refus de sécurité ou troncature (max_tokens).
+// Mieux vaut faire échouer le run clairement que publier un contenu coupé ou vide.
+function assertUsable(msg: Anthropic.Message, what: string): void {
+  if (msg.stop_reason === 'refusal') {
+    const cat = (msg as { stop_details?: { category?: string } }).stop_details?.category ?? 'inconnue';
+    throw new Error(`${what} : le modèle a refusé la requête (catégorie : ${cat}).`);
+  }
+  if (msg.stop_reason === 'max_tokens') {
+    throw new Error(`${what} : réponse tronquée (max_tokens atteint). Augmente max_tokens ou réduis la cible.`);
+  }
+}
+
+function requireText(msg: Anthropic.Message, what: string): string {
+  assertUsable(msg, what);
+  const text = textOf(msg.content);
+  if (!text) throw new Error(`${what} : réponse vide (aucun bloc de texte).`);
+  return text;
+}
+
 /** Génère le corps de l'article (long → streaming, conformément aux bonnes pratiques SDK). */
 export async function generateArticleBody(lang: Lang, weekLabel: string): Promise<string> {
   const stream = client().messages.stream({
@@ -27,35 +46,7 @@ export async function generateArticleBody(lang: Lang, weekLabel: string): Promis
     system: articleSystemPrompt(lang),
     messages: [{ role: 'user', content: articleUserPrompt(weekLabel) }],
   });
-  const msg = await stream.finalMessage();
-  return textOf(msg.content);
-}
-
-/** Métadonnées SEO via sortie structurée (JSON garanti par output_config.format). */
-export async function generateSeo(lang: Lang, body: string): Promise<GeneratedSeo> {
-  const res = await client().messages.create({
-    model: MODELS.seo,
-    max_tokens: 1024,
-    messages: [{ role: 'user', content: seoUserPrompt(lang, body) }],
-    output_config: {
-      format: {
-        type: 'json_schema',
-        schema: {
-          type: 'object',
-          properties: {
-            title: { type: 'string' },
-            description: { type: 'string' },
-            focusKeyword: { type: 'string' },
-            tags: { type: 'array', items: { type: 'string' } },
-            coverAlt: { type: 'string' },
-          },
-          required: ['title', 'description', 'focusKeyword', 'tags', 'coverAlt'],
-          additionalProperties: false,
-        },
-      },
-    },
-  } as Anthropic.MessageCreateParamsNonStreaming);
-  return JSON.parse(textOf(res.content)) as GeneratedSeo;
+  return requireText(await stream.finalMessage(), `Article (${lang})`);
 }
 
 /** Traduit le corps Markdown depuis la langue canonique vers `targetLang`. */
@@ -66,6 +57,51 @@ export async function translateBody(targetLang: Lang, body: string): Promise<str
     system: translateSystemPrompt(targetLang),
     messages: [{ role: 'user', content: body }],
   });
-  const msg = await stream.finalMessage();
-  return textOf(msg.content);
+  return requireText(await stream.finalMessage(), `Traduction (${targetLang})`);
+}
+
+// Extrait robustement un objet JSON d'une réponse texte (tolère ```json fences et préambule).
+function parseJsonObject(text: string, what: string): unknown {
+  let t = text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, '').trim();
+  const start = t.indexOf('{');
+  const end = t.lastIndexOf('}');
+  if (start === -1 || end === -1 || end < start) {
+    throw new Error(`${what} : aucun objet JSON dans la réponse.`);
+  }
+  try {
+    return JSON.parse(t.slice(start, end + 1));
+  } catch (e) {
+    throw new Error(`${what} : JSON invalide (${(e as Error).message}).`);
+  }
+}
+
+/**
+ * Métadonnées SEO par langue. Approche « JSON sur demande » (portable sur toute version du SDK,
+ * sans dépendre de output_config) avec extraction et validation robustes.
+ */
+export async function generateSeo(lang: Lang, body: string): Promise<GeneratedSeo> {
+  const msg = await client().messages.create({
+    model: MODELS.seo,
+    max_tokens: 1024,
+    messages: [{ role: 'user', content: seoUserPrompt(lang, body) }],
+  });
+  const raw = parseJsonObject(requireText(msg, `SEO (${lang})`), `SEO (${lang})`) as Partial<GeneratedSeo>;
+
+  if (
+    typeof raw.title !== 'string' ||
+    typeof raw.description !== 'string' ||
+    typeof raw.focusKeyword !== 'string' ||
+    typeof raw.coverAlt !== 'string' ||
+    !Array.isArray(raw.tags)
+  ) {
+    throw new Error(`SEO (${lang}) : champs manquants ou de type incorrect.`);
+  }
+  return {
+    title: raw.title,
+    seoTitle: typeof raw.seoTitle === 'string' ? raw.seoTitle : undefined,
+    description: raw.description,
+    focusKeyword: raw.focusKeyword,
+    coverAlt: raw.coverAlt,
+    tags: raw.tags.map(String),
+  };
 }
