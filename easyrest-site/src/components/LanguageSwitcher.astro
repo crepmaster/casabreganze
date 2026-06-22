@@ -1,0 +1,30 @@
+---
+import { languages, langList, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  alternates: Record<Lang, string>;
+}
+const { lang, alternates } = Astro.props;
+---
+
+<nav class="lang-switcher" aria-label="Langues">
+  {langList.map((l) => (
+    <a
+      href={alternates[l]}
+      hreflang={l}
+      lang={l}
+      aria-current={l === lang ? 'true' : undefined}
+      class={l === lang ? 'is-active' : ''}
+    >{l.toUpperCase()}</a>
+  ))}
+</nav>
+
+<style>
+  .lang-switcher { display: flex; gap: 0.25rem; }
+  .lang-switcher a {
+    font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.45rem;
+    border-radius: 6px; color: var(--muted); text-decoration: none;
+  }
+  .lang-switcher a.is-active { color: #fff; background: var(--accent); }
+</style>

@@ -1,0 +1,61 @@
+---
+import { type Lang, langList } from '../i18n/ui';
+import { SITE } from '../config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Map langue -> chemin absolu de la version traduite (pour hreflang + sélecteur). */
+  alternates: Record<Lang, string>;
+  /** JSON-LD optionnel (objet ou tableau d'objets schema.org). */
+  jsonLd?: object;
+  image?: string;
+}
+
+const { lang, title, description, alternates, jsonLd, image } = Astro.props;
+const canonical = new URL(alternates[lang], SITE.url).href;
+const ogImage = new URL(image ?? '/og-default.jpg', SITE.url).href;
+const fullTitle = `${title} · ${SITE.name}`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {/* hreflang : relie les versions linguistiques entre elles (corrige le SEO multilingue actuel) */}
+    {langList.map((l) => (
+      <link rel="alternate" hreflang={l} href={new URL(alternates[l], SITE.url).href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(alternates.fr, SITE.url).href} />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — ${lang}`} href={`/${lang}/rss.xml`} />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <Header lang={lang} alternates={alternates} />
+    <main>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

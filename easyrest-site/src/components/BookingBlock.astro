@@ -1,0 +1,44 @@
+---
+import { t, type Lang } from '../i18n/ui';
+import { BOOKING } from '../config';
+
+const { lang } = Astro.props as { lang: Lang };
+
+const waText = encodeURIComponent(t(lang, 'booking.wa_message'));
+const waHref = `https://wa.me/${BOOKING.whatsapp}?text=${waText}`;
+const discountLabel = t(lang, 'booking.discount').replace('{n}', String(BOOKING.discountPercent));
+---
+
+<section class="booking" id="reserver">
+  <h2>{t(lang, 'booking.title')}</h2>
+  <p class="discount">{discountLabel}</p>
+  <p class="lead">{t(lang, 'booking.lead')}</p>
+
+  <a class="btn btn-whatsapp" href={waHref} target="_blank" rel="noopener">
+    {t(lang, 'booking.cta_whatsapp')}
+  </a>
+
+  <p class="ota-intro">{t(lang, 'booking.ota_intro')}</p>
+  <div class="ota">
+    <a href={BOOKING.ota.booking} target="_blank" rel="noopener nofollow">{t(lang, 'booking.ota_booking')}</a>
+    <a href={BOOKING.ota.airbnb} target="_blank" rel="noopener nofollow">{t(lang, 'booking.ota_airbnb')}</a>
+  </div>
+</section>
+
+<style>
+  .booking {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    padding: clamp(1.5rem, 4vw, 2.5rem); text-align: center; max-width: 540px;
+  }
+  .booking h2 { margin: 0 0 0.5rem; }
+  .discount {
+    display: inline-block; background: #e8f7ee; color: #157347;
+    font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 999px; margin: 0 0 0.75rem;
+  }
+  .lead { color: var(--muted); margin: 0 0 1.25rem; }
+  .btn-whatsapp { background: #25d366; color: #04391f; }
+  .ota-intro { margin: 1.5rem 0 0.5rem; color: var(--muted); font-size: 0.9rem; }
+  .ota { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .ota a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .ota a:hover { text-decoration: underline; }
+</style>

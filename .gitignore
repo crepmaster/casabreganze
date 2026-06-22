@@ -6,6 +6,13 @@
 !docs/
 !docs/**
 
+# New Astro site (greenfield, replaces WordPress) — track source, ignore build artifacts
+!easyrest-site/
+!easyrest-site/**
+easyrest-site/node_modules/
+easyrest-site/dist/
+easyrest-site/.astro/
+
 # Allow wp-content tree
 !wp-content/
 wp-content/*

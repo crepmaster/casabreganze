@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { t, langList, type Lang } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return langList.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+
+const guides = (await getCollection('guides', (e) => !e.data.draft && e.data.lang === lang)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const alternates = Object.fromEntries(langList.map((l) => [l, `/${l}/guides/`])) as Record<Lang, string>;
+---
+
+<BaseLayout lang={lang} title={t(lang, 'guides.title')} description={t(lang, 'guides.intro')} alternates={alternates}>
+  <h1>{t(lang, 'guides.title')}</h1>
+  <p>{t(lang, 'guides.intro')}</p>
+
+  <ul class="guide-list">
+    {
+      guides.map((g) => (
+        <li class="guide-card">
+          <time datetime={g.data.pubDate.toISOString()}>{g.data.pubDate.toLocaleDateString(lang)}</time>
+          <h3>{g.data.title}</h3>
+          <p>{g.data.description}</p>
+          <a href={`/${lang}/guides/${g.data.translationKey}/`}>{t(lang, 'guides.read')}</a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookingBlock from '../../components/BookingBlock.astro';
+import { t, langList, type Lang } from '../../i18n/ui';
+import { SITE } from '../../config';
+
+export function getStaticPaths() {
+  return langList.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+
+const alternates = Object.fromEntries(langList.map((l) => [l, `/${l}/`])) as Record<Lang, string>;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LodgingBusiness',
+  name: SITE.name,
+  url: new URL(`/${lang}/`, SITE.url).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.address,
+    addressLocality: 'Milano',
+    addressCountry: 'IT',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lng },
+  priceRange: '€€',
+};
+---
+
+<BaseLayout
+  lang={lang}
+  title={t(lang, 'hero.title')}
+  description={t(lang, 'hero.subtitle')}
+  alternates={alternates}
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <h1>{t(lang, 'hero.title')}</h1>
+    <p>{t(lang, 'hero.subtitle')}</p>
+  </section>
+
+  <div class="center section-pad">
+    <BookingBlock lang={lang} />
+  </div>
+</BaseLayout>
