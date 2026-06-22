@@ -90,6 +90,22 @@ export const ui = {
   },
 } as const;
 
+// Garde-fou de build : échoue si une langue n'a pas exactement les mêmes clés que le FR (référence).
+// Évite de livrer des traductions incomplètes masquées par le repli FR.
+(function assertTranslationsComplete() {
+  const refKeys = Object.keys(ui.fr);
+  for (const lang of langList) {
+    const keys = new Set(Object.keys(ui[lang]));
+    const missing = refKeys.filter((k) => !keys.has(k));
+    const extra = [...keys].filter((k) => !refKeys.includes(k));
+    if (missing.length || extra.length) {
+      throw new Error(
+        `[i18n] La langue « ${lang} » est désynchronisée du FR. Manquantes: [${missing.join(', ')}] · En trop: [${extra.join(', ')}]`,
+      );
+    }
+  }
+})();
+
 export function t(lang: Lang, key: keyof (typeof ui)['fr']): string {
   return (ui[lang] as Record<string, string>)[key] ?? (ui.fr as Record<string, string>)[key];
 }

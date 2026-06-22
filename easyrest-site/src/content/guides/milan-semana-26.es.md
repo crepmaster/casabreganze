@@ -5,6 +5,7 @@ lang: es
 translationKey: milan-2026-w26
 pubDate: 2026-06-22
 tags: ["agenda", "milan", "eventos"]
+cover: /og-default.png
 coverAlt: "Vista del Duomo de Milán al atardecer"
 draft: false
 seo:

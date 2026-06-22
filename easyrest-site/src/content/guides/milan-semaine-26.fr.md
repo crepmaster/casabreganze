@@ -5,6 +5,7 @@ lang: fr
 translationKey: milan-2026-w26
 pubDate: 2026-06-22
 tags: ["agenda", "milan", "evenements"]
+cover: /og-default.png
 coverAlt: "Vue du Duomo de Milan au coucher du soleil"
 draft: false
 seo:

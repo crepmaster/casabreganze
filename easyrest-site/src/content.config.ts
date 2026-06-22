@@ -22,9 +22,11 @@ const guides = defineCollection({
     // Surcharges SEO optionnelles (sinon title/description ci-dessus font foi)
     seo: z
       .object({
-        title: z.string().optional(),
+        title: z.string().optional(), // override du <title> si différent du H1 (lu par [slug].astro)
+        // focusKeyword : métadonnée côté `engine` (scoring qualité / audit densité), volontairement
+        // NON rendue — Google ignore <meta keywords>. Conservée pour le pipeline de génération.
         focusKeyword: z.string().optional(),
-        noindex: z.boolean().default(false),
+        noindex: z.boolean().default(false), // lu par BaseLayout → <meta name="robots" content="noindex">
       })
       .optional(),
   }),

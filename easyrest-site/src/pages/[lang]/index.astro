@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BookingBlock from '../../components/BookingBlock.astro';
 import { t, langList, type Lang } from '../../i18n/ui';
+import { indexAlternates } from '../../i18n/paths';
 import { SITE } from '../../config';
 
 export function getStaticPaths() {
@@ -9,7 +10,7 @@ export function getStaticPaths() {
 }
 const lang = Astro.params.lang as Lang;
 
-const alternates = Object.fromEntries(langList.map((l) => [l, `/${l}/`])) as Record<Lang, string>;
+const alternates = indexAlternates('/');
 
 const jsonLd = {
   '@context': 'https://schema.org',

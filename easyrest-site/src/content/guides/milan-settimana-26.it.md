@@ -5,6 +5,7 @@ lang: it
 translationKey: milan-2026-w26
 pubDate: 2026-06-22
 tags: ["agenda", "milano", "eventi"]
+cover: /og-default.png
 coverAlt: "Veduta del Duomo di Milano al tramonto"
 draft: false
 seo:

@@ -1,10 +1,24 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
-import { t, langList, type Lang } from '../../../i18n/ui';
+import { t, type Lang } from '../../../i18n/ui';
+import { guideAlternates } from '../../../i18n/paths';
 
 export async function getStaticPaths() {
   const all = await getCollection('guides', (e) => !e.data.draft);
+
+  // Garde-fou : chaque (langue, translationKey) doit être unique, sinon une route en écrase une autre.
+  const seen = new Set<string>();
+  for (const e of all) {
+    const key = `${e.data.lang}:${e.data.translationKey}`;
+    if (seen.has(key)) {
+      throw new Error(
+        `[guides] Collision de route : deux guides « ${e.data.lang} » partagent translationKey « ${e.data.translationKey} ». Chaque (langue, translationKey) doit être unique.`,
+      );
+    }
+    seen.add(key);
+  }
+
   return all.map((entry) => ({
     params: { lang: entry.data.lang, slug: entry.data.translationKey },
     props: { entry, all },
@@ -15,22 +29,46 @@ const { entry, all } = Astro.props;
 const lang = entry.data.lang as Lang;
 const { Content } = await render(entry);
 
-// hreflang : pour chaque langue, l'URL de la version traduite si elle existe (sinon repli vers l'index)
-const alternates = Object.fromEntries(
-  langList.map((l) => {
-    const tr = all.find((e) => e.data.translationKey === entry.data.translationKey && e.data.lang === l);
-    return [l, tr ? `/${l}/guides/${tr.data.translationKey}/` : `/${l}/guides/`];
-  }),
-) as Record<Lang, string>;
-
+const alternates = guideAlternates(entry.data.translationKey, all);
 const seoTitle = entry.data.seo?.title ?? entry.data.title;
 ---
 
-<BaseLayout lang={lang} title={seoTitle} description={entry.data.description} alternates={alternates}>
+<BaseLayout
+  lang={lang}
+  title={seoTitle}
+  description={entry.data.description}
+  alternates={alternates}
+  image={entry.data.cover}
+  noindex={entry.data.seo?.noindex}
+>
   <article class="guide">
     <a href={`/${lang}/guides/`}>{t(lang, 'guides.back')}</a>
     <h1>{entry.data.title}</h1>
     <time datetime={entry.data.pubDate.toISOString()}>{entry.data.pubDate.toLocaleDateString(lang)}</time>
+
+    {
+      entry.data.cover && (
+        <img
+          class="guide-cover"
+          src={entry.data.cover}
+          alt={entry.data.coverAlt ?? entry.data.title}
+          width="1200"
+          height="630"
+          loading="eager"
+        />
+      )
+    }
+
+    {
+      entry.data.tags.length > 0 && (
+        <ul class="tags" aria-label="Tags">
+          {entry.data.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )
+    }
+
     <Content />
   </article>
 </BaseLayout>

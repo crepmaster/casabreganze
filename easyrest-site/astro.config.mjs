@@ -10,5 +10,13 @@ export default defineConfig({
   redirects: {
     '/': '/fr/',
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      // Génère les annotations hreflang dans le sitemap (en plus du <head>).
+      i18n: {
+        defaultLocale: 'fr',
+        locales: { fr: 'fr', en: 'en', it: 'it', es: 'es' },
+      },
+    }),
+  ],
 });

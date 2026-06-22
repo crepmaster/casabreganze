@@ -2,6 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { t, langList, type Lang } from '../../../i18n/ui';
+import { indexAlternates } from '../../../i18n/paths';
 
 export function getStaticPaths() {
   return langList.map((lang) => ({ params: { lang } }));
@@ -12,7 +13,7 @@ const guides = (await getCollection('guides', (e) => !e.data.draft && e.data.lan
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-const alternates = Object.fromEntries(langList.map((l) => [l, `/${l}/guides/`])) as Record<Lang, string>;
+const alternates = indexAlternates('/guides/');
 ---
 
 <BaseLayout lang={lang} title={t(lang, 'guides.title')} description={t(lang, 'guides.intro')} alternates={alternates}>
