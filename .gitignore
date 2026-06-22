@@ -13,6 +13,11 @@ easyrest-site/node_modules/
 easyrest-site/dist/
 easyrest-site/.astro/
 
+# Content engine (Node/TS) — track source, ignore deps
+!engine/
+!engine/**
+engine/node_modules/
+
 # Allow wp-content tree
 !wp-content/
 wp-content/*

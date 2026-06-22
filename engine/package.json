@@ -1,0 +1,19 @@
+{
+  "name": "easyrest-engine",
+  "type": "module",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Génère les guides hebdomadaires Milan (Claude) → Markdown + frontmatter pour le site Astro",
+  "scripts": {
+    "generate": "tsx src/generate.ts",
+    "dry-run": "tsx src/generate.ts --dry-run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.105.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
