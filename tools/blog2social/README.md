@@ -20,8 +20,30 @@ B2S_SERVICE_TOKEN=… python3 publish.py connect --network-id 36
 # Publier une vidéo
 B2S_SERVICE_TOKEN=… B2S_ACCESS_TOKEN=… python3 publish.py post \
     --account 2179158 --video https://exemple.com/clip.mp4 --caption "Texte #hashtags"
+
+# Diagnostiquer un refus : --debug imprime CHAQUE réponse brute (create / upload / check)
+B2S_SERVICE_TOKEN=… B2S_ACCESS_TOKEN=… python3 publish.py post --debug \
+    --account 2179158 --video https://exemple.com/clip.mp4 --caption "Texte"
 ```
 Codes de sortie de `post` : `0` publié · `1` erreur · `2` TikTok a refusé · `3` timeout (encore en traitement).
+
+## Diagnostiquer un échec TikTok
+`post` interprète désormais le seul signal d'erreur exposé par l'API, `b2s_error_code`, et l'affiche
+en clair en cas d'échec (`state:1`). Table d'interprétation (champ `ERROR_CODES` du script) :
+
+| `b2s_error_code` | Sens |
+|---|---|
+| `TOKEN` / `LOGIN` | jeton invalide/expiré ou auth refusée → ré-authentifier |
+| `RIGHT` | droits insuffisants (publication directe non autorisée sur la connexion) |
+| `CONTENT` | contenu refusé (texte/média non conforme) |
+| `VIDEO_NETWORK_FORMAT` | format vidéo refusé par le réseau |
+| `LIMIT` / `RATE_LIMIT` | quota atteint / trop de requêtes |
+| `NO_DATA` | données manquantes dans la requête |
+| `DEFAULT` | erreur générique sans détail exposé (souvent : publication directe non autorisée) |
+
+⚠️ Limite côté API : Blog2Social **ne renvoie pas** le message humain de TikTok. `--debug` capture
+tout ce que l'API expose (réponses `create` / `upload` / chaque poll `check`), mais si le code final
+reste `DEFAULT`, le détail exact reste côté TikTok — voir la limite ci-dessous.
 
 ## Ce que le script encapsule (découvertes validées)
 - **Auth** : `/user/auth` mint un access_token (longue durée) ; la connexion réseau est liée à CE token.

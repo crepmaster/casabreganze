@@ -44,6 +44,27 @@ UPLOAD_API = os.environ.get("B2S_UPLOAD_API", "https://api-upload.blog2social.co
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 
+# Mode debug : imprime chaque réponse brute (create / upload / check). Activable via --debug ou B2S_DEBUG=1.
+DEBUG = os.environ.get("B2S_DEBUG") == "1"
+
+# Champ b2s_error_code → interprétation (c'est le seul signal d'erreur exposé par l'API).
+ERROR_CODES = {
+    "TOKEN": "jeton invalide/expiré — ré-authentifier.",
+    "LOGIN": "authentification refusée.",
+    "RIGHT": "droits insuffisants sur le réseau (permission / publication non autorisée).",
+    "CONTENT": "contenu refusé par le réseau (texte ou média non conforme).",
+    "LIMIT": "limite de publications atteinte.",
+    "RATE_LIMIT": "trop de requêtes (rate limit).",
+    "VIDEO_NETWORK_FORMAT": "format vidéo refusé par le réseau.",
+    "NO_DATA": "données manquantes dans la requête.",
+    "DEFAULT": "erreur générique côté réseau, sans détail exposé par l'API "
+               "(souvent : publication directe non autorisée).",
+}
+
+
+def explain(code: str | None) -> str:
+    return ERROR_CODES.get(code or "", "code inconnu")
+
 
 def log(*a):
     print(*a, file=sys.stderr, flush=True)
@@ -77,6 +98,8 @@ class Blog2Social:
                 if attempt < retries - 1:
                     time.sleep(2 * (attempt + 1)); continue
                 raise B2SError(f"réseau: {e}")
+            if DEBUG:
+                log(f"<< JSON {url}\n   {text[:1200]}")
             s = text.strip()
             if s.startswith(("{", "[")):  # vraie réponse JSON (sinon page de challenge HTML)
                 return json.loads(s)
@@ -106,6 +129,8 @@ class Blog2Social:
                     text = r.read().decode()
             except urllib.error.HTTPError as e:
                 text = e.read().decode()
+            if DEBUG:
+                log(f"<< MULTIPART {url}\n   {text[:1200]}")
             s = text.strip()
             if s.startswith(("{", "[")) and '"error":1' not in s:
                 return json.loads(s)
@@ -164,18 +189,22 @@ class Blog2Social:
                 }, data)
                 log(f"  chunk {i + 1}/{n} OK")
 
-    def check(self, video_token: str, attempts: int = 30, delay: int = 6) -> int:
-        """Retourne l'état final : 0=fini, 1=échec, 2=encore en cours (timeout)."""
-        last = 2
+    def check(self, video_token: str, attempts: int = 40, delay: int = 6) -> tuple[int, str | None]:
+        """Poll /video/check. Retourne (état, b2s_error_code). état: 0=fini, 1=échec, 2=timeout encore en cours.
+        Le traitement TikTok peut rester en `state:2` plusieurs minutes avant de basculer."""
+        last_code = None
         for _ in range(attempts):
             d = self._post_json(f"{UPLOAD_API}/video/check?video_token={video_token}",
                                 {"video_token": video_token})
             item = d[0] if isinstance(d, list) and d else {}
-            last = item.get("state", 2)
-            if last in (0, 1):
-                return last
+            state = item.get("state", 2)
+            last_code = item.get("b2s_error_code", last_code)
+            if DEBUG:
+                log("   check:", json.dumps(item))
+            if state in (0, 1):
+                return state, item.get("b2s_error_code")
             time.sleep(delay)
-        return last
+        return 2, last_code
 
 
 # ---- util : récupérer la vidéo en local pour l'upload chunké --------------
@@ -204,8 +233,12 @@ def main() -> int:
     po.add_argument("--caption", required=True)
     po.add_argument("--title", default="")
     po.add_argument("--chunk-mib", type=int, default=4)
+    po.add_argument("--debug", action="store_true",
+                    help="imprime chaque réponse brute de l'API (create / upload / check)")
 
     args = p.parse_args()
+    global DEBUG
+    DEBUG = DEBUG or getattr(args, "debug", False)
     try:
         b2s = Blog2Social(os.environ.get("B2S_SERVICE_TOKEN", ""), os.environ.get("B2S_ACCESS_TOKEN"))
 
@@ -233,14 +266,17 @@ def main() -> int:
                 finally:
                     try: os.remove(local)
                     except OSError: pass
-            state = b2s.check(vt)
+            state, code = b2s.check(vt)
             if state == 0:
                 print("OK ✅ vidéo publiée"); return 0
             if state == 1:
-                log("ÉCHEC ❌ — TikTok a refusé la publication (souvent : publication directe "
-                    "non autorisée pour la connexion, cf. instant_sharing=0). video_token:", vt)
+                log(f"ÉCHEC ❌ — le réseau a refusé la publication. "
+                    f"b2s_error_code={code!r} → {explain(code)}")
+                log("(astuce : relance avec --debug pour voir chaque réponse brute de l'API.) "
+                    "video_token:", vt)
                 return 2
-            log("TIMEOUT — encore en traitement (state=2). video_token:", vt)
+            log(f"TIMEOUT — encore en traitement (state=2, dernier b2s_error_code={code!r}). "
+                f"video_token:", vt)
             return 3
     except B2SError as e:
         log("Erreur:", e)
