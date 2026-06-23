@@ -18,6 +18,10 @@ easyrest-site/.astro/
 !engine/**
 engine/node_modules/
 
+# Standalone tooling (scripts, utilities)
+!tools/
+!tools/**
+
 # Allow wp-content tree
 !wp-content/
 wp-content/*
@@ -43,3 +47,6 @@ wp-content/plugins/easyrest-content-engine/*
 wp-content/plugins/easyrest-core/scraper-node/node_modules/
 wp-content/plugins/easyrest-core/scraper-node/.env
 wp-content/plugins/easyrest-core/scraper-node/logs/
+# Python bytecode
+__pycache__/
+*.pyc
