@@ -230,9 +230,11 @@ def build_share_settings(args) -> dict | None:
     if not triggered:
         return None
     mode = args.mode if getattr(args, "mode", None) is not None else (1 if args.draft else 0)
+    # Défaut PUBLIC_TO_EVERYONE : en brouillon (mode:1), TikTok l'accepte même sans app auditée
+    # (l'utilisateur confirme dans l'app) — c'est ce que veut un éditeur. Override : --privacy SELF_ONLY.
     return {
         "mode": mode,
-        "status_privacy": getattr(args, "privacy", None) or "SELF_ONLY",
+        "status_privacy": getattr(args, "privacy", None) or "PUBLIC_TO_EVERYONE",
         "allow_comment": 1 if getattr(args, "allow_comment", False) else 0,
         "promotion_option_organic": 0,
         "promotion_option_branded": 0,

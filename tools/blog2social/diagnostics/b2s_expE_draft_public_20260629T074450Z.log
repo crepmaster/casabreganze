@@ -1,0 +1,101 @@
+== EXP E: draft + PUBLIC_TO_EVERYONE UTC=20260629T074450Z ==
+share_settings: {"mode": 1, "status_privacy": "PUBLIC_TO_EVERYONE", "allow_comment": 0, "promotion_option_organic": 0, "promotion_option_branded": 0}
+<< JSON https://api.blog2social.com/rest/v1.0/network/post/create
+   [{"error":0,"network_id":36,"type":0,"client_user_network_id":2179158,"extra":[],"video_token":"6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091","video_upload_type":1}]
+Post créé (video_upload_type=1).
+Upload vidéo : 24102187 octets en 6 chunk(s) de 4194304
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 1/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 2/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 3/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 4/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 5/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0,"networks":[{"error":0,"network_id":36,"client_user_network_id":2179158,"instant_sharing":1}]}
+  chunk 6/6 OK
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=6c6f3e59708a30ffeb0b200c931be0b5b22187e2da1fc78be89957208ab6481403c5d6c474074917c41782719091
+   [{"network_id":36,"network_type":0,"state":0,"client_user_network_id":2179158,"publish_url":"https:\/\/www.tiktok.com\/","publish_date":"2026-06-29 09:48:04"}]
+   check: {"network_id": 36, "network_type": 0, "state": 0, "client_user_network_id": 2179158, "publish_url": "https://www.tiktok.com/", "publish_date": "2026-06-29 09:48:04"}
+OK ✅ vidéo publiée
+---- exit: 0 ----

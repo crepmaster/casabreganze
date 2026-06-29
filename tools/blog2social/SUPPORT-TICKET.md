@@ -18,8 +18,10 @@
 | `{mode:1}` (partial) | `NETWORK_36_SHARE_SETTINGS_MISMATCH` | fail — object must be complete |
 | `{mode:0, status_privacy:SELF_ONLY, allow_comment, promotion_*}` (full, **direct**) | `DEFAULT` | fail |
 | `{mode:1, status_privacy:SELF_ONLY, allow_comment, promotion_*}` (full, **draft**) | — | **`state:0` published ✅** |
+| `{mode:1, status_privacy:PUBLIC_TO_EVERYONE, …}` (full, **draft, public**) | — | **`state:0` published ✅** |
 
-So **draft (`mode:1`) works**; **direct (`mode:0`) is refused with `DEFAULT`**. Our questions are now about
+So **draft (`mode:1`) works** (both `SELF_ONLY` and `PUBLIC_TO_EVERYONE` accepted); **direct (`mode:0`)
+is refused with `DEFAULT`**. Our questions are now about
 (a) enabling direct posting, (b) which `status_privacy` values are permitted, and (c) exposing the real
 TikTok error instead of `DEFAULT`.
 

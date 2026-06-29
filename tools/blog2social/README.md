@@ -40,7 +40,7 @@ paramétrable — **absent par défaut** (comportement réseau inchangé) :
 |---|---|
 | `--draft` | `mode: 1` → brouillon / boîte de réception (l'utilisateur finalise dans l'app TikTok) |
 | `--mode N` | `mode: N` brut (0 = publication directe, 1 = brouillon). Override de `--draft` |
-| `--privacy V` | `status_privacy: V` (`SELF_ONLY`, `PUBLIC_TO_EVERYONE`, `MUTUAL_FOLLOW_FRIENDS`, `FOLLOWER_OF_CREATOR`) — **souvent requis pour un post direct** |
+| `--privacy V` | `status_privacy: V` (`PUBLIC_TO_EVERYONE` *défaut*, `SELF_ONLY`, `MUTUAL_FOLLOW_FRIENDS`, `FOLLOWER_OF_CREATOR`) |
 | `--allow-comment` | `allow_comment: 1` |
 | `--share-settings '<json>'` | échappatoire : JSON brut, écrase tous les flags ci-dessus |
 
@@ -52,14 +52,16 @@ paramétrable — **absent par défaut** (comportement réseau inchangé) :
 2. **`mode:1` (brouillon) fonctionne ; `mode:0` (publication directe) est refusé** par TikTok pour
    une app non auditée → `DEFAULT`. La vidéo arrive dans la **boîte de réception TikTok**, l'utilisateur
    finalise la publication dans l'app.
-3. **`status_privacy: SELF_ONLY`** est le niveau qui passe pour une app non auditée.
+3. **Confidentialité** : en brouillon, `PUBLIC_TO_EVERYONE` **et** `SELF_ONLY` sont acceptés (tous deux
+   testés OK). `--draft` pré-règle donc le brouillon sur **public** par défaut (ce que veut un éditeur) ;
+   `--privacy SELF_ONLY` pour un brouillon privé.
 
 ```bash
-# Chemin nominal validé — publie la vidéo en brouillon TikTok
+# Chemin nominal validé — publie la vidéo en brouillon TikTok (pré-réglé public)
 B2S_SERVICE_TOKEN=… B2S_ACCESS_TOKEN=… python3 publish.py post --draft \
     --account 2179158 --video URL --caption "Texte #tags"
 ```
-Objet émis par `--draft` : `{"mode":1,"status_privacy":"SELF_ONLY","allow_comment":0,`
+Objet émis par `--draft` : `{"mode":1,"status_privacy":"PUBLIC_TO_EVERYONE","allow_comment":0,`
 `"promotion_option_organic":0,"promotion_option_branded":0}`.
 
 Pour viser la **publication directe** (non-brouillon) ou une confidentialité **publique**, il faut
