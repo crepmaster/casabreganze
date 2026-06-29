@@ -24,8 +24,30 @@ B2S_SERVICE_TOKEN=… B2S_ACCESS_TOKEN=… python3 publish.py post \
 # Diagnostiquer un refus : --debug imprime CHAQUE réponse brute (create / upload / check)
 B2S_SERVICE_TOKEN=… B2S_ACCESS_TOKEN=… python3 publish.py post --debug \
     --account 2179158 --video https://exemple.com/clip.mp4 --caption "Texte"
+
+# TikTok : envoyer en BROUILLON (boîte de réception) au lieu de publier directement
+B2S_SERVICE_TOKEN=… B2S_ACCESS_TOKEN=… python3 publish.py post --draft \
+    --account 2179158 --video https://exemple.com/clip.mp4 --caption "Texte"
 ```
 Codes de sortie de `post` : `0` publié · `1` erreur · `2` TikTok a refusé · `3` timeout (encore en traitement).
+
+## Mode brouillon / confidentialité TikTok (`share_settings`)
+La doc Blog2Social expose, dans chaque entrée `b2s_posts`, un objet `share_settings` qui pilote le
+mode de publication TikTok (direct vs brouillon) et la confidentialité. Le script le rend
+paramétrable — **absent par défaut** (comportement réseau inchangé) :
+
+| Flag | Effet sur `share_settings` |
+|---|---|
+| `--draft` | `mode: 1` → brouillon / boîte de réception (l'utilisateur finalise dans l'app TikTok) |
+| `--mode N` | `mode: N` brut (0 = publication directe, 1 = brouillon). Override de `--draft` |
+| `--privacy V` | `status_privacy: V` (`SELF_ONLY`, `PUBLIC_TO_EVERYONE`, `MUTUAL_FOLLOW_FRIENDS`, `FOLLOWER_OF_CREATOR`) — **souvent requis pour un post direct** |
+| `--allow-comment` | `allow_comment: 1` |
+| `--share-settings '<json>'` | échappatoire : JSON brut, écrase tous les flags ci-dessus |
+
+⚠️ Les **valeurs exactes** (`mode`, `status_privacy`) ne sont pas spécifiées dans la doc publique :
+`mode:1`=brouillon est une **hypothèse** à confirmer par le support (cf. `SUPPORT-TICKET.md`). Pistes à
+tester avec `--debug` : `--draft` seul ; `--privacy SELF_ONLY` (post direct privé, le seul autorisé
+pour une app TikTok non auditée) ; ou un `--share-settings` brut une fois la réponse du support reçue.
 
 ## Diagnostiquer un échec TikTok
 `post` interprète désormais le seul signal d'erreur exposé par l'API, `b2s_error_code`, et l'affiche

@@ -157,17 +157,22 @@ class Blog2Social:
         return self._post_json(f"{API}/network/add",
                                {**self._base(), "network_id": network_id, "network_type_id": network_type_id})
 
-    def create_post(self, account_id: int, title: str, message: str, video_url: str) -> dict:
+    def create_post(self, account_id: int, title: str, message: str, video_url: str,
+                    share_settings: dict | None = None) -> dict:
+        entry = {
+            "client_user_network_id": account_id,  # requis DANS l'entrée (sinon 500)
+            "title": title,
+            "message": message,
+            "postFormat": 2,  # vidéo
+            "mediaObjects": [{"type": "VIDEO", "url": video_url}],
+        }
+        if share_settings:
+            # TikTok : pilote direct/brouillon + confidentialité. Absent → comportement réseau par défaut.
+            entry["share_settings"] = share_settings
         payload = {
             **self._base(),
             "client_user_network_id": account_id,
-            "b2s_posts": [{
-                "client_user_network_id": account_id,  # requis DANS l'entrée (sinon 500)
-                "title": title,
-                "message": message,
-                "postFormat": 2,  # vidéo
-                "mediaObjects": [{"type": "VIDEO", "url": video_url}],
-            }],
+            "b2s_posts": [entry],
         }
         d = self._post_json(f"{API}/network/post/create", payload)
         item = d[0] if isinstance(d, list) and d else d
@@ -207,6 +212,25 @@ class Blog2Social:
         return 2, last_code
 
 
+# ---- util : construire share_settings depuis les flags CLI ----------------
+def build_share_settings(args) -> dict | None:
+    """Assemble share_settings pour TikTok. Renvoie None si aucun flag fourni
+    (→ on n'ajoute pas la clé, comportement réseau par défaut). `--share-settings`
+    (JSON brut) écrase tout le reste."""
+    if getattr(args, "share_settings", None):
+        return json.loads(args.share_settings)
+    s: dict = {}
+    if getattr(args, "mode", None) is not None:
+        s["mode"] = args.mode
+    elif getattr(args, "draft", False):
+        s["mode"] = 1  # hypothèse : 0=direct, 1=brouillon/inbox
+    if getattr(args, "privacy", None):
+        s["status_privacy"] = args.privacy
+    if getattr(args, "allow_comment", False):
+        s["allow_comment"] = 1
+    return s or None
+
+
 # ---- util : récupérer la vidéo en local pour l'upload chunké --------------
 def fetch_to_temp(url: str) -> str:
     dest = os.path.join("/tmp", "b2s_" + uuid.uuid4().hex + ".mp4")
@@ -235,6 +259,20 @@ def main() -> int:
     po.add_argument("--chunk-mib", type=int, default=4)
     po.add_argument("--debug", action="store_true",
                     help="imprime chaque réponse brute de l'API (create / upload / check)")
+    # --- share_settings TikTok (direct vs brouillon + confidentialité) -------
+    po.add_argument("--draft", action="store_true",
+                    help="TikTok : envoyer en BROUILLON (boîte de réception) au lieu de publier "
+                         "directement → met share_settings.mode=1")
+    po.add_argument("--mode", type=int,
+                    help="share_settings.mode brut (0=publication directe, 1=brouillon). "
+                         "Override de --draft.")
+    po.add_argument("--privacy",
+                    help="share_settings.status_privacy (ex. SELF_ONLY, PUBLIC_TO_EVERYONE, "
+                         "MUTUAL_FOLLOW_FRIENDS, FOLLOWER_OF_CREATOR). Souvent requis pour un post direct.")
+    po.add_argument("--allow-comment", action="store_true",
+                    help="share_settings.allow_comment=1")
+    po.add_argument("--share-settings",
+                    help="JSON brut pour share_settings (échappatoire — écrase tous les flags ci-dessus).")
 
     args = p.parse_args()
     global DEBUG
@@ -255,7 +293,11 @@ def main() -> int:
             return 0
 
         if args.cmd == "post":
-            created = b2s.create_post(args.account, args.title or args.caption[:40], args.caption, args.video)
+            share = build_share_settings(args)
+            if share:
+                log("share_settings:", json.dumps(share))
+            created = b2s.create_post(args.account, args.title or args.caption[:40],
+                                      args.caption, args.video, share)
             vt = created["video_token"]
             vtype = created.get("video_upload_type")
             log(f"Post créé (video_upload_type={vtype}).")
