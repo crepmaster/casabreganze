@@ -214,21 +214,29 @@ class Blog2Social:
 
 # ---- util : construire share_settings depuis les flags CLI ----------------
 def build_share_settings(args) -> dict | None:
-    """Assemble share_settings pour TikTok. Renvoie None si aucun flag fourni
-    (→ on n'ajoute pas la clé, comportement réseau par défaut). `--share-settings`
-    (JSON brut) écrase tout le reste."""
+    """Assemble un share_settings TikTok COMPLET. TikTok valide l'objet entier :
+    un objet partiel est rejeté (`b2s_error_code: NETWORK_36_SHARE_SETTINGS_MISMATCH`).
+    On émet donc toujours les 5 champs dès qu'un flag share est fourni.
+
+    Recette validée en test réel (publication OK) : mode=1 (brouillon), status_privacy=SELF_ONLY.
+    mode=0 (publication directe) est refusé par TikTok pour une app non auditée (→ DEFAULT).
+
+    Renvoie None si aucun flag fourni (→ pas de clé, comportement réseau par défaut).
+    `--share-settings` (JSON brut) court-circuite et écrase tout le reste."""
     if getattr(args, "share_settings", None):
         return json.loads(args.share_settings)
-    s: dict = {}
-    if getattr(args, "mode", None) is not None:
-        s["mode"] = args.mode
-    elif getattr(args, "draft", False):
-        s["mode"] = 1  # hypothèse : 0=direct, 1=brouillon/inbox
-    if getattr(args, "privacy", None):
-        s["status_privacy"] = args.privacy
-    if getattr(args, "allow_comment", False):
-        s["allow_comment"] = 1
-    return s or None
+    triggered = (getattr(args, "draft", False) or getattr(args, "mode", None) is not None
+                 or getattr(args, "privacy", None) or getattr(args, "allow_comment", False))
+    if not triggered:
+        return None
+    mode = args.mode if getattr(args, "mode", None) is not None else (1 if args.draft else 0)
+    return {
+        "mode": mode,
+        "status_privacy": getattr(args, "privacy", None) or "SELF_ONLY",
+        "allow_comment": 1 if getattr(args, "allow_comment", False) else 0,
+        "promotion_option_organic": 0,
+        "promotion_option_branded": 0,
+    }
 
 
 # ---- util : récupérer la vidéo en local pour l'upload chunké --------------

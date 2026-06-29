@@ -1,0 +1,63 @@
+== EXP B: full direct SELF_ONLY UTC=20260629T071830Z ==
+share_settings: {"mode": 0, "status_privacy": "SELF_ONLY", "allow_comment": 1, "promotion_option_organic": 0, "promotion_option_branded": 0}
+<< JSON https://api.blog2social.com/rest/v1.0/network/post/create
+   [{"error":0,"network_id":36,"type":0,"client_user_network_id":2179158,"extra":[],"video_token":"7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511","video_upload_type":1}]
+Post créé (video_upload_type=1).
+Upload vidéo : 24102187 octets en 6 chunk(s) de 4194304
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 1/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 2/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 3/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 4/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0}
+  chunk 5/6 OK
+<< MULTIPART https://api-upload.blog2social.com/api/rest/v1.0/video/upload
+   {"error":0,"networks":[{"error":0,"network_id":36,"client_user_network_id":2179158,"instant_sharing":1}]}
+  chunk 6/6 OK
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":2,"client_user_network_id":2179158}]
+   check: {"network_id": 36, "network_type": 0, "state": 2, "client_user_network_id": 2179158}
+<< JSON https://api-upload.blog2social.com/api/rest/v1.0/video/check?video_token=7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+   [{"network_id":36,"network_type":0,"state":1,"client_user_network_id":2179158,"b2s_error_code":"DEFAULT"}]
+   check: {"network_id": 36, "network_type": 0, "state": 1, "client_user_network_id": 2179158, "b2s_error_code": "DEFAULT"}
+ÉCHEC ❌ — le réseau a refusé la publication. b2s_error_code='DEFAULT' → erreur générique côté réseau, sans détail exposé par l'API (souvent : publication directe non autorisée).
+(astuce : relance avec --debug pour voir chaque réponse brute de l'API.) video_token: 7652185d2175bc9a9cdd8588fc93ad45f4e53cdc6061c93ba6fba24be2ea38308ef85c56c90ac931991782717511
+---- exit: 2 ----

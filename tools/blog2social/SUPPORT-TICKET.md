@@ -1,7 +1,27 @@
-# Blog2Social API — support ticket: TikTok video publish ends in `state:1 / b2s_error_code:"DEFAULT"`
+# Blog2Social API — support ticket: enabling **direct** (non-draft) TikTok video publishing
 
-> Ready-to-send dossier. Raw capture: [`diagnostics/b2s_debug_20260623T122517Z.log`](diagnostics/b2s_debug_20260623T122517Z.log).
-> **Before sending:** the `service_token` is never printed in the log, but rotate it anyway since it was used in a shared test environment.
+> **Update — partially solved on our side.** TikTok **draft** publishing now works for us via a complete
+> `share_settings` object (`mode:1`, `status_privacy:SELF_ONLY`). The remaining ask is **direct/public
+> publishing** (`mode:0`), which still fails with `DEFAULT`. The findings below are reproducible evidence.
+>
+> Raw captures: [`diagnostics/`](diagnostics/) — `b2s_debug_*` (no share_settings → DEFAULT),
+> `b2s_expA_draft_*` (partial → MISMATCH), `b2s_expB_full_direct_*` (full mode:0 → DEFAULT),
+> `b2s_expC_full_draft_*` / `b2s_expD_draft_oob_*` (full mode:1 → **published OK**).
+> **Before sending:** the `service_token` is never printed in the logs, but rotate it anyway since it was
+> used in a shared test environment.
+
+## 0. TL;DR of what we found (please confirm / correct)
+
+| `share_settings` sent | `b2s_error_code` | Outcome |
+|---|---|---|
+| *(none)* | `DEFAULT` | fail |
+| `{mode:1}` (partial) | `NETWORK_36_SHARE_SETTINGS_MISMATCH` | fail — object must be complete |
+| `{mode:0, status_privacy:SELF_ONLY, allow_comment, promotion_*}` (full, **direct**) | `DEFAULT` | fail |
+| `{mode:1, status_privacy:SELF_ONLY, allow_comment, promotion_*}` (full, **draft**) | — | **`state:0` published ✅** |
+
+So **draft (`mode:1`) works**; **direct (`mode:0`) is refused with `DEFAULT`**. Our questions are now about
+(a) enabling direct posting, (b) which `status_privacy` values are permitted, and (c) exposing the real
+TikTok error instead of `DEFAULT`.
 
 ---
 
@@ -108,11 +128,11 @@ Full untruncated log: [`diagnostics/b2s_debug_20260623T122517Z.log`](diagnostics
 
 ## 8. Questions for support (please answer point by point)
 
-1. For `video_token` `71a4...7518`, what is the **actual TikTok-side error** returned to your servers? `b2s_error_code:"DEFAULT"` exposes nothing to us.
-2. Why does the connection report `instant_sharing:0` while the upload step reports `instant_sharing:1` for the same network? Is the pipeline attempting a direct publish the account isn't entitled to?
-3. What is required to make TikTok publishing succeed for this account — a **Business TikTok account**, the `video.publish` scope, an approved app, or a specific re-connection flow?
-4. Is there a supported **draft / manual-confirmation mode** (video delivered to the TikTok inbox) we can request via the API instead of direct publish? If so, which field/value?
-5. Does the API expose (now or planned) the underlying network error message via any endpoint, so integrators can self-diagnose instead of receiving `DEFAULT`?
+1. **Direct publish:** with a *complete* `share_settings` and `mode:0` (direct) + `status_privacy:SELF_ONLY`, we still get `DEFAULT` (see `b2s_expB_full_direct_*`). What is required to enable **direct** (non-draft) TikTok publishing for this account — an audited TikTok app, the `video.publish` scope, a Business account, or a specific re-connection flow?
+2. **Privacy levels:** which `status_privacy` values are accepted for this connection? Is `SELF_ONLY` the only one until the app is audited (i.e. `PUBLIC_TO_EVERYONE` requires audit)?
+3. **`share_settings` contract:** can you document the required keys and accepted values? We inferred that all 5 (`mode`, `status_privacy`, `allow_comment`, `promotion_option_organic`, `promotion_option_branded`) must be present, else `NETWORK_36_SHARE_SETTINGS_MISMATCH`. Is `mode` 0=direct / 1=draft correct?
+4. **`instant_sharing` mismatch:** the connection reports `instant_sharing:0` but the upload step reports `instant_sharing:1` for the same network — is that expected, and does it relate to the direct-publish refusal?
+5. **Error transparency:** can the API expose (now or planned) the underlying TikTok error message instead of the opaque `DEFAULT`? For `video_token` `71a4...7518` (the no-share-settings run), what was the actual TikTok-side error?
 
 ## 9. How to reproduce on your side
 
