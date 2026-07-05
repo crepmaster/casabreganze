@@ -19,7 +19,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; } /* coupe tout débordement horizontal résiduel (mobile) */
 
 body {
   margin: 0;
