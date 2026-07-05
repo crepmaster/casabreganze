@@ -1,0 +1,9 @@
+{
+  // Déploiement du site statique (easyrest-site) via Cloudflare Workers Static Assets.
+  // Worker "assets-only" : aucun code serveur, il sert simplement le dossier dist/.
+  "name": "casabreganze",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "./easyrest-site/dist"
+  }
+}

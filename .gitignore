@@ -2,6 +2,7 @@
 # (Le socle WordPress a été retiré du tronc — récupérable via le tag `archive/wordpress`.)
 *
 !.gitignore
+!wrangler.jsonc
 
 # Documentation projet (planning, refonte, architecture)
 !docs/
