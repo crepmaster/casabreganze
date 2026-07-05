@@ -6,11 +6,13 @@
   "description": "Génère les guides hebdomadaires Milan (Claude) → Markdown + frontmatter pour le site Astro",
   "scripts": {
     "generate": "tsx src/generate.ts",
-    "dry-run": "tsx src/generate.ts --dry-run"
+    "dry-run": "tsx src/generate.ts --dry-run",
+    "events": "tsx src/events.ts",
+    "events:dry": "tsx src/events.ts --dry-run",
+    "test": "tsx --test src/*.test.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.105.0",
-    "zod": "^4.4.3"
+    "@anthropic-ai/sdk": "^0.105.0"
   },
   "devDependencies": {
     "@types/node": "^26.0.0",

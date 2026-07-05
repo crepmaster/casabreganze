@@ -1,49 +1,88 @@
 :root {
-  --ink: #1a1c22;
-  --muted: #6b7280;
-  --line: #e7e7ea;
+  /* Palette — neutres chauds + accent terracotta (Milan / hospitalité). */
+  --bg: #ffffff;
+  --surface: #f6f4f0; /* off-white chaud pour les sections alternées */
   --card: #fafafa;
-  --accent: #c0392b; /* rouge chaleureux ; à accorder à l'identité visuelle finale */
-  --max: 1080px;
+  --ink: #1e2024;
+  --muted: #6b7280;
+  --line: #e7e3dc;
+  --accent: #c2603f; /* terracotta */
+  --accent-ink: #fff; /* texte sur fond accent */
+  --accent-soft: #f3e3db; /* aplat doux d'accent */
+  --green: #1f7a53; /* vert (dispo / WhatsApp) */
+
+  --max: 1120px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --shadow: 0 10px 30px -12px rgba(20, 22, 30, 0.18);
+  --shadow-sm: 0 4px 14px -8px rgba(20, 22, 30, 0.2);
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color: var(--ink);
   line-height: 1.65;
-  background: #fff;
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
 }
 
 main { max-width: var(--max); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
 
-h1, h2, h3 { line-height: 1.2; font-weight: 700; }
-h1 { font-size: clamp(2rem, 5vw, 3rem); }
+/* Utilitaire : casser la contrainte de largeur de <main> pour un bloc pleine largeur. */
+.full-bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+h1, h2, h3 { line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.1rem, 5.5vw, 3.4rem); }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); }
 
 a { color: inherit; }
 
-.btn {
-  display: inline-block; font-weight: 700; text-decoration: none;
-  padding: 0.85rem 1.6rem; border-radius: 12px; transition: transform 0.12s ease;
+/* En-tête de section réutilisable */
+.section-head { text-align: center; max-width: 46ch; margin: 0 auto clamp(1.5rem, 4vw, 2.5rem); }
+.section-head .eyebrow {
+  display: inline-block; text-transform: uppercase; letter-spacing: 0.14em;
+  font-size: 0.72rem; font-weight: 700; color: var(--accent); margin-bottom: 0.6rem;
 }
-.btn:hover { transform: translateY(-1px); }
+.section-head p { color: var(--muted); margin: 0.5rem 0 0; }
 
-.hero {
-  text-align: center; padding: clamp(3rem, 8vw, 6rem) 0 2rem;
-}
-.hero p { font-size: 1.2rem; color: var(--muted); max-width: 38ch; margin: 1rem auto 0; }
-
-.section-pad { padding: 2.5rem 0; }
+.section-pad { padding: clamp(2.5rem, 6vw, 4.5rem) 0; }
+.section-surface { background: var(--surface); }
 .center { display: flex; justify-content: center; }
 
-.guide-list { list-style: none; padding: 0; display: grid; gap: 1.25rem; }
-.guide-card {
-  border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem 1.5rem;
+/* Réservation + calendrier côte à côte (empilés sur mobile). */
+.booking-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  justify-content: center;
+  align-items: flex-start;
 }
+.booking-row > * { flex: 1 1 380px; max-width: 540px; }
+
+/* Boutons */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700;
+  text-decoration: none; padding: 0.9rem 1.7rem; border-radius: 999px;
+  transition: transform 0.12s ease, box-shadow 0.2s ease; box-shadow: var(--shadow-sm);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-whatsapp { background: #25d366; color: #04391f; }
+
+/* ─── Pages guides (préservées) ─────────────────────────────────────────────── */
+.guide-list { list-style: none; padding: 0; display: grid; gap: 1.25rem; }
+.guide-card { border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem 1.5rem; background: var(--bg); }
 .guide-card h3 { margin: 0 0 0.35rem; }
 .guide-card time { color: var(--muted); font-size: 0.85rem; }
 .guide-card a { color: var(--accent); font-weight: 600; text-decoration: none; }
@@ -54,9 +93,7 @@ article.guide :is(h2, h3) { margin-top: 1.8rem; }
   width: 100%; height: auto; border-radius: 14px; margin: 1rem 0 0.5rem;
   aspect-ratio: 1200 / 630; object-fit: cover;
 }
-.tags {
-  list-style: none; padding: 0; margin: 0.75rem 0 0; display: flex; gap: 0.5rem; flex-wrap: wrap;
-}
+.tags { list-style: none; padding: 0; margin: 0.75rem 0 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .tags li {
   font-size: 0.78rem; color: var(--muted); background: var(--card);
   border: 1px solid var(--line); border-radius: 999px; padding: 0.2rem 0.7rem;

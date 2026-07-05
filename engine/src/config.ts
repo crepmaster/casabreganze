@@ -14,12 +14,16 @@ export const LANG_NAMES: Record<Lang, string> = {
 
 export const CITY = 'Milan';
 
-// Modèles Claude. Opus 4.8 par défaut (meilleure qualité long-form multilingue).
-// Pour réduire le coût des traductions, passer TRANSLATION à 'claude-haiku-4-5'.
+// Modèles Claude.
+// - article : Opus 4.8 — rédaction long-form native, la qualité prime.
+// - translation / seo : Haiku 4.5 — tâches cadrées et mécaniques ; le quality
+//   scorer sert de garde-fou. Réduit fortement le coût du run hebdomadaire
+//   (1 article Opus + 3 traductions + 4 SEO). Remonter en Opus si la qualité
+//   des traductions ou des métadonnées se dégrade.
 export const MODELS = {
   article: 'claude-opus-4-8',
-  seo: 'claude-opus-4-8',
-  translation: 'claude-opus-4-8',
+  seo: 'claude-haiku-4-5',
+  translation: 'claude-haiku-4-5',
 } as const;
 
 export const WORD_TARGET = { min: 1200, max: 2000 };

@@ -2,10 +2,12 @@ import { CANONICAL_LANG, LANGS, LANG_NAMES, MIN_QUALITY, OUTPUT_DIR, type Lang }
 import { isoDate, isoWeek, weekRange } from './week.js';
 import { generateArticleBody, generateSeo, translateBody } from './anthropic.js';
 import { scoreQuality } from './scorer.js';
-import { writeGuide } from './writeGuide.js';
+import { guideExists, readGuideBody, writeGuide } from './writeGuide.js';
 import type { Frontmatter, GeneratedSeo, GuideVersion } from './types.js';
 
 const DRY_RUN = process.argv.includes('--dry-run');
+// --force régénère même les langues déjà écrites (sinon on les ignore = reprise après échec).
+const FORCE = process.argv.includes('--force');
 
 function weekLabel(now: Date): string {
   const { start, end } = weekRange(now);
@@ -59,6 +61,32 @@ async function buildVersion(lang: Lang, label: string, canonicalBody: string | n
   return { lang, body, seo, quality: score };
 }
 
+// Construit le frontmatter et écrit le guide immédiatement (checkpoint).
+async function persist(v: GuideVersion, translationKey: string, pubDate: string): Promise<void> {
+  // Override <title> uniquement s'il diffère réellement du H1 (sinon le site retombe sur title).
+  const seoTitle = v.seo.seoTitle && v.seo.seoTitle !== v.seo.title ? v.seo.seoTitle : undefined;
+  const fm: Frontmatter = {
+    title: v.seo.title,
+    description: v.seo.description,
+    lang: v.lang,
+    translationKey,
+    pubDate,
+    tags: v.seo.tags,
+    cover: '/og-default.png', // image OG de marque par défaut ; visuel dédié par article = amélioration future
+    coverAlt: v.seo.coverAlt,
+    draft: v.quality < MIN_QUALITY,
+    seo: { title: seoTitle, focusKeyword: v.seo.focusKeyword },
+  };
+  const path = await writeGuide(fm, v.body);
+  console.log(`  ✓ ${v.lang} → ${path}${fm.draft ? '  (draft)' : ''}`);
+}
+
+// Reprend un guide déjà écrit : ignore en --dry-run et en --force (on veut alors régénérer).
+async function alreadyDone(translationKey: string, lang: Lang): Promise<boolean> {
+  if (DRY_RUN || FORCE) return false;
+  return guideExists(translationKey, lang);
+}
+
 async function main(): Promise<void> {
   const now = new Date();
   const { year, week } = isoWeek(now);
@@ -66,39 +94,33 @@ async function main(): Promise<void> {
   const label = weekLabel(now);
   const pubDate = isoDate(now);
 
-  console.log(`EasyRest engine ${DRY_RUN ? '(DRY RUN) ' : ''}— ${translationKey} (${label})`);
+  console.log(`EasyRest engine ${DRY_RUN ? '(DRY RUN) ' : ''}${FORCE ? '(FORCE) ' : ''}— ${translationKey} (${label})`);
   console.log(`Sortie : ${OUTPUT_DIR}`);
 
-  // 1) Version canonique
-  console.log(`Génération canonique (${CANONICAL_LANG})…`);
-  const canonical = await buildVersion(CANONICAL_LANG, label, null);
-
-  // 2) Traductions des autres langues
-  const others = LANGS.filter((l) => l !== CANONICAL_LANG);
-  const versions: GuideVersion[] = [canonical];
-  for (const lang of others) {
-    console.log(`Traduction ${lang}…`);
-    versions.push(await buildVersion(lang, label, canonical.body));
+  // 1) Version canonique. Écrite dès qu'elle est prête, pour que les traductions
+  //    puissent reprendre même après un crash. Son corps pilote les traductions ;
+  //    à la reprise, on le relit depuis le disque plutôt que de le régénérer.
+  let canonicalBody: string;
+  if (await alreadyDone(translationKey, CANONICAL_LANG)) {
+    console.log(`Canonique (${CANONICAL_LANG}) déjà présente — relecture depuis le disque.`);
+    canonicalBody = await readGuideBody(translationKey, CANONICAL_LANG);
+  } else {
+    console.log(`Génération canonique (${CANONICAL_LANG})…`);
+    const canonical = await buildVersion(CANONICAL_LANG, label, null);
+    await persist(canonical, translationKey, pubDate);
+    canonicalBody = canonical.body;
   }
 
-  // 3) Écriture des 4 fichiers (reliés par translationKey ; draft si sous le seuil qualité)
-  for (const v of versions) {
-    // Override <title> uniquement s'il diffère réellement du H1 (sinon le site retombe sur title).
-    const seoTitle = v.seo.seoTitle && v.seo.seoTitle !== v.seo.title ? v.seo.seoTitle : undefined;
-    const fm: Frontmatter = {
-      title: v.seo.title,
-      description: v.seo.description,
-      lang: v.lang,
-      translationKey,
-      pubDate,
-      tags: v.seo.tags,
-      cover: '/og-default.png', // image OG de marque par défaut ; visuel dédié par article = amélioration future
-      coverAlt: v.seo.coverAlt,
-      draft: v.quality < MIN_QUALITY,
-      seo: { title: seoTitle, focusKeyword: v.seo.focusKeyword },
-    };
-    const path = await writeGuide(fm, v.body);
-    console.log(`  ✓ ${v.lang} → ${path}${fm.draft ? '  (draft)' : ''}`);
+  // 2) Traductions des autres langues (reliées par translationKey ; draft si sous le seuil).
+  const others = LANGS.filter((l) => l !== CANONICAL_LANG);
+  for (const lang of others) {
+    if (await alreadyDone(translationKey, lang)) {
+      console.log(`  ↷ ${lang} déjà présent — ignoré (--force pour régénérer).`);
+      continue;
+    }
+    console.log(`Traduction ${lang}…`);
+    const v = await buildVersion(lang, label, canonicalBody);
+    await persist(v, translationKey, pubDate);
   }
 
   console.log('Terminé. Commitez les fichiers générés pour déclencher le build.');

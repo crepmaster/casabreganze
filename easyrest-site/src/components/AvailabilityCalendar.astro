@@ -1,0 +1,237 @@
+---
+import { t, type Lang } from '../i18n/ui';
+import { loadBookedRanges, isBooked } from '../lib/guesty';
+
+const { lang } = Astro.props as { lang: Lang };
+
+// Chargé au build (fetch mémoïsé). `null` = Guesty indisponible → on masque tout.
+const ranges = await loadBookedRanges();
+
+const MONTHS_SHOWN = 12; // fenêtre glissante navigable au picker
+const pad = (n: number) => String(n).padStart(2, '0');
+const isoOf = (y: number, m: number, d: number) => `${y}-${pad(m + 1)}-${pad(d)}`;
+
+const now = new Date();
+const todayISO = isoOf(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+
+const DAY_MS = 86_400_000;
+const mondayBase = Date.UTC(2024, 0, 1); // un lundi
+const weekdayFmt = new Intl.DateTimeFormat(lang, { weekday: 'short' });
+const weekdays = Array.from({ length: 7 }, (_, i) => weekdayFmt.format(new Date(mondayBase + i * DAY_MS)));
+const monthFmt = new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' });
+
+const hint: Record<Lang, string> = {
+  fr: 'Cliquez votre date d’arrivée puis de départ.',
+  en: 'Click your check-in date, then check-out.',
+  it: 'Clicca la data di arrivo, poi di partenza.',
+  es: 'Haz clic en la entrada y luego en la salida.',
+};
+
+type CellState = 'past' | 'booked' | 'free';
+interface Cell {
+  day: number;
+  iso: string;
+  state: CellState;
+}
+interface Month {
+  label: string;
+  blanks: number;
+  cells: Cell[];
+}
+
+const list = ranges ?? [];
+const months: Month[] = [];
+for (let k = 0; k < MONTHS_SHOWN; k++) {
+  const ref = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + k, 1));
+  const y = ref.getUTCFullYear();
+  const m = ref.getUTCMonth();
+  const blanks = (new Date(Date.UTC(y, m, 1)).getUTCDay() + 6) % 7;
+  const daysInMonth = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+  const cells: Cell[] = [];
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dISO = isoOf(y, m, day);
+    let state: CellState;
+    if (dISO < todayISO) state = 'past';
+    else if (isBooked(dISO, list)) state = 'booked';
+    else state = 'free';
+    cells.push({ day, iso: dISO, state });
+  }
+  months.push({ label: monthFmt.format(ref), blanks, cells });
+}
+---
+
+{
+  ranges !== null && (
+    <section class="cal" id="disponibilites">
+      <h2>{t(lang, 'calendar.title')}</h2>
+      <p class="sub">{t(lang, 'calendar.subtitle')}</p>
+
+      <div class="legend">
+        <span><i class="dot free" /> {t(lang, 'calendar.available')}</span>
+        <span><i class="dot booked" /> {t(lang, 'calendar.booked')}</span>
+      </div>
+      <p class="hint">{hint[lang]}</p>
+
+      <div class="picker">
+        <button id="cal-prev" type="button" aria-label="Mois précédent">‹</button>
+        <span id="cal-label" class="picker__label">{months[0].label}</span>
+        <button id="cal-next" type="button" aria-label="Mois suivant">›</button>
+      </div>
+
+      <div id="cal-months">
+        {months.map((month, i) => (
+          <div class="month" data-index={i} data-label={month.label} hidden={i !== 0}>
+            <div class="grid">
+              {weekdays.map((wd) => (
+                <span class="wd">{wd}</span>
+              ))}
+              {Array.from({ length: month.blanks }).map(() => (
+                <span class="cell blank" />
+              ))}
+              {month.cells.map((cell) =>
+                cell.state === 'free' ? (
+                  <button class="cell free" data-date={cell.iso} data-state="free" type="button">
+                    {cell.day}
+                  </button>
+                ) : (
+                  <span class={`cell ${cell.state}`} data-date={cell.iso} data-state={cell.state}>
+                    {cell.day}
+                  </span>
+                ),
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<script>
+  const monthsWrap = document.getElementById('cal-months');
+  const label = document.getElementById('cal-label');
+  const prev = document.getElementById('cal-prev') as HTMLButtonElement | null;
+  const next = document.getElementById('cal-next') as HTMLButtonElement | null;
+
+  if (monthsWrap && label && prev && next) {
+    const panels = Array.from(monthsWrap.querySelectorAll<HTMLElement>('.month'));
+
+    // ── Picker de mois ────────────────────────────────────────────────────────
+    let cur = 0;
+    const update = () => {
+      panels.forEach((p, i) => (p.hidden = i !== cur));
+      label.textContent = panels[cur].dataset.label ?? '';
+      prev.disabled = cur === 0;
+      next.disabled = cur === panels.length - 1;
+    };
+    prev.addEventListener('click', () => { if (cur > 0) { cur--; update(); } });
+    next.addEventListener('click', () => { if (cur < panels.length - 1) { cur++; update(); } });
+    update();
+
+    // ── Sélection de plage (arrivée → départ) ─────────────────────────────────
+    const cells = Array.from(monthsWrap.querySelectorAll<HTMLElement>('.cell[data-date]'));
+    const stateOf = new Map(cells.map((c) => [c.dataset.date!, c.dataset.state!]));
+    let checkin: string | null = null;
+    let checkout: string | null = null;
+
+    const nights = (a: string, b: string) => Math.round((+new Date(b) - +new Date(a)) / 86400000);
+    // Toutes les nuits [a, b) doivent être libres (le jour de départ peut être un check-in d'un autre).
+    const rangeFree = (a: string, b: string) => {
+      const end = new Date(b + 'T00:00:00Z');
+      for (let t = new Date(a + 'T00:00:00Z'); t < end; t.setUTCDate(t.getUTCDate() + 1)) {
+        if (stateOf.get(t.toISOString().slice(0, 10)) !== 'free') return false;
+      }
+      return true;
+    };
+    const paint = () => {
+      cells.forEach((c) => {
+        const iso = c.dataset.date!;
+        c.classList.toggle('sel-start', iso === checkin);
+        c.classList.toggle('sel-end', iso === checkout);
+        c.classList.toggle('in-range', !!(checkin && checkout && iso > checkin && iso < checkout));
+      });
+    };
+    const emit = () => {
+      if (checkin && checkout) {
+        document.dispatchEvent(new CustomEvent('easyrest:stay', { detail: { checkin, checkout, nights: nights(checkin, checkout) } }));
+      } else if (checkin) {
+        document.dispatchEvent(new CustomEvent('easyrest:stay-partial', { detail: { checkin } }));
+      } else {
+        document.dispatchEvent(new CustomEvent('easyrest:stay-reset'));
+      }
+    };
+
+    cells
+      .filter((c) => c.dataset.state === 'free')
+      .forEach((btn) =>
+        btn.addEventListener('click', () => {
+          const d = btn.dataset.date!;
+          if (!checkin || checkout || d <= checkin) {
+            checkin = d;
+            checkout = null;
+          } else if (rangeFree(checkin, d)) {
+            checkout = d;
+          } else {
+            checkin = d; // plage traverse une date réservée → on repart de cette date
+            checkout = null;
+          }
+          paint();
+          emit();
+        }),
+      );
+  }
+</script>
+
+<style>
+  .cal {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    box-shadow: var(--shadow-sm);
+  }
+  .cal h2 { margin: 0 0 0.25rem; }
+  .sub { color: var(--muted); margin: 0 0 0.9rem; font-size: 0.95rem; }
+  .legend { display: flex; gap: 1.25rem; font-size: 0.9rem; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .dot { width: 0.8rem; height: 0.8rem; border-radius: 50%; display: inline-block; }
+  .dot.free { background: var(--green); }
+  .dot.booked { background: var(--line); border: 1px solid var(--muted); }
+  .hint { color: var(--muted); font-size: 0.82rem; margin: 0.5rem 0 1rem; }
+
+  .picker { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.9rem; }
+  .picker__label { font-weight: 700; text-transform: capitalize; font-size: 1.05rem; }
+  .picker button {
+    width: 2.4rem; height: 2.4rem; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    font-size: 1.3rem; line-height: 1; cursor: pointer; display: grid; place-items: center;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .picker button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .picker button:disabled { opacity: 0.35; cursor: default; }
+
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .wd { text-align: center; font-size: 0.72rem; color: var(--muted); text-transform: capitalize; padding-bottom: 0.35rem; }
+  .cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    border: 0;
+    font: inherit;
+    padding: 0;
+  }
+  .cell.blank { visibility: hidden; }
+  button.cell.free { background: #e8f7ee; color: #157347; font-weight: 600; cursor: pointer; transition: background 0.12s ease; }
+  button.cell.free:hover { background: #cdeed9; }
+  .cell.booked { background: var(--line); color: var(--muted); text-decoration: line-through; }
+  .cell.past { color: var(--muted); opacity: 0.4; }
+
+  /* Plage sélectionnée */
+  .cell.in-range { background: var(--accent-soft); color: var(--accent); border-radius: 0; }
+  button.cell.sel-start, button.cell.sel-end { background: var(--accent); color: #fff; font-weight: 700; }
+  button.cell.sel-start { border-radius: 10px 0 0 10px; }
+  button.cell.sel-end { border-radius: 0 10px 10px 0; }
+</style>

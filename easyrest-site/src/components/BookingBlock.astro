@@ -7,14 +7,70 @@ const { lang } = Astro.props as { lang: Lang };
 const waText = encodeURIComponent(t(lang, 'booking.wa_message'));
 const waHref = `https://wa.me/${BOOKING.whatsapp}?text=${waText}`;
 const discountLabel = t(lang, 'booking.discount').replace('{n}', String(BOOKING.discountPercent));
+
+// Libellés localisés inline (pour ne pas alourdir ui.ts).
+const L: Record<Lang, Record<string, string>> = {
+  fr: { guests: 'Voyageurs', submit: 'Voir mon prix', computing: 'Calcul…', vs: 'vs Booking', nights: 'nuits', onRequest: 'Prix sur demande', from: 'du', to: 'au', priceLine: 'Prix direct estimé', pick: 'Choisissez vos dates dans le calendrier', guestsWord: 'voyageurs', arrival: 'Arrivée', chooseDepart: 'cliquez la date de départ', estimated: 'estimation' },
+  en: { guests: 'Guests', submit: 'See my price', computing: 'Calculating…', vs: 'vs Booking', nights: 'nights', onRequest: 'Price on request', from: 'from', to: 'to', priceLine: 'Estimated direct price', pick: 'Pick your dates in the calendar', guestsWord: 'guests', arrival: 'Check-in', chooseDepart: 'click the check-out date', estimated: 'estimate' },
+  it: { guests: 'Ospiti', submit: 'Vedi il prezzo', computing: 'Calcolo…', vs: 'vs Booking', nights: 'notti', onRequest: 'Prezzo su richiesta', from: 'dal', to: 'al', priceLine: 'Prezzo diretto stimato', pick: 'Scegli le date nel calendario', guestsWord: 'ospiti', arrival: 'Arrivo', chooseDepart: 'clicca la data di partenza', estimated: 'stima' },
+  es: { guests: 'Huéspedes', submit: 'Ver mi precio', computing: 'Calculando…', vs: 'vs Booking', nights: 'noches', onRequest: 'Precio a consultar', from: 'del', to: 'al', priceLine: 'Precio directo estimado', pick: 'Elige tus fechas en el calendario', guestsWord: 'huéspedes', arrival: 'Entrada', chooseDepart: 'haz clic en la salida', estimated: 'estimación' },
+};
+const l = L[lang];
 ---
 
-<section class="booking" id="reserver">
+<section
+  class="booking"
+  id="reserver"
+  data-lang={lang}
+  data-endpoint={BOOKING.quoteEndpoint}
+  data-whatsapp={BOOKING.whatsapp}
+  data-wa-base={t(lang, 'booking.wa_message')}
+  data-l-from={l.from}
+  data-l-to={l.to}
+  data-l-guests={l.guestsWord}
+  data-l-price={l.priceLine}
+  data-l-computing={l.computing}
+  data-l-submit={l.submit}
+  data-l-vs={l.vs}
+  data-l-nights={l.nights}
+  data-l-onrequest={l.onRequest}
+  data-pick={l.pick}
+  data-l-arrival={l.arrival}
+  data-l-choosedepart={l.chooseDepart}
+  data-l-estimated={l.estimated}
+  data-base-price={BOOKING.basePricePerNight}
+  data-discount={BOOKING.discountPercent}
+>
   <h2>{t(lang, 'booking.title')}</h2>
   <p class="discount">{discountLabel}</p>
   <p class="lead">{t(lang, 'booking.lead')}</p>
 
-  <a class="btn btn-whatsapp" href={waHref} target="_blank" rel="noopener">
+  <div class="stay" id="stay-summary" data-empty="true">
+    <span class="stay__prompt">{l.pick} <span aria-hidden="true">↓</span></span>
+  </div>
+
+  <div class="controls">
+    <label class="guests">
+      <span>{l.guests}</span>
+      <select id="sim-adults">
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </label>
+    <button type="button" class="btn btn-primary" id="sim-go" disabled>{l.submit}</button>
+  </div>
+
+  <div class="sim__result" id="sim-result" hidden>
+    <div class="sim__price">
+      <span class="direct" id="sim-direct"></span>
+      <span class="was" id="sim-was"></span>
+    </div>
+    <p class="sim__meta" id="sim-meta"></p>
+  </div>
+
+  <a class="btn btn-whatsapp" id="wa-cta" href={waHref} target="_blank" rel="noopener">
     {t(lang, 'booking.cta_whatsapp')}
   </a>
 
@@ -25,10 +81,124 @@ const discountLabel = t(lang, 'booking.discount').replace('{n}', String(BOOKING.
   </div>
 </section>
 
+<script>
+  const root = document.getElementById('reserver');
+  const summary = document.getElementById('stay-summary');
+  const adults = document.getElementById('sim-adults') as HTMLSelectElement | null;
+  const go = document.getElementById('sim-go') as HTMLButtonElement | null;
+  const result = document.getElementById('sim-result');
+  const directEl = document.getElementById('sim-direct');
+  const wasEl = document.getElementById('sim-was');
+  const metaEl = document.getElementById('sim-meta');
+  const wa = document.getElementById('wa-cta') as HTMLAnchorElement | null;
+
+  if (root && summary && adults && go && result && directEl && wasEl && metaEl && wa) {
+    const d = root.dataset;
+    const lang = d.lang || 'fr';
+    const endpoint = d.endpoint || '';
+    const phone = d.whatsapp || '';
+    const dateFmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long' });
+    const asDate = (iso: string) => new Date(iso + 'T12:00:00');
+    const waLink = (msg: string) => `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+
+    let stay: { checkin: string; checkout: string; nights: number } | null = null;
+
+    const clearPrice = () => { result.hidden = true; };
+
+    // Le calendrier pilote les dates.
+    document.addEventListener('easyrest:stay', (e) => {
+      stay = (e as CustomEvent).detail;
+      summary.dataset.empty = 'false';
+      summary.innerHTML =
+        `<span class="stay__range">${dateFmt.format(asDate(stay.checkin))} → ${dateFmt.format(asDate(stay.checkout))}</span>` +
+        `<span class="stay__nights">${stay.nights} ${d.lNights}</span>`;
+      go.disabled = false;
+      clearPrice();
+    });
+    document.addEventListener('easyrest:stay-partial', (e) => {
+      const { checkin } = (e as CustomEvent).detail;
+      stay = null;
+      summary.dataset.empty = 'true';
+      summary.innerHTML = `<span class="stay__prompt">${d.lArrival} ${dateFmt.format(asDate(checkin))} — ${d.lChoosedepart}</span>`;
+      go.disabled = true;
+      clearPrice();
+    });
+    document.addEventListener('easyrest:stay-reset', () => {
+      stay = null;
+      summary.dataset.empty = 'true';
+      summary.innerHTML = `<span class="stay__prompt">${d.pick ?? ''}</span>`;
+      go.disabled = true;
+      clearPrice();
+    });
+
+    const basePrice = Number(d.basePrice || 0);
+    const discount = Number(d.discount || 0);
+
+    // Affiche le prix (réel ou estimé) et pré-remplit WhatsApp avec dates + prix.
+    const render = (
+      direct: number,
+      ref: number,
+      cur: string,
+      nights: number,
+      disc: number,
+      isEstimate: boolean,
+      stayText: string,
+    ) => {
+      result.hidden = false;
+      directEl.textContent = `${direct} ${cur}`;
+      wasEl.textContent = ref ? `${ref} ${cur}` : '';
+      metaEl.textContent = `${nights} ${d.lNights} · −${disc}% ${d.lVs}${isEstimate ? ` · ${d.lEstimated}` : ''}`;
+      wa.href = waLink(`${d.waBase}${stayText}. ${d.lPrice} : ${direct}€`);
+    };
+
+    go.addEventListener('click', async () => {
+      if (!stay) return;
+      const n = adults.value;
+      const stayText = `${d.lFrom} ${stay.checkin} ${d.lTo} ${stay.checkout} (${n} ${d.lGuests})`;
+
+      // Repli : estimation depuis le tarif de référence (ou « prix sur demande » si absent).
+      const estimate = () => {
+        if (basePrice > 0 && stay) {
+          const ref = Math.round(basePrice * stay.nights);
+          render(Math.round(ref * (1 - discount / 100)), ref, '€', stay.nights, discount, true, stayText);
+        } else {
+          result.hidden = false;
+          directEl.textContent = '';
+          wasEl.textContent = '';
+          metaEl.textContent = d.lOnrequest || '';
+          wa.href = waLink(`${d.waBase}${stayText}`);
+        }
+      };
+
+      if (!endpoint) { estimate(); return; }
+
+      const label = go.textContent;
+      go.disabled = true;
+      go.textContent = d.lComputing || '';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ checkin: stay.checkin, checkout: stay.checkout, adults: Number(n) }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.code || 'error');
+        const cur = data.currency === 'EUR' ? '€' : data.currency;
+        render(data.directPrice, data.bookingPrice, cur, data.nights, data.discountPercent, false, stayText);
+      } catch {
+        estimate();
+      } finally {
+        go.disabled = false;
+        go.textContent = label;
+      }
+    });
+  }
+</script>
+
 <style>
   .booking {
-    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
-    padding: clamp(1.5rem, 4vw, 2.5rem); text-align: center; max-width: 540px;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 4vw, 2.5rem); text-align: center; box-shadow: var(--shadow-sm);
   }
   .booking h2 { margin: 0 0 0.5rem; }
   .discount {
@@ -36,7 +206,37 @@ const discountLabel = t(lang, 'booking.discount').replace('{n}', String(BOOKING.
     font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 999px; margin: 0 0 0.75rem;
   }
   .lead { color: var(--muted); margin: 0 0 1.25rem; }
-  .btn-whatsapp { background: #25d366; color: #04391f; }
+
+  /* Résumé du séjour (piloté par le calendrier) */
+  .stay {
+    border: 1px dashed var(--line); border-radius: 14px; padding: 0.9rem 1rem;
+    margin-bottom: 0.9rem; min-height: 3.3rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;
+  }
+  .stay[data-empty='false'] { border-style: solid; border-color: var(--accent-soft); background: var(--accent-soft); }
+  .stay__prompt { color: var(--muted); font-size: 0.92rem; }
+  .stay__range { font-weight: 700; font-size: 1.05rem; text-transform: capitalize; }
+  .stay__nights {
+    font-size: 0.8rem; font-weight: 700; color: var(--accent);
+    background: var(--bg); border-radius: 999px; padding: 0.15rem 0.6rem;
+  }
+
+  .controls { display: flex; gap: 0.75rem; align-items: end; margin-bottom: 1rem; }
+  .guests { display: flex; flex-direction: column; gap: 0.25rem; text-align: left; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+  .guests select {
+    font: inherit; padding: 0.6rem 0.7rem; border: 1px solid var(--line);
+    border-radius: 10px; background: var(--bg); color: var(--ink);
+  }
+  .controls .btn { flex: 1; justify-content: center; }
+  .controls .btn:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
+
+  .sim__result { margin: 0 0 1rem; }
+  .sim__price { display: flex; align-items: baseline; gap: 0.6rem; justify-content: center; }
+  .sim__price .direct { font-size: 2rem; font-weight: 800; color: var(--accent); }
+  .sim__price .was { color: var(--muted); text-decoration: line-through; font-weight: 600; }
+  .sim__meta { color: var(--muted); font-size: 0.85rem; margin: 0.25rem 0 0; }
+
+  .btn-whatsapp { width: 100%; justify-content: center; }
   .ota-intro { margin: 1.5rem 0 0.5rem; color: var(--muted); font-size: 0.9rem; }
   .ota { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
   .ota a { color: var(--accent); font-weight: 600; text-decoration: none; }

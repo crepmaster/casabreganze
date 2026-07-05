@@ -1,45 +1,35 @@
-# WordPress repo: track only custom theme & plugins
+# Dépôt : tout ignoré par défaut, on autorise explicitement les sous-projets suivis.
+# (Le socle WordPress a été retiré du tronc — récupérable via le tag `archive/wordpress`.)
 *
 !.gitignore
 
-# Project documentation (planning, refactoring, architecture)
+# Documentation projet (planning, refonte, architecture)
 !docs/
 !docs/**
 
-# New Astro site (greenfield, replaces WordPress) — track source, ignore build artifacts
+# Site Astro (source suivie, artefacts de build ignorés)
 !easyrest-site/
 !easyrest-site/**
 easyrest-site/node_modules/
 easyrest-site/dist/
 easyrest-site/.astro/
 
-# Content engine (Node/TS) — track source, ignore deps
+# Moteur de contenu (Node/TS) — source suivie, deps ignorées
 !engine/
 !engine/**
 engine/node_modules/
 
-# Allow wp-content tree
-!wp-content/
-wp-content/*
+# Microservice prix (extrait de l'ancien plugin WordPress easyrest-core)
+!services/
+!services/**
+services/**/node_modules/
+services/**/.env
+services/**/logs/
 
-# Theme
-!wp-content/themes/
-wp-content/themes/*
-!wp-content/themes/easyrest-child/
-wp-content/themes/easyrest-child/*
-!wp-content/themes/easyrest-child/**
+# Ops (workflows n8n, runbooks)
+!ops/
+!ops/**
 
-# Plugins
-!wp-content/plugins/
-wp-content/plugins/*
-!wp-content/plugins/easyrest-core/
-wp-content/plugins/easyrest-core/*
-!wp-content/plugins/easyrest-core/**
-!wp-content/plugins/easyrest-content-engine/
-wp-content/plugins/easyrest-content-engine/*
-!wp-content/plugins/easyrest-content-engine/**
-
-# Exclude heavy/secret plugin subfolders
-wp-content/plugins/easyrest-core/scraper-node/node_modules/
-wp-content/plugins/easyrest-core/scraper-node/.env
-wp-content/plugins/easyrest-core/scraper-node/logs/
+# CI/CD (GitHub Actions)
+!.github/
+!.github/**

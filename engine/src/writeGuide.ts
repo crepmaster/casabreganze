@@ -1,6 +1,6 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { OUTPUT_DIR } from './config.js';
+import { OUTPUT_DIR, type Lang } from './config.js';
 import type { Frontmatter } from './types.js';
 
 // Sérialisation YAML minimale et sûre : on cite en JSON les chaînes (scalaire YAML valide),
@@ -32,10 +32,38 @@ export function buildFrontmatter(fm: Frontmatter): string {
   return lines.join('\n');
 }
 
+function guidePath(translationKey: string, lang: Lang): string {
+  return join(OUTPUT_DIR, `${translationKey}.${lang}.md`);
+}
+
 /** Écrit un fichier `${translationKey}.${lang}.md` dans la collection de guides. Retourne le chemin. */
 export async function writeGuide(fm: Frontmatter, body: string): Promise<string> {
   await mkdir(OUTPUT_DIR, { recursive: true });
-  const path = join(OUTPUT_DIR, `${fm.translationKey}.${fm.lang}.md`);
+  const path = guidePath(fm.translationKey, fm.lang);
   await writeFile(path, `${buildFrontmatter(fm)}\n\n${body.trim()}\n`, 'utf8');
   return path;
+}
+
+/** Vrai si le guide de cette langue existe déjà (checkpoint de reprise). */
+export async function guideExists(translationKey: string, lang: Lang): Promise<boolean> {
+  try {
+    await readFile(guidePath(translationKey, lang), 'utf8');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Relit le corps Markdown d'un guide déjà écrit (sans le frontmatter).
+ * Utilisé à la reprise : si la canonique existe mais qu'une traduction manque,
+ * on récupère le corps FR depuis le disque plutôt que de le régénérer.
+ * Le frontmatter est délimité par deux lignes `---` ; les valeurs sont
+ * échappées en JSON, donc aucune ligne `---` ne peut apparaître à l'intérieur.
+ */
+export async function readGuideBody(translationKey: string, lang: Lang): Promise<string> {
+  const raw = await readFile(guidePath(translationKey, lang), 'utf8');
+  const parts = raw.split(/^---\s*$/m);
+  if (parts.length < 3) throw new Error(`Guide illisible (frontmatter absent) : ${guidePath(translationKey, lang)}`);
+  return parts.slice(2).join('---').trim();
 }

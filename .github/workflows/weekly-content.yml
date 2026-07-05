@@ -1,0 +1,69 @@
+name: Contenu hebdomadaire Milan
+
+# Publie un guide « Que faire à Milan » (4 langues) chaque semaine, sans intervention.
+#   génère (Claude) → valide (build Astro) → commit → push → l'hébergeur redéploie.
+# Le build Astro sert de garde-fou : un frontmatter invalide fait échouer le job
+# AVANT le commit, donc rien de cassé n'atteint jamais le site.
+#
+# Pré-requis (une seule fois, Settings → Secrets and variables → Actions) :
+#   - Secret ANTHROPIC_API_KEY : la clé Anthropic utilisée par le moteur.
+# La syndication réseaux sociaux est gérée séparément par n8n qui lit /feed.xml
+# (voir ops/n8n-syndication.md) — cette Action ne poste pas sur les réseaux.
+
+on:
+  schedule:
+    # Tous les lundis à 06:00 UTC. La semaine ISO courante pilote le nommage.
+    - cron: '0 6 * * 1'
+  workflow_dispatch: {} # bouton « Run workflow » pour un déclenchement manuel
+
+concurrency:
+  # Évite deux runs simultanés qui écriraient le même fichier de semaine.
+  group: weekly-content
+  cancel-in-progress: false
+
+permissions:
+  contents: write # nécessaire pour committer/pusher le contenu généré
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # 1) Génération du contenu (écrit dans easyrest-site/src/content/guides/).
+      #    Idempotent par semaine : reprend les langues déjà écrites en cas de relance.
+      - name: Générer les guides (Claude)
+        working-directory: engine
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          npm ci
+          npm run generate
+
+      # 2) Garde-fou : le build Astro valide le frontmatter (schéma Zod) et l'i18n.
+      #    S'il échoue, le job s'arrête ici — rien n'est committé.
+      - name: Valider via le build Astro
+        working-directory: easyrest-site
+        run: |
+          npm ci
+          npm run build
+
+      # 3) Commit + push uniquement s'il y a du nouveau contenu.
+      - name: Committer le contenu généré
+        run: |
+          git config user.name  "easyrest-bot"
+          git config user.email "bot@easyrest.eu"
+          git add easyrest-site/src/content/guides/
+          if git diff --cached --quiet; then
+            echo "Aucun nouveau guide (semaine déjà publiée ou tout en draft) — rien à committer."
+            exit 0
+          fi
+          week="$(date -u +%G-w%V)"
+          git commit -m "content: guide Milan hebdomadaire (${week})"
+          git push

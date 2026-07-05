@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import { t, type Lang } from '../i18n/ui';
+
+const { lang } = Astro.props as { lang: Lang };
+
+// Derniers guides publiés pour cette langue (agenda insolite inclus).
+const guides = (await getCollection('guides', (e) => !e.data.draft && e.data.lang === lang))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const head: Record<Lang, { eyebrow: string; title: string; cta: string }> = {
+  fr: { eyebrow: 'Le séjour', title: 'Que faire à Milan pendant votre séjour', cta: 'Voir tous les guides' },
+  en: { eyebrow: 'Your stay', title: 'What to do in Milan during your stay', cta: 'See all guides' },
+  it: { eyebrow: 'Il soggiorno', title: 'Cosa fare a Milano durante il soggiorno', cta: 'Vedi tutte le guide' },
+  es: { eyebrow: 'La estancia', title: 'Qué hacer en Milán durante tu estancia', cta: 'Ver todas las guías' },
+};
+const h = head[lang];
+---
+
+{
+  guides.length > 0 && (
+    <section class="teaser section-pad section-surface full-bleed">
+      <div class="inner">
+        <div class="section-head">
+          <span class="eyebrow">{h.eyebrow}</span>
+          <h2>{h.title}</h2>
+        </div>
+
+        <div class="cards">
+          {guides.map((g) => (
+            <a class="tcard" href={`/${lang}/guides/${g.data.translationKey}/`}>
+              {g.data.cover && <img class="tcard__img" src={g.data.cover} alt={g.data.coverAlt ?? g.data.title} loading="lazy" />}
+              <div class="tcard__body">
+                <time datetime={g.data.pubDate.toISOString()}>{g.data.pubDate.toLocaleDateString(lang)}</time>
+                <h3>{g.data.title}</h3>
+                <p>{g.data.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div class="teaser__cta">
+          <a class="btn btn-primary" href={`/${lang}/guides/`}>{h.cta}</a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .inner { max-width: var(--max); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(1rem, 2.5vw, 1.5rem);
+  }
+  .tcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .tcard:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .tcard__img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+  .tcard__body { padding: 1.1rem 1.25rem 1.4rem; }
+  .tcard__body time { color: var(--muted); font-size: 0.8rem; }
+  .tcard__body h3 { margin: 0.3rem 0 0.5rem; font-size: 1.15rem; }
+  .tcard__body p {
+    margin: 0; color: var(--muted); font-size: 0.92rem;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .teaser__cta { text-align: center; margin-top: clamp(1.5rem, 4vw, 2.5rem); }
+</style>

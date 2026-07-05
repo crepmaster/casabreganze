@@ -37,6 +37,33 @@ export function seoUserPrompt(lang: Lang, body: string): string {
   ].join('\n');
 }
 
+// ── Agenda insolite : événements RÉELS via recherche web ────────────────────
+export function eventsSystemPrompt(): string {
+  return [
+    `Tu es un rédacteur local expert de ${CITY}, spécialiste des expériences insolites et singulières, qui écrit pour le blog de l'appartement de location courte durée « EasyRest ».`,
+    "Tu DOIS utiliser l'outil de recherche web pour trouver de VRAIS événements à venir.",
+    '',
+    "Règles d'honnêteté STRICTES (non négociables) :",
+    "- N'inclure QUE des événements que la recherche web confirme réellement (nom, lieu, dates).",
+    "- Ne JAMAIS inventer ni deviner un événement, une date, un lieu ou un prix. En cas de doute, ne pas l'inclure.",
+    '- Si la recherche ne donne pas assez d’éléments fiables, écris-le honnêtement plutôt que de combler par de l’imaginaire.',
+    "- Privilégier le SINGULIER, l'insolite, le méconnu (éviter les attractions touristiques évidentes : Duomo, Cène, etc.).",
+    '',
+    'Contraintes de rédaction :',
+    `- Rédige en français, d'un style chaleureux et concret.`,
+    "- Pour chaque événement : ce qui le rend unique, le lieu, les dates, et conserve l'URL source.",
+    '- NE PAS écrire de titre H1 (#). Commence par un court paragraphe d’intro, puis des sections de niveau 2 (##).',
+    '- Inclure au moins une liste à puces.',
+    '- Terminer par une section « ## Sources » listant les URLs réellement utilisées.',
+    `- Mentionne subtilement, une seule fois, la proximité de l'appartement EasyRest et l'accès facile au centre de ${CITY}.`,
+    '- Sortie : UNIQUEMENT le corps en Markdown, sans frontmatter ni bloc de code englobant.',
+  ].join('\n');
+}
+
+export function eventsUserPrompt(periodLabel: string): string {
+  return `Recherche puis rédige un guide des événements et activités les plus singuliers et insolites à ${CITY} pour la période : ${periodLabel}. Concentre-toi sur ce qui est confirmé et vérifiable via la recherche web.`;
+}
+
 export function translateSystemPrompt(targetLang: Lang): string {
   return [
     `Tu es un traducteur professionnel. Traduis le Markdown fourni en ${LANG_NAMES[targetLang]}.`,

@@ -1,6 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import Gallery from '../../components/Gallery.astro';
+import Amenities from '../../components/Amenities.astro';
 import BookingBlock from '../../components/BookingBlock.astro';
+import AvailabilityCalendar from '../../components/AvailabilityCalendar.astro';
+import GuidesTeaser from '../../components/GuidesTeaser.astro';
 import { t, langList, type Lang } from '../../i18n/ui';
 import { indexAlternates } from '../../i18n/paths';
 import { SITE } from '../../config';
@@ -35,12 +40,16 @@ const jsonLd = {
   alternates={alternates}
   jsonLd={jsonLd}
 >
-  <section class="hero">
-    <h1>{t(lang, 'hero.title')}</h1>
-    <p>{t(lang, 'hero.subtitle')}</p>
-  </section>
+  <Hero lang={lang} />
+  <Gallery lang={lang} />
+  <Amenities lang={lang} />
 
-  <div class="center section-pad">
-    <BookingBlock lang={lang} />
+  <div class="section-pad">
+    <div class="booking-row">
+      <BookingBlock lang={lang} />
+      <AvailabilityCalendar lang={lang} />
+    </div>
   </div>
+
+  <GuidesTeaser lang={lang} />
 </BaseLayout>

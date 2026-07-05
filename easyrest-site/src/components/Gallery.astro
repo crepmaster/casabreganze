@@ -1,0 +1,325 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { photos, type Category } from '../lib/gallery';
+import type { Lang } from '../i18n/ui';
+
+const { lang } = Astro.props as { lang: Lang };
+
+const head: Record<Lang, { eyebrow: string; title: string; sub: string }> = {
+  fr: { eyebrow: 'La visite', title: 'L’appartement, pièce par pièce', sub: 'Choisissez une pièce, faites défiler, cliquez pour agrandir.' },
+  en: { eyebrow: 'The tour', title: 'The apartment, room by room', sub: 'Pick a room, swipe, tap to enlarge.' },
+  it: { eyebrow: 'Il tour', title: 'L’appartamento, stanza per stanza', sub: 'Scegli una stanza, scorri, tocca per ingrandire.' },
+  es: { eyebrow: 'La visita', title: 'El apartamento, habitación por habitación', sub: 'Elige una habitación, desliza, toca para ampliar.' },
+};
+const allLabel: Record<Lang, string> = { fr: 'Tout', en: 'All', it: 'Tutto', es: 'Todo' };
+const catLabel: Record<Category, Record<Lang, string>> = {
+  building: { fr: 'Entrée', en: 'Entrance', it: 'Ingresso', es: 'Entrada' },
+  living: { fr: 'Salon', en: 'Living room', it: 'Soggiorno', es: 'Salón' },
+  kitchen: { fr: 'Cuisine', en: 'Kitchen', it: 'Cucina', es: 'Cocina' },
+  bedroom: { fr: 'Chambre', en: 'Bedroom', it: 'Camera', es: 'Dormitorio' },
+  bathroom: { fr: 'Salle de bain', en: 'Bathroom', it: 'Bagno', es: 'Baño' },
+};
+
+// Ordre des onglets = ordre de visite naturel.
+const TAB_ORDER: Category[] = ['building', 'living', 'kitchen', 'bedroom', 'bathroom'];
+const count = (c: Category) => photos.filter((p) => p.category === c).length;
+const tabs = [
+  { key: 'all', label: allLabel[lang], n: photos.length },
+  ...TAB_ORDER.map((c) => ({ key: c, label: catLabel[c][lang], n: count(c) })),
+];
+
+// Version large pour la lightbox, générée au build (une par photo).
+const items = await Promise.all(
+  photos.map(async (p) => ({
+    photo: p,
+    label: catLabel[p.category][lang],
+    full: (await getImage({ src: p.src, width: 1600, format: 'webp' })).src,
+  })),
+);
+const h = head[lang];
+---
+
+<section class="gallery section-pad" id="galerie">
+  <div class="section-head">
+    <span class="eyebrow">{h.eyebrow}</span>
+    <h2>{h.title}</h2>
+    <p>{h.sub}</p>
+  </div>
+
+  <div class="tabs" role="tablist" id="gallery-tabs">
+    {tabs.map((tab, i) => (
+      <button
+        class:list={['tab', { active: i === 0 }]}
+        role="tab"
+        aria-selected={i === 0 ? 'true' : 'false'}
+        data-cat={tab.key}
+        type="button"
+      >
+        {tab.label}<span class="count">{tab.n}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="slider-wrap">
+    <button class="slide-nav prev" id="slide-prev" type="button" aria-label="Précédent">‹</button>
+    <div class="slider" id="gallery-grid">
+      {items.map((it, i) => (
+        <button
+          class="tile"
+          data-full={it.full}
+          data-caption={it.label}
+          data-category={it.photo.category}
+          data-index={i}
+          type="button"
+          aria-label={it.label}
+        >
+          <Image
+            src={it.photo.src}
+            alt={`${it.label} — appartement EasyRest à Milan`}
+            widths={[400, 640, 840]}
+            sizes="(max-width: 640px) 78vw, 400px"
+            loading={i < 3 ? 'eager' : 'lazy'}
+          />
+          <span class="tag">{it.label}</span>
+        </button>
+      ))}
+    </div>
+    <button class="slide-nav next" id="slide-next" type="button" aria-label="Suivant">›</button>
+  </div>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Photo">
+    <button class="lb-close" data-lb="close" aria-label="Fermer">×</button>
+    <button class="lb-nav lb-prev" data-lb="prev" aria-label="Précédent">‹</button>
+    <img id="lb-img" alt="" />
+    <button class="lb-nav lb-next" data-lb="next" aria-label="Suivant">›</button>
+    <p class="lb-caption" id="lb-caption"></p>
+  </dialog>
+</section>
+
+<script>
+  const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const track = document.getElementById('gallery-grid');
+  const tabsBar = document.getElementById('gallery-tabs');
+  const prevSlide = document.getElementById('slide-prev');
+  const nextSlide = document.getElementById('slide-next');
+  const img = document.getElementById('lb-img') as HTMLImageElement | null;
+  const caption = document.getElementById('lb-caption');
+
+  if (dialog && track && tabsBar && prevSlide && nextSlide && img && caption) {
+    const tiles = Array.from(track.querySelectorAll<HTMLButtonElement>('.tile'));
+    const tabs = Array.from(tabsBar.querySelectorAll<HTMLButtonElement>('.tab'));
+    let current = 0;
+
+    // Onglets : filtre les photos du slider selon la pièce, puis rembobine.
+    const applyFilter = (cat: string) => {
+      tiles.forEach((tile) => {
+        tile.hidden = !(cat === 'all' || tile.dataset.category === cat);
+      });
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+    };
+    tabs.forEach((tab) =>
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => {
+          t.classList.toggle('active', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        applyFilter(tab.dataset.cat ?? 'all');
+      }),
+    );
+
+    // Flèches du slider : défile d'une vignette (largeur de la 1re visible + gap).
+    const step = () => {
+      const first = tiles.find((t) => !t.hidden);
+      return first ? first.getBoundingClientRect().width + 12 : 320;
+    };
+    prevSlide.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    nextSlide.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+
+    // Lightbox : navigue dans les vignettes actuellement visibles.
+    const visible = () => tiles.filter((t) => !t.hidden);
+    const show = (i: number) => {
+      const vis = visible();
+      if (!vis.length) return;
+      current = (i + vis.length) % vis.length;
+      const tile = vis[current];
+      img.src = tile.dataset.full ?? '';
+      caption.textContent = tile.dataset.caption ?? '';
+      img.alt = tile.dataset.caption ?? '';
+    };
+    tiles.forEach((tile) =>
+      tile.addEventListener('click', () => {
+        show(visible().indexOf(tile));
+        dialog.showModal();
+      }),
+    );
+    dialog.addEventListener('click', (e) => {
+      const el = e.target as HTMLElement;
+      const action = el.dataset.lb;
+      if (action === 'close' || el === dialog) dialog.close();
+      else if (action === 'prev') show(current - 1);
+      else if (action === 'next') show(current + 1);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!dialog.open) return;
+      if (e.key === 'ArrowLeft') show(current - 1);
+      else if (e.key === 'ArrowRight') show(current + 1);
+    });
+  }
+</script>
+
+<style>
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .tab:hover { border-color: var(--accent); }
+  .tab.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .tab .count {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 0.05rem 0.45rem;
+    min-width: 1.4em;
+    text-align: center;
+  }
+  .tab.active .count { background: rgba(255, 255, 255, 0.25); color: #fff; }
+
+  /* Slider horizontal */
+  .slider-wrap { position: relative; }
+  .slider {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 4px 2px 12px;
+    scrollbar-width: thin;
+  }
+  .slider::-webkit-scrollbar { height: 6px; }
+  .slider::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+  .tile {
+    position: relative;
+    flex: 0 0 clamp(260px, 78vw, 420px);
+    scroll-snap-align: start;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .tile[hidden] { display: none; }
+  .tile :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .tile:hover :global(img) { transform: scale(1.05); }
+  .tile .tag {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(15, 16, 20, 0.55);
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+
+  .slide-nav {
+    position: absolute;
+    top: calc(50% - 6px);
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--ink);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow);
+    transition: background 0.15s ease;
+  }
+  .slide-nav:hover { background: #fff; }
+  .slide-nav.prev { left: -0.6rem; }
+  .slide-nav.next { right: -0.6rem; }
+  @media (max-width: 640px) {
+    .slide-nav { display: none; } /* swipe au doigt sur mobile */
+    .tabs { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 0.4rem; }
+    .tab { flex: none; }
+  }
+
+  /* Lightbox */
+  .lightbox {
+    border: 0;
+    background: transparent;
+    max-width: 96vw;
+    max-height: 96vh;
+    padding: 0;
+    overflow: visible;
+  }
+  .lightbox::backdrop { background: rgba(10, 11, 15, 0.9); backdrop-filter: blur(2px); }
+  #lb-img {
+    max-width: 92vw;
+    max-height: 88vh;
+    border-radius: 12px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  .lb-caption { color: #fff; text-align: center; margin: 0.8rem 0 0; font-size: 0.9rem; opacity: 0.85; }
+  .lb-close, .lb-nav {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    border: 0;
+    cursor: pointer;
+    border-radius: 999px;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.6rem;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+  }
+  .lb-close:hover, .lb-nav:hover { background: rgba(255, 255, 255, 0.28); }
+  .lb-close { top: 1rem; right: 1rem; }
+  .lb-nav { top: 50%; transform: translateY(-50%); }
+  .lb-prev { left: 1rem; }
+  .lb-next { right: 1rem; }
+  @media (max-width: 640px) {
+    .lb-nav { top: auto; bottom: 1rem; transform: none; }
+    .lb-prev { left: 25%; }
+    .lb-next { right: 25%; }
+  }
+</style>

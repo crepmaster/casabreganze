@@ -5,7 +5,8 @@ import { glob } from 'astro/loaders';
 // CONTRAT DE FRONTMATTER — interface entre `engine` (ce qu'il écrit) et `site`
 // (ce qu'Astro attend). C'est le pivot : tout le reste s'y accroche.
 // Un article = 4 fichiers (un par langue) reliés par `translationKey` → hreflang.
-// Voir docs/FRONTMATTER-CONTRACT.md
+// Ce schéma Zod fait FOI ; son miroir côté producteur est engine/src/types.ts
+// (interface Frontmatter). Toute divergence est attrapée au build (échec ici).
 // ─────────────────────────────────────────────────────────────────────────────
 const guides = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/guides' }),

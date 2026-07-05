@@ -1,12 +1,21 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { MODELS, type Lang } from './config.js';
-import { articleSystemPrompt, articleUserPrompt, seoUserPrompt, translateSystemPrompt } from './prompts.js';
+import {
+  articleSystemPrompt,
+  articleUserPrompt,
+  eventsSystemPrompt,
+  eventsUserPrompt,
+  seoUserPrompt,
+  translateSystemPrompt,
+} from './prompts.js';
 import type { GeneratedSeo } from './types.js';
 
 // Client construit paresseusement : le mode --dry-run ne touche jamais à l'API ni à la clé.
+// maxRetries relevé (défaut SDK = 2) : un cron hebdomadaire non surveillé doit encaisser
+// les erreurs transitoires (429 / 5xx / coupures réseau) avec backoff exponentiel automatique.
 let _client: Anthropic | null = null;
 function client(): Anthropic {
-  if (!_client) _client = new Anthropic(); // lit ANTHROPIC_API_KEY dans l'environnement
+  if (!_client) _client = new Anthropic({ maxRetries: 4 }); // lit ANTHROPIC_API_KEY dans l'environnement
   return _client;
 }
 
@@ -47,6 +56,34 @@ export async function generateArticleBody(lang: Lang, weekLabel: string): Promis
     messages: [{ role: 'user', content: articleUserPrompt(weekLabel) }],
   });
   return requireText(await stream.finalMessage(), `Article (${lang})`);
+}
+
+/**
+ * Génère le corps de l'agenda insolite en s'appuyant sur la recherche web (outil serveur).
+ * L'outil web_search tourne côté Anthropic : on relance sur `pause_turn` (limite d'itérations
+ * de la boucle serveur) en réémettant l'historique, jusqu'à la réponse finale.
+ */
+export async function generateEventsBody(periodLabel: string): Promise<string> {
+  const messages: Anthropic.MessageParam[] = [{ role: 'user', content: eventsUserPrompt(periodLabel) }];
+  const MAX_CONTINUATIONS = 6;
+
+  for (let i = 0; i < MAX_CONTINUATIONS; i++) {
+    const msg = await client().messages.create({
+      model: MODELS.article,
+      max_tokens: 8000,
+      system: eventsSystemPrompt(),
+      tools: [{ type: 'web_search_20260209', name: 'web_search' }],
+      messages,
+    });
+
+    // La boucle d'outils serveur a atteint sa limite : réémettre pour continuer.
+    if (msg.stop_reason === 'pause_turn') {
+      messages.push({ role: 'assistant', content: msg.content });
+      continue;
+    }
+    return requireText(msg, 'Agenda (fr)');
+  }
+  throw new Error(`Agenda (fr) : recherche web non conclue après ${MAX_CONTINUATIONS} relances (pause_turn).`);
 }
 
 /** Traduit le corps Markdown depuis la langue canonique vers `targetLang`. */
