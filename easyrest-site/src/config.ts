@@ -5,6 +5,11 @@ export const SITE = {
   // Adresse & géo de l'appartement (pour le schema LocalBusiness) — TODO confirmer
   address: 'Via Giovanni da Breganze, 20152 Milano (MI), Italia',
   geo: { lat: 45.4572, lng: 9.1458 },
+  // Google Ads — suivi de conversion « clic WhatsApp ». Vides → aucun tag n'est chargé.
+  googleAds: {
+    id: '', // Conversion ID, ex. 'AW-1234567890'
+    waConversionLabel: '', // label de l'action de conversion, ex. 'AbC-D_efG'
+  },
 };
 
 export const BOOKING = {

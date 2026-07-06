@@ -60,6 +60,25 @@ const fullTitle = `${title} · ${SITE.name}`;
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — ${lang}`} href={`/${lang}/rss.xml`} />
 
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
+    {/* Google Ads — tag + suivi du clic WhatsApp (chargé uniquement si configuré dans config.ts). */}
+    {SITE.googleAds.id && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.googleAds.id}`}></script>
+        <script
+          set:html={`
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', ${JSON.stringify(SITE.googleAds.id)});
+            ${
+              SITE.googleAds.waConversionLabel
+                ? `document.addEventListener('click', function(e){ var t=e.target; var a=(t&&t.closest)?t.closest('a[href*="wa.me"]'):null; if(a){ gtag('event','conversion',{send_to:${JSON.stringify(SITE.googleAds.id + '/' + SITE.googleAds.waConversionLabel)}}); } });`
+                : ''
+            }
+          `}
+        />
+      </>
+    )}
   </head>
   <body>
     <Header lang={lang} alternates={alternates} />
