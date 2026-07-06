@@ -9,7 +9,7 @@ export const SITE = {
 
 export const BOOKING = {
   // Réservation = lead-gen. Le bouton ouvre WhatsApp ; l'agence confirme (<15 min) et encaisse via son PayPal.
-  whatsapp: '393473366969', // PROVISOIRE (numéro factice) — remplacer par le vrai numéro de l'agence
+  whatsapp: '393885822307', // WhatsApp de l'agence (+39 388 582 23 07)
   // Tarif de référence par nuit (€) — sert d'estimation quand le scraper live n'est pas
   // disponible (prix estimé = nuits × ce tarif × (1 - remise)). TODO: mettre le vrai tarif moyen.
   basePricePerNight: 120,
