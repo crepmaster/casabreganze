@@ -19,10 +19,9 @@ export const BOOKING = {
   // Calendrier de disponibilités Guesty (iCal, lecture seule) importé au build.
   // Vide → le calendrier est masqué. Voir src/lib/guesty.ts.
   icalUrl: 'https://app.guesty.com/api/public/icalendar-dashboard-api/export/f8b62c16-65c8-48da-bf5a-a718f6ac0527',
-  // Endpoint public /quote du microservice prix (services/price-scraper).
-  // Vide → le simulateur bascule en « prix sur demande » (WhatsApp avec les dates).
-  // Renseigner l'URL déployée, ex : 'https://prix.easyrest.eu/quote'.
-  quoteEndpoint: '',
+  // Endpoint public /quote du microservice prix (services/price-scraper sur Hetzner).
+  // Vide → le simulateur bascule en « prix estimé / sur demande » (WhatsApp avec les dates).
+  quoteEndpoint: 'https://api.easyrest.eu/quote',
   ota: {
     booking: 'https://www.booking.com/hotel/it/easy-rest-affitti-brevi-italia.fr.html', // annonce Booking (tracking retiré)
     airbnb: 'https://www.airbnb.fr/rooms/1370963027643363967', // annonce Airbnb (tracking retiré)
