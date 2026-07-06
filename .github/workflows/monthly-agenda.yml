@@ -1,24 +1,24 @@
-name: Contenu hebdomadaire Milan
+name: Agenda mensuel Milan
 
-# Publie un guide « Que faire à Milan » (4 langues) chaque semaine, sans intervention.
-#   génère (Claude) → valide (build Astro) → commit → push → l'hébergeur redéploie.
-# Le build Astro sert de garde-fou : un frontmatter invalide fait échouer le job
-# AVANT le commit, donc rien de cassé n'atteint jamais le site.
+# Publie « l'agenda insolite de Milan » (4 langues), une fois par mois, sans intervention.
+#   génère (Claude + recherche web) → valide (build Astro) → commit → push → Cloudflare redéploie.
+# Le build Astro sert de garde-fou : un frontmatter invalide fait échouer le job AVANT le
+# commit, donc rien de cassé n'atteint jamais le site.
 #
 # Pré-requis (une seule fois, Settings → Secrets and variables → Actions) :
-#   - Secret ANTHROPIC_API_KEY : la clé Anthropic utilisée par le moteur.
+#   - Secret ANTHROPIC_API_KEY : la clé Anthropic utilisée par le moteur (recherche web incluse).
 # La syndication réseaux sociaux est gérée séparément par n8n qui lit /feed.xml
 # (voir ops/n8n-syndication.md) — cette Action ne poste pas sur les réseaux.
 
 on:
   schedule:
-    # Tous les lundis à 06:00 UTC. La semaine ISO courante pilote le nommage.
-    - cron: '0 6 * * 1'
+    # Le 1er de chaque mois à 06:00 UTC. Le mois courant pilote le nommage (milan-agenda-YYYY-MM).
+    - cron: '0 6 1 * *'
   workflow_dispatch: {} # bouton « Run workflow » pour un déclenchement manuel
 
 concurrency:
-  # Évite deux runs simultanés qui écriraient le même fichier de semaine.
-  group: weekly-content
+  # Évite deux runs simultanés qui écriraient le même fichier de mois.
+  group: monthly-agenda
   cancel-in-progress: false
 
 permissions:
@@ -36,15 +36,16 @@ jobs:
         with:
           node-version: '22'
 
-      # 1) Génération du contenu (écrit dans easyrest-site/src/content/guides/).
-      #    Idempotent par semaine : reprend les langues déjà écrites en cas de relance.
-      - name: Générer les guides (Claude)
+      # 1) Génération de l'agenda (recherche web + rédaction), écrit dans
+      #    easyrest-site/src/content/guides/. Idempotent par mois : reprend les langues
+      #    déjà écrites en cas de relance (--force pour tout régénérer).
+      - name: Générer l'agenda (Claude + recherche web)
         working-directory: engine
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           npm ci
-          npm run generate
+          npm run events
 
       # 2) Garde-fou : le build Astro valide le frontmatter (schéma Zod) et l'i18n.
       #    S'il échoue, le job s'arrête ici — rien n'est committé.
@@ -61,9 +62,9 @@ jobs:
           git config user.email "bot@easyrest.eu"
           git add easyrest-site/src/content/guides/
           if git diff --cached --quiet; then
-            echo "Aucun nouveau guide (semaine déjà publiée ou tout en draft) — rien à committer."
+            echo "Aucun nouvel agenda (mois déjà publié ou tout en draft) — rien à committer."
             exit 0
           fi
-          week="$(date -u +%G-w%V)"
-          git commit -m "content: guide Milan hebdomadaire (${week})"
+          month="$(date -u +%Y-%m)"
+          git commit -m "content: agenda insolite Milan (${month})"
           git push
