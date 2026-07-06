@@ -7,8 +7,8 @@ export const SITE = {
   geo: { lat: 45.4572, lng: 9.1458 },
   // Google Ads — suivi de conversion « clic WhatsApp ». Vides → aucun tag n'est chargé.
   googleAds: {
-    id: '', // Conversion ID, ex. 'AW-1234567890'
-    waConversionLabel: '', // label de l'action de conversion, ex. 'AbC-D_efG'
+    id: 'AW-879175074', // Google tag / Conversion ID
+    waConversionLabel: '', // TODO: label de l'action « WhatsApp click » (2ᵉ moitié du send_to)
   },
 };
 
