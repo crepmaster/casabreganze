@@ -78,7 +78,7 @@ async function persist(v: GuideVersion, translationKey: string, pubDate: string)
     translationKey,
     pubDate,
     tags: v.seo.tags,
-    cover: '/og-default.png',
+    cover: '/og.jpg',
     coverAlt: v.seo.coverAlt,
     draft: v.quality < MIN_QUALITY,
     seo: { title: seoTitle, focusKeyword: v.seo.focusKeyword },

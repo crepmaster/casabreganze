@@ -46,6 +46,43 @@ function requireText(msg: Anthropic.Message, what: string): string {
   return text;
 }
 
+// Avec l'outil web_search, le modèle émet des blocs de texte de narration ENTRE les
+// recherches (« Je vais chercher… »). Le vrai article est le texte qui suit le DERNIER
+// bloc lié à l'outil. On ne garde que celui-là pour ne pas polluer le corps.
+function finalAnswerText(msg: Anthropic.Message, what: string): string {
+  assertUsable(msg, what);
+  let lastTool = -1;
+  msg.content.forEach((b, i) => {
+    if (b.type === 'server_tool_use' || b.type === 'web_search_tool_result') lastTool = i;
+  });
+  const text = msg.content
+    .slice(lastTool + 1)
+    .filter((b): b is Anthropic.TextBlock => b.type === 'text')
+    .map((b) => b.text)
+    .join('')
+    .trim();
+  if (!text) throw new Error(`${what} : réponse finale vide après la recherche web.`);
+  return stripPreamble(text);
+}
+
+// Retire en tête : lignes vides, un éventuel titre H1 (# ...) — le titre vit dans le
+// frontmatter — et une phrase méta d'annonce (« Je rédige le guide », « I now have… »)
+// que le modèle ajoute parfois malgré la consigne. S'arrête au premier vrai contenu.
+function stripPreamble(body: string): string {
+  const meta =
+    /(je (vais|vous|rédige|prépare)|j'?ai (maintenant|désormais|toutes|rassemblé|collecté|suffisamment)|voici (le|notre|un) |i (will|now|have|can)|let me|the result|here'?s the )/i;
+  const lines = body.split('\n');
+  let i = 0;
+  while (i < lines.length) {
+    const l = lines[i].trim();
+    if (l === '') { i++; continue; }
+    if (/^#\s+/.test(l)) { i++; continue; } // H1 → géré par le frontmatter
+    if (l.length < 240 && !/^#{2,}\s/.test(l) && !/^[-*]\s/.test(l) && meta.test(l)) { i++; continue; }
+    break;
+  }
+  return lines.slice(i).join('\n').trim();
+}
+
 /** Génère le corps de l'article (long → streaming, conformément aux bonnes pratiques SDK). */
 export async function generateArticleBody(lang: Lang, weekLabel: string): Promise<string> {
   const stream = client().messages.stream({
@@ -81,7 +118,7 @@ export async function generateEventsBody(periodLabel: string): Promise<string> {
       messages.push({ role: 'assistant', content: msg.content });
       continue;
     }
-    return requireText(msg, 'Agenda (fr)');
+    return finalAnswerText(msg, 'Agenda (fr)');
   }
   throw new Error(`Agenda (fr) : recherche web non conclue après ${MAX_CONTINUATIONS} relances (pause_turn).`);
 }

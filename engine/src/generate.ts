@@ -72,7 +72,7 @@ async function persist(v: GuideVersion, translationKey: string, pubDate: string)
     translationKey,
     pubDate,
     tags: v.seo.tags,
-    cover: '/og-default.png', // image OG de marque par défaut ; visuel dédié par article = amélioration future
+    cover: '/og.jpg', // photo de l'appart par défaut ; visuel dédié par article = amélioration future
     coverAlt: v.seo.coverAlt,
     draft: v.quality < MIN_QUALITY,
     seo: { title: seoTitle, focusKeyword: v.seo.focusKeyword },
