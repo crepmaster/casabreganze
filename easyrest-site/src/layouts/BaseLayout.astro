@@ -3,6 +3,7 @@ import { type Lang, langList } from '../i18n/ui';
 import { SITE } from '../config';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -61,13 +62,16 @@ const fullTitle = `${title} · ${SITE.name}`;
 
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 
-    {/* Google Ads — tag + suivi du clic WhatsApp (chargé uniquement si configuré dans config.ts). */}
+    {/* Google Ads + Consent Mode v2 — chargé uniquement si configuré dans config.ts.
+        Par défaut tout est REFUSÉ ; mis à « granted » seulement après acceptation (bandeau). */}
     {SITE.googleAds.id && (
       <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.googleAds.id}`}></script>
         <script
           set:html={`
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+            var __c=null;try{__c=localStorage.getItem('er-consent');}catch(e){}
+            gtag('consent','default',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
+            if(__c==='granted'){gtag('consent','update',{ad_storage:'granted',analytics_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});}
             gtag('js', new Date());
             gtag('config', ${JSON.stringify(SITE.googleAds.id)});
             ${
@@ -77,6 +81,7 @@ const fullTitle = `${title} · ${SITE.name}`;
             }
           `}
         />
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.googleAds.id}`}></script>
       </>
     )}
   </head>
@@ -86,5 +91,6 @@ const fullTitle = `${title} · ${SITE.name}`;
       <slot />
     </main>
     <Footer lang={lang} />
+    {SITE.googleAds.id && <ConsentBanner lang={lang} />}
   </body>
 </html>

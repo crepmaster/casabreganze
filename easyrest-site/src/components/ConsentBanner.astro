@@ -1,0 +1,82 @@
+---
+import type { Lang } from '../i18n/ui';
+
+const { lang } = Astro.props as { lang: Lang };
+
+const T: Record<Lang, { text: string; accept: string; refuse: string }> = {
+  fr: { text: 'Nous utilisons des cookies de mesure d’audience et publicitaires (Google) pour améliorer le site et nos annonces.', accept: 'Accepter', refuse: 'Refuser' },
+  en: { text: 'We use analytics and advertising cookies (Google) to improve the site and our ads.', accept: 'Accept', refuse: 'Decline' },
+  it: { text: 'Usiamo cookie di analisi e pubblicitari (Google) per migliorare il sito e i nostri annunci.', accept: 'Accetta', refuse: 'Rifiuta' },
+  es: { text: 'Usamos cookies de análisis y publicidad (Google) para mejorar el sitio y nuestros anuncios.', accept: 'Aceptar', refuse: 'Rechazar' },
+};
+const t = T[lang];
+---
+
+<div class="consent" id="consent-banner" role="dialog" aria-live="polite" hidden>
+  <p>{t.text}</p>
+  <div class="consent__actions">
+    <button type="button" data-consent="refuse" class="consent__btn ghost">{t.refuse}</button>
+    <button type="button" data-consent="accept" class="consent__btn accept">{t.accept}</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    let stored: string | null = null;
+    try { stored = localStorage.getItem('er-consent'); } catch (e) { /* localStorage indispo */ }
+    const el = document.getElementById('consent-banner');
+    if (!el) return;
+    if (stored) { el.remove(); return; } // choix déjà fait → pas de bandeau
+    el.hidden = false;
+
+    const choose = (v: 'granted' | 'denied') => {
+      try { localStorage.setItem('er-consent', v); } catch (e) { /* ignore */ }
+      if (v === 'granted' && typeof (window as any).gtag === 'function') {
+        (window as any).gtag('consent', 'update', {
+          ad_storage: 'granted',
+          analytics_storage: 'granted',
+          ad_user_data: 'granted',
+          ad_personalization: 'granted',
+        });
+      }
+      el.remove();
+    };
+    el.querySelector('[data-consent="accept"]')?.addEventListener('click', () => choose('granted'));
+    el.querySelector('[data-consent="refuse"]')?.addEventListener('click', () => choose('denied'));
+  })();
+</script>
+
+<style>
+  .consent {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 50;
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .consent p { margin: 0; font-size: 0.88rem; flex: 1 1 260px; line-height: 1.5; }
+  .consent__actions { display: flex; gap: 0.5rem; margin-left: auto; }
+  .consent__btn {
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 999px;
+    padding: 0.5rem 1.1rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .consent__btn.accept { background: var(--accent); color: #fff; }
+  .consent__btn.ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+  .consent__btn.ghost:hover { background: rgba(255, 255, 255, 0.12); }
+</style>
